@@ -17,9 +17,35 @@
  */
 
 
-package dz.aak.nalangen.nlg;
+package dz.aak.nalangen.wfreq;
 
-public interface UnivRealizer {
-
+public interface WordFrequency {
 	
+	/**
+	 * 
+	 * @param word
+	 * @return
+	 */
+	public int getWordFrequency(String word);
+	
+	/**
+	 * 
+	 * @param corpusName
+	 * @param word
+	 * @return
+	 */
+	public int getWordFrequency(String corpusName, String word);
+	
+	/**
+	 * 
+	 * @return The license of the data
+	 */
+	public String getLicense();
+	
+	/**
+	 * 
+	 * @return The code of the language
+	 */
+	public String getLanguage();
+
 }
