@@ -139,19 +139,18 @@ public class Ston2Text extends Parser {
 
 	@Override
 	protected void beginSubject() {
-		realizer.beginDisjunction();
+		realizer.beginSubject();
 		
 	}
 
 	@Override
 	protected void beginObject() {
-		realizer.beginDisjunction();
-		
+		realizer.beginObject();
 	}
 
 	@Override
 	protected void beginDisjunction() {
-		// TODO Auto-generated method stub
+		realizer.beginDisjunction();
 		
 	}
 
@@ -169,13 +168,13 @@ public class Ston2Text extends Parser {
 
 	@Override
 	protected void endSubject() {
-		realizer.addSubject();
+		realizer.endSubject();
 		
 	}
 
 	@Override
 	protected void endObject() {
-		realizer.addObject();
+		realizer.endObject();
 		
 	}
 

@@ -32,8 +32,11 @@ public interface UnivRealizer {
 	public void beginDisjunction();
 	public void addConjunction(String nounPhraseID);
 	public void endDisjunction();
-	public void addSubject();
-	public void addObject();
+	
+	public void beginSubject();
+	public void beginObject();
+	public void endSubject();
+	public void endObject();
 	public void endSentence();
 	
 	
