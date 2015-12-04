@@ -19,49 +19,53 @@
 
 package dz.aak.nalangen.ston;
 
+import java.util.HashSet;
 import java.util.Set;
 
+import dz.aak.nalangen.nlg.UnivRealizer;
+import dz.aak.nalangen.wordnet.SqliteReqExceptions.LangNotFound;
+import dz.aak.nalangen.wordnet.SqliteReqExceptions.NoSqliteBase;
+import dz.aak.nalangen.wordnet.SqliteRequestor;
+import dz.aak.nalangen.wordnet.WNRequestor;
 import dz.aak.sentrep.ston.Parser;
 
-public class Ston2Sent extends Parser {
+public class Ston2Text extends Parser {
 
-	public Ston2Sent() {
-		// TODO Auto-generated constructor stub
+	private UnivRealizer realizer;
+	private WNRequestor wordnet;
+	private boolean subject = true;
+	
+	
+	public Ston2Text(UnivRealizer realizer, String lang, String basePath) {
+		this.realizer = realizer;
+		try {
+			wordnet = SqliteRequestor.create(lang, basePath);
+		} catch (NoSqliteBase | LangNotFound e) {
+			System.out.println("Wordnet problem");
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	protected void beginActions() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	protected void beginAction(String id, int synSet) {
-		// TODO Auto-generated method stub
-		
+		String verb = wordnet.getWord(synSet, "VERB");
+		realizer.beginSentence(id, verb);
 	}
 
 	@Override
 	protected void addVerbSpecif(String tense, String aspect) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected void addSubject(String subjectID) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected void addObject(String objectID) {
-		// TODO Auto-generated method stub
+		realizer.addVerbSpecif(tense, aspect);
 		
 	}
 
 	@Override
 	protected void endAction() {
-		// TODO Auto-generated method stub
+		realizer.endSentence();
 		
 	}
 
@@ -85,13 +89,21 @@ public class Ston2Sent extends Parser {
 
 	@Override
 	protected void beginRole(String id, int synSet) {
-		// TODO Auto-generated method stub
-		
+		String noun = wordnet.getWord(synSet, "NOUN");
+		realizer.beginNounPhrase(id, noun);
 	}
 
 	@Override
 	protected void addAdjective(int synSet, Set<Integer> advSynSets) {
-		// TODO Auto-generated method stub
+		String adjective = wordnet.getWord(synSet, "ADJECTIVE");		
+		Set<String> adverbs = new HashSet<String>();
+		
+		for(int advsyn : advSynSets){
+			String adverb = wordnet.getWord(advsyn, "ADVERB");
+			adverbs.add(adverb);
+		}
+		
+		realizer.addAdjective(adjective, adverbs);
 		
 	}
 
@@ -121,7 +133,49 @@ public class Ston2Sent extends Parser {
 
 	@Override
 	protected void parseSuccess() {
+		realizer.endParagraph();
+		
+	}
+
+	@Override
+	protected void beginSubject() {
+		realizer.beginDisjunction();
+		
+	}
+
+	@Override
+	protected void beginObject() {
+		realizer.beginDisjunction();
+		
+	}
+
+	@Override
+	protected void beginDisjunction() {
 		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void addConjunction(String roleID) {
+		realizer.addConjunction(roleID);
+		
+	}
+
+	@Override
+	protected void endDisjunction() {
+		realizer.endDisjunction();
+		
+	}
+
+	@Override
+	protected void endSubject() {
+		realizer.addSubject();
+		
+	}
+
+	@Override
+	protected void endObject() {
+		realizer.addObject();
 		
 	}
 

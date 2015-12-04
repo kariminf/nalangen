@@ -19,7 +19,31 @@
 
 package dz.aak.nalangen.nlg;
 
-public interface UnivRealizer {
+import java.util.Set;
 
+public interface UnivRealizer {
+	
+	public void beginParagraph();
+	
+	public void beginSentence(String id, String verb);
+	
+	public void addVerbSpecif(String tense, String aspect);
+	
+	public void beginDisjunction();
+	public void addConjunction(String nounPhraseID);
+	public void endDisjunction();
+	public void addSubject();
+	public void addObject();
+	public void endSentence();
+	
+	
+	public void beginNounPhrase(String id, String noun);
+	public void addAdjective(String adjective, Set<String> adverbs);
+	
+	
+	public void endParagraph();
+	
+	public String getText();
+	
 	
 }
