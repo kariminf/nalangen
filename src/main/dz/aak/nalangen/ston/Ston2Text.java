@@ -33,7 +33,6 @@ public class Ston2Text extends Parser {
 
 	private UnivRealizer realizer;
 	private WNRequestor wordnet;
-	private boolean subject = true;
 	
 	
 	public Ston2Text(UnivRealizer realizer, String lang, String basePath) {
