@@ -57,8 +57,8 @@ public class Ston2Text extends Parser {
 	}
 
 	@Override
-	protected void addVerbSpecif(String tense, String aspect) {
-		realizer.addVerbSpecif(tense, aspect);
+	protected void addVerbSpecif(String tense, String modality, boolean progressive, boolean negated) {
+		realizer.addVerbSpecif(tense, modality, progressive, negated);
 		
 	}
 

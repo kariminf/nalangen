@@ -27,7 +27,7 @@ public interface UnivRealizer {
 	
 	public void beginSentence(String id, String verb);
 	
-	public void addVerbSpecif(String tense, String aspect);
+	public void addVerbSpecif(String tense, String modality, boolean progressive, boolean negated);
 	
 	public void beginDisjunction();
 	public void addConjunction(String nounPhraseID);
