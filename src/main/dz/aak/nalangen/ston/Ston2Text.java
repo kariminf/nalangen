@@ -33,10 +33,14 @@ public class Ston2Text extends Parser {
 
 	private UnivRealizer realizer;
 	private WNRequestor wordnet;
+	private String lastID = "";
+	//private String prep ="";
+	private String lang = "eng";
 	
 	
 	public Ston2Text(UnivRealizer realizer, String lang, String basePath) {
 		this.realizer = realizer;
+		this.lang = lang;
 		try {
 			wordnet = SqliteRequestor.create(lang, basePath);
 		} catch (NoSqliteBase | LangNotFound e) {
@@ -45,26 +49,17 @@ public class Ston2Text extends Parser {
 		}
 	}
 
-	@Override
-	protected void beginActions() {
-		
-	}
 
 	@Override
-	protected void beginAction(String id, int synSet) {
+	protected void addAction(String id, int synSet) {
 		String verb = wordnet.getWord(synSet, "VERB");
 		realizer.beginSentence(id, verb);
+		lastID = id;
 	}
 
 	@Override
 	protected void addVerbSpecif(String tense, String modality, boolean progressive, boolean negated) {
 		realizer.addVerbSpecif(tense, modality, progressive, negated);
-		
-	}
-
-	@Override
-	protected void endAction() {
-		realizer.endSentence();
 		
 	}
 
@@ -75,21 +70,10 @@ public class Ston2Text extends Parser {
 	}
 
 	@Override
-	protected void endActions() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected void beginRoles() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected void beginRole(String id, int synSet) {
+	protected void addRole(String id, int synSet) {
 		String noun = wordnet.getWord(synSet, "NOUN");
 		realizer.beginNounPhrase(id, noun);
+		lastID = id;
 	}
 
 	@Override
@@ -106,11 +90,6 @@ public class Ston2Text extends Parser {
 		
 	}
 
-	@Override
-	protected void endRole() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	protected void adjectiveFail() {
@@ -125,56 +104,75 @@ public class Ston2Text extends Parser {
 	}
 
 	@Override
-	protected void endRoles() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	protected void parseSuccess() {
 		realizer.endParagraph();
 		
 	}
 
 	@Override
-	protected void beginSubject() {
+	protected void addSubjects() {
 		realizer.beginSubject();
-		
-	}
-
-	@Override
-	protected void beginObject() {
-		realizer.beginObject();
-	}
-
-	@Override
-	protected void beginDisjunction() {
 		realizer.beginDisjunction();
-		
 	}
 
 	@Override
-	protected void addConjunction(String roleID) {
-		realizer.addConjunction(roleID);
-		
+	protected void addObjects() {
+		realizer.beginObject();
+		realizer.beginDisjunction();
 	}
 
 	@Override
-	protected void endDisjunction() {
+	protected void addConjunctions(Set<String> IDs) {
+		for(String ID: IDs)
+			realizer.addConjunction(ID);
 		realizer.endDisjunction();
+		//realizer.beginDisjunction();
+	}
+
+
+	@Override
+	protected void parseFail() {
+		// TODO Auto-generated method stub
 		
 	}
 
+
 	@Override
-	protected void endSubject() {
+	protected void relativeFail() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	protected void addRelative(String type) {
+		// TODO complete, for now just adpositional phrases
+		if (type.matches("p_at")){
+			String prep = "at";
+			if (lang == "fr") prep = "dans";
+			realizer.addPrepositionPhrase(lastID, prep);
+			realizer.beginDisjunction();
+		}
+		
+	}
+
+
+	@Override
+	protected void endAction() {
+		realizer.endSentence();
+	}
+
+
+	@Override
+	protected void endSubjects() {
 		realizer.endSubject();
-		
 	}
 
+
 	@Override
-	protected void endObject() {
+	protected void endObjects() {
 		realizer.endObject();
-		
 	}
+
 
 }

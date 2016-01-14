@@ -46,6 +46,8 @@ public interface UnivRealizer {
 	
 	public void endParagraph();
 	
+	public void addPrepositionPhrase(String parentID, String preposition);
+	
 	public String getText();
 	
 	
