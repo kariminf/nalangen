@@ -25,7 +25,7 @@ public interface UnivRealizer {
 	
 	public void beginParagraph();
 	
-	public void beginSentence(String id, String verb);
+	public void beginSentPhrase(String id, String verb);
 	
 	public void addVerbSpecif(String tense, String modality, boolean progressive, boolean negated);
 	
@@ -37,7 +37,7 @@ public interface UnivRealizer {
 	public void beginObject();
 	public void endSubject();
 	public void endObject();
-	public void endSentence();
+	public void endSentPhrase();
 	
 	
 	public void beginNounPhrase(String id, String noun);
@@ -49,6 +49,9 @@ public interface UnivRealizer {
 	public void addPrepositionPhrase(String parentID, String preposition);
 	
 	public String getText();
+	
+	public void beginSentence (String type);
+	public void endSentence ();
 	
 	
 }

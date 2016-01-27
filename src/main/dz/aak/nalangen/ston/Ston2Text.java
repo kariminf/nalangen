@@ -53,7 +53,7 @@ public class Ston2Text extends Parser {
 	@Override
 	protected void addAction(String id, int synSet) {
 		String verb = wordnet.getWord(synSet, "VERB");
-		realizer.beginSentence(id, verb);
+		realizer.beginSentPhrase(id, verb);
 		lastID = id;
 	}
 
@@ -112,21 +112,20 @@ public class Ston2Text extends Parser {
 	@Override
 	protected void addSubjects() {
 		realizer.beginSubject();
-		realizer.beginDisjunction();
 	}
 
 	@Override
 	protected void addObjects() {
 		realizer.beginObject();
-		realizer.beginDisjunction();
 	}
 
 	@Override
 	protected void addConjunctions(Set<String> IDs) {
+		if (IDs.size() < 1) return;
+		realizer.beginDisjunction();
 		for(String ID: IDs)
 			realizer.addConjunction(ID);
 		realizer.endDisjunction();
-		//realizer.beginDisjunction();
 	}
 
 
@@ -159,7 +158,7 @@ public class Ston2Text extends Parser {
 
 	@Override
 	protected void endAction() {
-		realizer.endSentence();
+		realizer.endSentPhrase();
 	}
 
 
@@ -177,15 +176,13 @@ public class Ston2Text extends Parser {
 
 	@Override
 	protected void beginSentence(String type) {
-		// TODO Auto-generated method stub
-		
+		realizer.beginSentence(type);
 	}
 
 
 	@Override
 	protected void endSentence() {
-		// TODO Auto-generated method stub
-		
+		realizer.endSentence();
 	}
 
 

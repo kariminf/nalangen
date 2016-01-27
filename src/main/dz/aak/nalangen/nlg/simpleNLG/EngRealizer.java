@@ -44,33 +44,33 @@ public class EngRealizer implements UnivRealizer {
 	}
 
 	@Override
-	public void beginSentence(String id, String verb) {
+	public void beginSentPhrase(String id, String verb) {
 		VPPhraseSpec verbP = nlgFactory.createVerbPhrase(verb);
 		sp = nlgFactory.createClause();
 		
 		sp.setVerb(verbP);
 		
 		sps.put(id, sp);
-		System.out.println("Begin sentence: " + verb);
+		System.out.println("Begin phrase: " + verb);
 		
 	}
 
 	@Override
-	public void endSentence() {
+	public void endSentPhrase() {
 		paragraph.addComponent(sp);
 		
-		System.out.println("End sentence");
+		System.out.println("End phrase");
 		
 	}
 
 	@Override
 	public void addVerbSpecif(String tense, String modality, boolean progressive, boolean negated) {
 		
-		if(modality.matches("NONE")){
-			sp.setFeature(Feature.TENSE, Tense.valueOf(tense));
+		if(modality.matches("none")){
+			sp.setFeature(Feature.TENSE, Tense.valueOf(tense.toUpperCase()));
 		} else {
 			String modal = modality.toLowerCase();
-			if (tense.matches("PAST")){
+			if (tense.matches("past")){
 				System.out.println(modal);
 				WordElement pastmodal = lexicon.getWord(modal);
 				modal = pastmodal.getFeatureAsString(LexicalFeature.PAST);
@@ -173,6 +173,7 @@ public class EngRealizer implements UnivRealizer {
 	@Override
 	public void endObject() {
 		sp.setObject(disjunctions);
+		disjunctions = null;
 		System.out.println("end object");
 	}
 
@@ -188,6 +189,21 @@ public class EngRealizer implements UnivRealizer {
 		disjunctions.setFeature(Feature.CONJUNCTION, "or");
 		prepositional.addComplement(disjunctions);
 		parent.addPostModifier(prepositional);
+		
+	}
+
+	@Override
+	public void beginSentence(String type) {
+		// TODO Auto-generated method stub
+		
+		disjunctions = nlgFactory.createCoordinatedPhrase();
+		disjunctions.setFeature(Feature.CONJUNCTION, "or");
+		
+	}
+
+	@Override
+	public void endSentence() {
+		// TODO Auto-generated method stub
 		
 	}
 
