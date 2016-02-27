@@ -21,37 +21,54 @@ package dz.aak.nalangen.nlg;
 
 import java.util.Set;
 
-public interface UnivRealizer {
+import dz.aak.nalangen.nlg.Types.Modality;
+import dz.aak.nalangen.nlg.Types.Tense;
+
+
+public abstract class UnivRealizer {
 	
-	public void beginParagraph();
+	protected RealizerMap nlMap;
+	protected ModelingMap mdMap;
 	
-	public void beginSentPhrase(String id, String verb);
+	public UnivRealizer(RealizerMap nlMap, ModelingMap mdMap){
+		this.nlMap = nlMap;
+		this.mdMap = mdMap;
+	}
 	
-	public void addVerbSpecif(String tense, String modality, boolean progressive, boolean negated);
+	public String getRealizerTense(String modelTense){
+		Tense tense = mdMap.mapTense(modelTense);
+		return nlMap.getTense(tense);
+	}
 	
-	public void beginDisjunction();
-	public void addConjunction(String nounPhraseID);
-	public void endDisjunction();
+	public abstract void beginParagraph();
 	
-	public void beginSubject();
-	public void beginObject();
-	public void endSubject();
-	public void endObject();
-	public void endSentPhrase();
+	public abstract void beginSentPhrase(String id, String verb);
+	
+	public abstract void addVerbSpecif(String tense, String modality, boolean progressive, boolean negated);
+	
+	public abstract void beginDisjunction();
+	public abstract void addConjunction(String nounPhraseID);
+	public abstract void endDisjunction();
+	
+	public abstract void beginSubject();
+	public abstract void beginObject();
+	public abstract void endSubject();
+	public abstract void endObject();
+	public abstract void endSentPhrase();
 	
 	
-	public void beginNounPhrase(String id, String noun);
-	public void addAdjective(String adjective, Set<String> adverbs);
+	public abstract void beginNounPhrase(String id, String noun);
+	public abstract void addAdjective(String adjective, Set<String> adverbs);
 	
 	
-	public void endParagraph();
+	public abstract void endParagraph();
 	
-	public void addPrepositionPhrase(String parentID, String preposition);
+	public abstract void addPrepositionPhrase(String parentID, String preposition);
 	
-	public String getText();
+	public abstract String getText();
 	
-	public void beginSentence (String type);
-	public void endSentence ();
+	public abstract void beginSentence (String type);
+	public abstract void endSentence ();
 	
 	
 }

@@ -1,9 +1,11 @@
-package dz.aak.nalangen.nlg.simpleNLG;
+package dz.aak.nalangen.nlg.simplenlg;
 
 import java.util.HashMap;
 import java.util.Set;
 
+import dz.aak.nalangen.nlg.ModelingMap;
 import dz.aak.nalangen.nlg.UnivRealizer;
+import dz.aak.nalangen.nlg.Types;
 
 import simplenlg.features.Feature;
 import simplenlg.features.LexicalFeature;
@@ -21,7 +23,7 @@ import simplenlg.phrasespec.SPhraseSpec;
 import simplenlg.phrasespec.VPPhraseSpec;
 import simplenlg.realiser.english.Realiser;
 
-public class EngRealizer implements UnivRealizer {
+public class EngRealizer extends UnivRealizer {
 	
 	private static Lexicon lexicon = Lexicon.getDefaultLexicon();
 	private static NLGFactory nlgFactory = new NLGFactory(lexicon);
@@ -39,8 +41,8 @@ public class EngRealizer implements UnivRealizer {
 	
 	private String result = "";
 
-	public EngRealizer() {
-		// TODO Auto-generated constructor stub
+	public EngRealizer(ModelingMap mdMap) {
+		super(new SimpleNlgMap(), mdMap);
 	}
 
 	@Override
@@ -66,11 +68,17 @@ public class EngRealizer implements UnivRealizer {
 	@Override
 	public void addVerbSpecif(String tense, String modality, boolean progressive, boolean negated) {
 		
-		if(modality.matches("none")){
-			sp.setFeature(Feature.TENSE, Tense.valueOf(tense.toUpperCase()));
+		Types.Tense theTense = mdMap.mapTense(tense);
+		String rTense = nlMap.getTense(theTense);
+		
+		Types.Modality theModality = mdMap.mapModal(modality);
+				
+		if(theModality == Types.Modality.NONE){
+			sp.setFeature(Feature.TENSE, Tense.valueOf(rTense));
 		} else {
-			String modal = modality.toLowerCase();
-			if (tense.matches("past")){
+			
+			String modal = nlMap.getModal(theModality);
+			if (theTense == Types.Tense.PAST){
 				System.out.println(modal);
 				WordElement pastmodal = lexicon.getWord(modal);
 				modal = pastmodal.getFeatureAsString(LexicalFeature.PAST);

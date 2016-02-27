@@ -1,11 +1,13 @@
-package dz.aak.nalangen.nlg.simpleNLG;
+package dz.aak.nalangen.nlg.simplenlg;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import dz.aak.nalangen.nlg.simpleNLG.EngRealizer;
+import dz.aak.nalangen.nlg.ModelingMap;
+import dz.aak.nalangen.nlg.simplenlg.EngRealizer;
 import dz.aak.nalangen.ston.Ston2Text;
+import dz.aak.nalangen.ston.StonMap;
 
 public class Ston2Eng {
 
@@ -16,7 +18,8 @@ public class Ston2Eng {
 	 */
 	public static void main(String[] args) {
 		String specif = readFile(stonFile);
-		EngRealizer realizer = new EngRealizer();
+		ModelingMap stonMap = new StonMap();
+		EngRealizer realizer = new EngRealizer(stonMap);
 		Ston2Text translator = new Ston2Text(realizer, "eng", wordnetPath);
 		
 		//System.out.println(specif);
