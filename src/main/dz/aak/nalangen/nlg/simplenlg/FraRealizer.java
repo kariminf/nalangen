@@ -21,13 +21,13 @@ import simplenlg.phrasespec.NPPhraseSpec;
 import simplenlg.phrasespec.PPPhraseSpec;
 import simplenlg.phrasespec.SPhraseSpec;
 import simplenlg.phrasespec.VPPhraseSpec;
-import simplenlg.realiser.english.Realiser;
+import simplenlg.realiser.Realiser;
 
-public class EngRealizer extends UnivRealizer {
+public class FraRealizer extends UnivRealizer {
 	
-	private static Lexicon lexicon = Lexicon.getDefaultLexicon();
+	private static Lexicon lexicon = new simplenlg.lexicon.french.XMLLexicon();
 	private static NLGFactory nlgFactory = new NLGFactory(lexicon);
-	private static Realiser realiser = new Realiser(lexicon);
+	private static Realiser realiser = new Realiser();
 	private static DocumentElement paragraph = nlgFactory.createParagraph();
 	
 	private NPPhraseSpec np;
@@ -41,8 +41,8 @@ public class EngRealizer extends UnivRealizer {
 	
 	private String result = "";
 
-	public EngRealizer(ModelingMap mdMap) {
-		super(new EngSnlgMap(), mdMap);
+	public FraRealizer(ModelingMap mdMap) {
+		super(new FraSnlgMap(), mdMap);
 	}
 
 	@Override
@@ -99,7 +99,7 @@ public class EngRealizer extends UnivRealizer {
 
 	@Override
 	public void beginNounPhrase(String id, String noun) {
-		np = nlgFactory.createNounPhrase("the", noun);
+		np = nlgFactory.createNounPhrase("le", noun);
 		
 		nps.put(id, np);
 		System.out.println("\tnoun: " + noun);
@@ -161,14 +161,14 @@ public class EngRealizer extends UnivRealizer {
 	@Override
 	public void beginSubject() {
 		disjunctions = nlgFactory.createCoordinatedPhrase();
-		disjunctions.setFeature(Feature.CONJUNCTION, "or");
+		disjunctions.setFeature(Feature.CONJUNCTION, "ou");
 		System.out.println("Add subject");
 	}
 
 	@Override
 	public void beginObject() {
 		disjunctions = nlgFactory.createCoordinatedPhrase();
-		disjunctions.setFeature(Feature.CONJUNCTION, "or");
+		disjunctions.setFeature(Feature.CONJUNCTION, "ou");
 		System.out.println("Add object");
 	}
 
@@ -194,7 +194,7 @@ public class EngRealizer extends UnivRealizer {
 		PPPhraseSpec prepositional = nlgFactory.createPrepositionPhrase(preposition);
 		
 		disjunctions = nlgFactory.createCoordinatedPhrase();
-		disjunctions.setFeature(Feature.CONJUNCTION, "or");
+		disjunctions.setFeature(Feature.CONJUNCTION, "ou");
 		prepositional.addComplement(disjunctions);
 		parent.addPostModifier(prepositional);
 		
@@ -205,7 +205,7 @@ public class EngRealizer extends UnivRealizer {
 		// TODO Auto-generated method stub
 		
 		disjunctions = nlgFactory.createCoordinatedPhrase();
-		disjunctions.setFeature(Feature.CONJUNCTION, "or");
+		disjunctions.setFeature(Feature.CONJUNCTION, "ou");
 		
 	}
 

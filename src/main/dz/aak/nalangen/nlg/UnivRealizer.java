@@ -22,6 +22,7 @@ package dz.aak.nalangen.nlg;
 import java.util.Set;
 
 import dz.aak.nalangen.nlg.Types.Modality;
+import dz.aak.nalangen.nlg.Types.Relation;
 import dz.aak.nalangen.nlg.Types.Tense;
 
 
@@ -38,6 +39,13 @@ public abstract class UnivRealizer {
 	public String getRealizerTense(String modelTense){
 		Tense tense = mdMap.mapTense(modelTense);
 		return nlMap.getTense(tense);
+	}
+	
+	public String mapRelation(String retation, String noun, String verb){
+		
+		Relation rel = mdMap.mapAdposition(retation);
+		String result = nlMap.getAdposition(rel, noun);
+		return result;
 	}
 	
 	public abstract void beginParagraph();

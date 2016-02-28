@@ -9,7 +9,7 @@ import dz.aak.nalangen.nlg.simplenlg.EngRealizer;
 import dz.aak.nalangen.ston.Ston2Text;
 import dz.aak.nalangen.ston.StonMap;
 
-public class Ston2Eng {
+public class Ston2TextTest {
 
 	static String stonFile = "../SentRep/ston/at.ston";
 	static String wordnetPath = "wordnet/wordnet.sqlite";

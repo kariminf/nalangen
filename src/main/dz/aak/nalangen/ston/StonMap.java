@@ -1,6 +1,7 @@
 package dz.aak.nalangen.ston;
 
 import dz.aak.nalangen.nlg.ModelingMap;
+import dz.aak.nalangen.nlg.Types.Relation;
 import dz.aak.nalangen.nlg.Types.Modality;
 import dz.aak.nalangen.nlg.Types.Tense;
 import dz.aak.sentrep.ston.StonLex;
@@ -33,6 +34,14 @@ public class StonMap extends ModelingMap {
 		
 		}
 		return Modality.NONE;
+	}
+
+	@Override
+	public Relation mapAdposition(String langAdpos) {
+		
+		Relation adpos = Relation.valueOf(langAdpos);
+		
+		return adpos;
 	}
 
 }

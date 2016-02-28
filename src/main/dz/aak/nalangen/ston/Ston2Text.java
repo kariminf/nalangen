@@ -146,12 +146,10 @@ public class Ston2Text extends Parser {
 	@Override
 	protected void addRelative(String type) {
 		// TODO complete, for now just adpositional phrases
-		if (type.matches("p_at")){
-			String prep = "at";
-			if (lang == "fr") prep = "dans";
-			realizer.addPrepositionPhrase(lastID, prep);
-			realizer.beginDisjunction();
-		}
+		type = type.toUpperCase();
+		String prep = realizer.mapRelation(type, "", "");
+		realizer.addPrepositionPhrase(lastID, prep);
+		realizer.beginDisjunction();
 		
 	}
 
