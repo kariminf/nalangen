@@ -19,6 +19,8 @@
 
 package dz.aak.nalangen.ston;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -36,6 +38,12 @@ public class Ston2Text extends Parser {
 	private String lastID = "";
 	//private String prep ="";
 	private String lang = "eng";
+	
+	private boolean isAction = false;
+	
+	private int currentRelID = 0;
+	private HashMap<String, ArrayList<Integer>> refs = 
+			new HashMap<String, ArrayList<Integer>>();
 	
 	
 	public Ston2Text(UnivRealizer realizer, String lang, String basePath) {
@@ -55,6 +63,7 @@ public class Ston2Text extends Parser {
 		String verb = wordnet.getWord(synSet, "VERB");
 		realizer.beginSentPhrase(id, verb);
 		lastID = id;
+		isAction = true;
 	}
 
 	@Override
@@ -74,6 +83,7 @@ public class Ston2Text extends Parser {
 		String noun = wordnet.getWord(synSet, "NOUN");
 		realizer.beginNounPhrase(id, noun);
 		lastID = id;
+		isAction = false;
 	}
 
 	@Override
@@ -148,8 +158,25 @@ public class Ston2Text extends Parser {
 		// TODO complete, for now just adpositional phrases
 		type = type.toUpperCase();
 		String prep = realizer.mapRelation(type, "", "");
-		realizer.addPrepositionPhrase(lastID, prep);
-		realizer.beginDisjunction();
+		
+		if (isAction){
+			realizer.addPrepositionPhrase(lastID, prep);
+			realizer.beginDisjunction();
+		} else {
+			String relID = "rel" + currentRelID;
+			//realizer.addComplementizer(relID, prep);
+			realizer.beginDisjunction();
+			if (refs.containsKey(lastID)){
+				refs.get(lastID).add(currentRelID);
+			} else {
+				ArrayList<Integer> r = new ArrayList<Integer>();
+				r.add(currentRelID);
+				refs.put(lastID, r);
+			}
+			currentRelID++;
+			
+		}
+		
 		
 	}
 
@@ -174,6 +201,16 @@ public class Ston2Text extends Parser {
 
 	@Override
 	protected void beginSentence(String type) {
+		
+		for (String mainCl : refs.keySet()){
+			
+			for (int relClNum: refs.get(mainCl)){
+				String relCl = "rel" + relClNum;
+				//realizer.linkComplementizer(mainCl, relCl);
+			}
+			
+		}
+		
 		realizer.beginSentence(type);
 	}
 

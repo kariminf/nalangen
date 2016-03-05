@@ -2,6 +2,14 @@ package dz.aak.nalangen.nlg;
 
 public class Types {
 	
+	public static enum Mood {
+		AFFIRMATIVE,
+		EXCLAMATIVE,
+		INTERROGATIVE,
+		CONDITIONAL,
+		CAUSAL
+	}
+	
 	public static enum Tense {
 		PAST,
 		PRESENT,

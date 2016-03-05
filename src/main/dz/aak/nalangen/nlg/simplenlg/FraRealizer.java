@@ -53,7 +53,7 @@ public class FraRealizer extends UnivRealizer {
 		sp.setVerb(verbP);
 		
 		sps.put(id, sp);
-		System.out.println("Begin phrase: " + verb);
+		//System.out.println("Begin phrase: " + verb);
 		
 	}
 
@@ -61,7 +61,7 @@ public class FraRealizer extends UnivRealizer {
 	public void endSentPhrase() {
 		paragraph.addComponent(sp);
 		
-		System.out.println("End phrase");
+		//System.out.println("End phrase");
 		
 	}
 
@@ -93,7 +93,7 @@ public class FraRealizer extends UnivRealizer {
 		sp.setFeature(Feature.NEGATED, negated);
 
 			
-		System.out.println("\tadd tense and aspect");
+		//System.out.println("\tadd tense and aspect");
 	}
 
 
@@ -102,7 +102,7 @@ public class FraRealizer extends UnivRealizer {
 		np = nlgFactory.createNounPhrase("le", noun);
 		
 		nps.put(id, np);
-		System.out.println("\tnoun: " + noun);
+		//System.out.println("\tnoun: " + noun);
 	}
 
 	@Override
@@ -115,7 +115,7 @@ public class FraRealizer extends UnivRealizer {
 		
 		np.addModifier(adjectiveP);
 		
-		System.out.println("\t\tAdd adjective: " + adjective);
+		//System.out.println("\t\tAdd adjective: " + adjective);
 		
 	}
 
@@ -140,12 +140,12 @@ public class FraRealizer extends UnivRealizer {
 	@Override
 	public void beginDisjunction() {
 		conjunctions = nlgFactory.createCoordinatedPhrase();
-		System.out.println("\tbegin disjunction: ");
+		//System.out.println("\tbegin disjunction: ");
 	}
 
 	@Override
 	public void addConjunction(String nounPhraseID) {
-		System.out.println("\tadd conjunction: " + nounPhraseID);
+		//System.out.println("\tadd conjunction: " + nounPhraseID);
 		if (nps.containsKey(nounPhraseID)){
 			conjunctions.addCoordinate(nps.get(nounPhraseID));
 		}
@@ -155,34 +155,34 @@ public class FraRealizer extends UnivRealizer {
 	@Override
 	public void endDisjunction() {
 		disjunctions.addCoordinate(conjunctions);
-		System.out.println("\tend disjunction: ");
+		//System.out.println("\tend disjunction: ");
 	}
 
 	@Override
 	public void beginSubject() {
 		disjunctions = nlgFactory.createCoordinatedPhrase();
 		disjunctions.setFeature(Feature.CONJUNCTION, "ou");
-		System.out.println("Add subject");
+		//System.out.println("Add subject");
 	}
 
 	@Override
 	public void beginObject() {
 		disjunctions = nlgFactory.createCoordinatedPhrase();
 		disjunctions.setFeature(Feature.CONJUNCTION, "ou");
-		System.out.println("Add object");
+		//System.out.println("Add object");
 	}
 
 	@Override
 	public void endSubject() {
 		sp.setSubject(disjunctions);
-		System.out.println("end subject");
+		//System.out.println("end subject");
 	}
 
 	@Override
 	public void endObject() {
 		sp.setObject(disjunctions);
 		disjunctions = null;
-		System.out.println("end object");
+		//System.out.println("end object");
 	}
 
 	@Override
@@ -211,6 +211,24 @@ public class FraRealizer extends UnivRealizer {
 
 	@Override
 	public void endSentence() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void beginComplementizer(String pronoun) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void endComplementizer() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void linkComplimentizers() {
 		// TODO Auto-generated method stub
 		
 	}

@@ -5,13 +5,14 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import dz.aak.nalangen.nlg.ModelingMap;
+import dz.aak.nalangen.nlg.UnivRealizer;
 import dz.aak.nalangen.nlg.simplenlg.EngRealizer;
 import dz.aak.nalangen.ston.Ston2Text;
 import dz.aak.nalangen.ston.StonMap;
 
 public class Ston2TextTest {
 
-	static String stonFile = "../SentRep/ston/at.ston";
+	static String stonFile = "../SentRep/ston/that.ston";
 	static String wordnetPath = "wordnet/wordnet.sqlite";
 	/**
 	 * @param args
@@ -19,18 +20,30 @@ public class Ston2TextTest {
 	public static void main(String[] args) {
 		String specif = readFile(stonFile);
 		ModelingMap stonMap = new StonMap();
-		EngRealizer realizer = new EngRealizer(stonMap);
-		Ston2Text translator = new Ston2Text(realizer, "eng", wordnetPath);
+		UnivRealizer realizer;
+		Ston2Text translator;
 		
-		//System.out.println(specif);
-		
+		realizer = new EngRealizer(stonMap);
+		translator = new Ston2Text(realizer, "eng", wordnetPath);
 		translator.parse(specif);
-		
 		if(translator.parsed()){
 			System.out.println(realizer.getText());
 		} else {
-			System.out.println("No");
+			System.out.println("English parse failed");
 		}
+		
+		/*
+		
+		realizer = new FraRealizer(stonMap);
+		translator = new Ston2Text(realizer, "fra", wordnetPath);
+		translator.parse(specif);
+		if(translator.parsed()){
+			System.out.println(realizer.getText());
+		} else {
+			System.out.println("French parse failed");
+		}
+		
+		*/
 
 	}
 	

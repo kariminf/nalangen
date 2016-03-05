@@ -19,9 +19,11 @@
 
 package dz.aak.nalangen.nlg;
 
+import java.util.List;
 import java.util.Set;
 
 import dz.aak.nalangen.nlg.Types.Modality;
+import dz.aak.nalangen.nlg.Types.Mood;
 import dz.aak.nalangen.nlg.Types.Relation;
 import dz.aak.nalangen.nlg.Types.Tense;
 
@@ -52,11 +54,11 @@ public abstract class UnivRealizer {
 	
 	public abstract void beginSentPhrase(String id, String verb);
 	
-	public abstract void addVerbSpecif(String tense, String modality, boolean progressive, boolean negated);
+	public abstract void addVerbSpecif(Tense tense, Modality modality, boolean progressive, boolean negated);
 	
-	public abstract void beginDisjunction();
-	public abstract void addConjunction(String nounPhraseID);
-	public abstract void endDisjunction();
+	//public abstract void beginDisjunctions();
+	public abstract void addConjunctions(List<String> phraseIDs);
+	//public abstract void endDisjunctions();
 	
 	public abstract void beginSubject();
 	public abstract void beginObject();
@@ -75,7 +77,18 @@ public abstract class UnivRealizer {
 	
 	public abstract String getText();
 	
-	public abstract void beginSentence (String type);
+	/*
+	public abstract void addComplementizer(String id, String pronoun);
+	
+	public abstract void linkComplementizer(String parentId, String id);
+	*/
+	
+	public abstract void beginComplementizer(String pronoun);
+	public abstract void endComplementizer();
+	
+	public abstract void linkComplimentizers();
+	
+	public abstract void beginSentence (Mood type);
 	public abstract void endSentence ();
 	
 	
