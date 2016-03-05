@@ -18,8 +18,6 @@ public class EnRealizerTest {
 		ModelingMap stonMap = new StonMap();
 		UnivRealizer realizer = new EngRealizer(stonMap);
 		
-		realizer.beginParagraph();
-		
 		//Roles
 		realizer.beginNounPhrase("mother", "mother");
 		realizer.beginNounPhrase("food", "food");
@@ -59,18 +57,12 @@ public class EnRealizerTest {
 		
 		realizer.endSentPhrase();
 		
-		realizer.linkComplimentizers();
-		
 		realizer.beginSentence(Types.Mood.AFFIRMATIVE);
 		List<String>  sentRefs = new ArrayList<String>();
 		sentRefs.add("was");
 		realizer.addConjunctions(sentRefs);
 		realizer.endSentence();
-		
-		realizer.endParagraph();
-		
-		
-		
+			
 		System.out.println(realizer.getText());
 		
 	}
@@ -78,8 +70,6 @@ public class EnRealizerTest {
 	private static void simpleTest(){
 		ModelingMap stonMap = new StonMap();
 		UnivRealizer realizer = new EngRealizer(stonMap);
-		
-		realizer.beginParagraph();
 		
 		//Roles
 		realizer.beginNounPhrase("mother", "mother");
@@ -112,10 +102,6 @@ public class EnRealizerTest {
 		realizer.addConjunctions(sentRefs);
 		realizer.endSentence();
 		
-		realizer.endParagraph();
-		
-		
-		
 		System.out.println(realizer.getText());
 	}
 	/**
@@ -123,7 +109,7 @@ public class EnRealizerTest {
 	 */
 	public static void main(String[] args) {
 		
-		//simpleTest();
+		simpleTest();
 		thatTest();
 
 	}

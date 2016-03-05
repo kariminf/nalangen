@@ -50,15 +50,10 @@ public abstract class UnivRealizer {
 		return result;
 	}
 	
-	public abstract void beginParagraph();
-	
 	public abstract void beginSentPhrase(String id, String verb);
 	
 	public abstract void addVerbSpecif(Tense tense, Modality modality, boolean progressive, boolean negated);
-	
-	//public abstract void beginDisjunctions();
 	public abstract void addConjunctions(List<String> phraseIDs);
-	//public abstract void endDisjunctions();
 	
 	public abstract void beginSubject();
 	public abstract void beginObject();
@@ -69,9 +64,6 @@ public abstract class UnivRealizer {
 	
 	public abstract void beginNounPhrase(String id, String noun);
 	public abstract void addAdjective(String adjective, Set<String> adverbs);
-	
-	
-	public abstract void endParagraph();
 	
 	public abstract void addPrepositionPhrase(String parentID, String preposition);
 	
@@ -86,10 +78,8 @@ public abstract class UnivRealizer {
 	public abstract void beginComplementizer(String pronoun);
 	public abstract void endComplementizer();
 	
-	public abstract void linkComplimentizers();
-	
 	public abstract void beginSentence (Mood type);
 	public abstract void endSentence ();
 	
-	
+	public abstract void showDebugMsg(boolean yes);
 }

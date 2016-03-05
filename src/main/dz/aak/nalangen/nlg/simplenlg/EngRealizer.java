@@ -9,13 +9,14 @@ import dz.aak.nalangen.nlg.ModelingMap;
 import dz.aak.nalangen.nlg.UnivRealizer;
 import dz.aak.nalangen.nlg.Types;
 
+import simplenlg.features.ClauseStatus;
+import simplenlg.features.DiscourseFunction;
 import simplenlg.features.Feature;
 import simplenlg.features.LexicalFeature;
 import simplenlg.features.Tense;
 import simplenlg.framework.CoordinatedPhraseElement;
-import simplenlg.framework.DocumentElement;
-import simplenlg.framework.NLGElement;
 import simplenlg.framework.NLGFactory;
+import simplenlg.framework.PhraseElement;
 import simplenlg.framework.WordElement;
 import simplenlg.lexicon.Lexicon;
 import simplenlg.phrasespec.AdjPhraseSpec;
@@ -27,11 +28,11 @@ import simplenlg.realiser.english.Realiser;
 
 public class EngRealizer extends UnivRealizer {
 	
-	private static final boolean debugMsg = true;
+	private boolean debugMsg = false;
 	
-	private static Lexicon lexicon = Lexicon.getDefaultLexicon();
-	private static NLGFactory nlgFactory = new NLGFactory(lexicon);
-	private static Realiser realiser = new Realiser(lexicon);
+	private Lexicon lexicon = Lexicon.getDefaultLexicon();
+	private NLGFactory nlgFactory = new NLGFactory(lexicon);
+	private Realiser realiser = new Realiser(lexicon);
 	//private static DocumentElement paragraph = nlgFactory.createParagraph();
 	
 	private NPPhraseSpec np;
@@ -40,17 +41,15 @@ public class EngRealizer extends UnivRealizer {
 	private SPhraseSpec sp;
 	private HashMap<String, SPhraseSpec> sps = new HashMap<String, SPhraseSpec>();
 	
-	private HashMap<String, ArrayList<String>> refs = 
-			new HashMap<String, ArrayList<String>>();
 	
-	private String complementPronoun = "";
+	private PhraseElement pe;
 	
 	private CoordinatedPhraseElement disjunctions;
 	private CoordinatedPhraseElement conjunctions;
 	
 	
-	private String lastNP = "";
-	private String lastVP = "";
+	//private String lastNP = "";
+	//private String lastVP = "";
 	
 	private String result = "";
 
@@ -61,12 +60,16 @@ public class EngRealizer extends UnivRealizer {
 	@Override
 	public void beginSentPhrase(String id, String verb) {
 		VPPhraseSpec verbP = nlgFactory.createVerbPhrase(verb);
-		sp = nlgFactory.createClause();
 		
+		if (sps.containsKey(id)){
+			sp = sps.get(id);
+		} else {
+			sp = nlgFactory.createClause();
+			sps.put(id, sp);
+		}
+		pe = sp;	
 		sp.setVerb(verbP);
-		
-		sps.put(id, sp);
-		lastVP = id;
+		//lastVP = id;
 		if (debugMsg)
 			System.out.println("Begin verbal phrase: " + id + ", verb= " + verb);
 		
@@ -75,7 +78,7 @@ public class EngRealizer extends UnivRealizer {
 	@Override
 	public void endSentPhrase() {
 		if (debugMsg)
-			System.out.println("End verbal phrase: " + lastVP);
+			System.out.println("End verbal phrase");
 		
 	}
 
@@ -117,9 +120,9 @@ public class EngRealizer extends UnivRealizer {
 	@Override
 	public void beginNounPhrase(String id, String noun) {
 		np = nlgFactory.createNounPhrase("the", noun);
-		
+		pe = np;
 		nps.put(id, np);
-		lastNP = id;
+		//lastNP = id;
 		
 		if (debugMsg)
 			System.out.println("Begin noun phrase: " + id + ", noun= " + noun);
@@ -141,19 +144,6 @@ public class EngRealizer extends UnivRealizer {
 	}
 
 	@Override
-	public void endParagraph() {
-		//NLGElement el = realiser.realise(paragraph);
-		//result = el.getRealisation();
-		
-		//System.out.println("End Phrase");
-	}
-
-	@Override
-	public void beginParagraph() {
-		
-	}
-
-	@Override
 	public String getText() {
 		/*NLGElement el = realiser.realise(paragraph);
 		result = el.getRealisation();*/
@@ -166,7 +156,7 @@ public class EngRealizer extends UnivRealizer {
 		
 		if (debugMsg)
 			System.out.println("        add conjunctions: " + phraseIDs);
-		
+		/*
 		if (complementPronoun.length() > 0){
 			complementPronoun += "|";
 			for (String phraseID: phraseIDs)
@@ -176,7 +166,7 @@ public class EngRealizer extends UnivRealizer {
 		
 		if (debugMsg)
 			System.out.println("       ...");
-
+		*/
 		conjunctions = nlgFactory.createCoordinatedPhrase();
 		conjunctions.setFeature(Feature.CONJUNCTION, "and");
 
@@ -185,13 +175,20 @@ public class EngRealizer extends UnivRealizer {
 				conjunctions.addCoordinate(nps.get(phraseID));
 				if (debugMsg)
 					System.out.println("       " + phraseID + ">> Nominal phrase");
+				continue;
 			}
 
 			if (sps.containsKey(phraseID)){
 				conjunctions.addCoordinate(sps.get(phraseID));
 				if (debugMsg)
 					System.out.println("       " + phraseID + ">> Verbal phrase");
+				continue;
 			}
+			
+			//When not found; it is a late verbal phrase
+			sp = nlgFactory.createClause();
+			sps.put(phraseID, sp);
+			conjunctions.addCoordinate(sp);
 		}
 		
 		disjunctions.addCoordinate(conjunctions);
@@ -270,7 +267,16 @@ public class EngRealizer extends UnivRealizer {
 
 	@Override
 	public void beginComplementizer(String pronoun) {
-		complementPronoun = pronoun;
+		//complementPronoun = pronoun;
+		
+		disjunctions = nlgFactory.createCoordinatedPhrase();
+		disjunctions.setFeature(Feature.CONJUNCTION, "or");
+		//SPhraseSpec clause = nlgFactory.createClause();
+		//clause.setFeature(Feature.COMPLEMENTISER, "lool");
+		//clause.setComplement(disjunctions);
+		//TODO complimentizer pronoun
+	
+		pe.addComplement(disjunctions);
 		if (debugMsg)
 			System.out.println("    Begin complimentizer:" + pronoun);
 		
@@ -279,73 +285,11 @@ public class EngRealizer extends UnivRealizer {
 	@Override
 	public void endComplementizer() {
 		
-		if (lastNP.length() < 1) return;
-		
-		ArrayList<String> npComp = (refs.containsKey(lastNP))?
-				refs.get(lastNP):
-					new ArrayList<String>();
-		
-		refs.put(lastNP, npComp);
-		
-		npComp.add(complementPronoun);
-		
-		if (debugMsg)
-			System.out.println("    End complimentizer");
-		
-		complementPronoun = "";
-		
 	}
 
 	@Override
-	public void linkComplimentizers() {
-		
-		
-		if (debugMsg)
-			System.out.println("... Linking complimentizers");
-		
-		for (String mainC : refs.keySet()){
-			if (! nps.containsKey(mainC)) continue;
-			NPPhraseSpec np = nps.get(mainC);
-			CoordinatedPhraseElement relPhEls = //relative phrase elements
-					nlgFactory.createCoordinatedPhrase();
-			relPhEls.setFeature(Feature.CONJUNCTION, "and");
-			System.out.println(refs.get(mainC));
-			
-			for (String disConj: refs.get(mainC)){
-				//split using | then using ,
-				//The first string before | is the pronoun
-				String[] disjs = disConj.split("\\|");
-				if (disjs.length < 2) continue;
-				String pronoun = disjs[0];
-				CoordinatedPhraseElement disjEl = //disjuncted elements
-						nlgFactory.createCoordinatedPhrase();
-				disjEl.setFeature(Feature.CONJUNCTION, "or");
-				disjEl.setFeature(Feature.COMPLEMENTISER, pronoun);
-				for (String disj: disjs){
-					String[] conjs = disj.split(",");
-					if (conjs.length < 1) continue;
-					CoordinatedPhraseElement conjEl = //conjuncted elements
-							nlgFactory.createCoordinatedPhrase();
-					conjEl.setFeature(Feature.CONJUNCTION, "and");
-					for (String conj: conjs){
-						if (conj.trim().length() < 1) continue;
-						
-						if (! sps.containsKey(conj)) continue;
-						
-						SPhraseSpec sp = sps.get(conj);
-						conjEl.addCoordinate(sp);
-						
-					}
-					disjEl.addCoordinate(conjEl);
-					
-				}
-				relPhEls.addCoordinate(disjEl);	
-			}
-			
-			np.addComplement(relPhEls);	
-		}
-		
-		refs.clear();
+	public void showDebugMsg(boolean yes) {
+		debugMsg = yes;
 		
 	}
 
