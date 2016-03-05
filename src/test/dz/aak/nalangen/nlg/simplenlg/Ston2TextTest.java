@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import dz.aak.nalangen.nlg.ModelingMap;
 import dz.aak.nalangen.nlg.UnivRealizer;
-import dz.aak.nalangen.nlg.simplenlg.EngRealizer;
+import dz.aak.nalangen.nlg.simplenlg.SNLGRealizer;
 import dz.aak.nalangen.ston.Ston2Text;
 import dz.aak.nalangen.ston.StonMap;
 
@@ -23,7 +23,7 @@ public class Ston2TextTest {
 		UnivRealizer realizer;
 		Ston2Text translator;
 		
-		realizer = new EngRealizer(stonMap);
+		realizer = new SNLGRealizer(stonMap);
 		translator = new Ston2Text(realizer, "eng", wordnetPath);
 		translator.parse(specif);
 		if(translator.parsed()){

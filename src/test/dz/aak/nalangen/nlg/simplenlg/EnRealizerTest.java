@@ -16,7 +16,7 @@ public class EnRealizerTest {
 	private static void thatTest(){
 		
 		ModelingMap stonMap = new StonMap();
-		UnivRealizer realizer = new EngRealizer(stonMap);
+		UnivRealizer realizer = new SNLGRealizer(stonMap);
 		
 		//Roles
 		realizer.beginNounPhrase("mother", "mother");
@@ -69,7 +69,7 @@ public class EnRealizerTest {
 	
 	private static void simpleTest(){
 		ModelingMap stonMap = new StonMap();
-		UnivRealizer realizer = new EngRealizer(stonMap);
+		UnivRealizer realizer = new SNLGRealizer(stonMap);
 		
 		//Roles
 		realizer.beginNounPhrase("mother", "mother");

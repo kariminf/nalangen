@@ -26,7 +26,7 @@ import simplenlg.phrasespec.SPhraseSpec;
 import simplenlg.phrasespec.VPPhraseSpec;
 import simplenlg.realiser.english.Realiser;
 
-public class EngRealizer extends UnivRealizer {
+public class SNLGRealizer extends UnivRealizer {
 	
 	private boolean debugMsg = false;
 	
@@ -53,7 +53,7 @@ public class EngRealizer extends UnivRealizer {
 	
 	private String result = "";
 
-	public EngRealizer(ModelingMap mdMap) {
+	public SNLGRealizer(ModelingMap mdMap) {
 		super(new EngSnlgMap(), mdMap);
 	}
 
