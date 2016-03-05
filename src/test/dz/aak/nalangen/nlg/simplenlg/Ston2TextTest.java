@@ -23,7 +23,7 @@ public class Ston2TextTest {
 		UnivRealizer realizer;
 		Ston2Text translator;
 		
-		realizer = new SNLGRealizer(stonMap);
+		realizer = new EngRealizer(stonMap);
 		translator = new Ston2Text(realizer, "eng", wordnetPath);
 		translator.parse(specif);
 		if(translator.parsed()){
@@ -32,7 +32,6 @@ public class Ston2TextTest {
 			System.out.println("English parse failed");
 		}
 		
-		/*
 		
 		realizer = new FraRealizer(stonMap);
 		translator = new Ston2Text(realizer, "fra", wordnetPath);
@@ -43,7 +42,7 @@ public class Ston2TextTest {
 			System.out.println("French parse failed");
 		}
 		
-		*/
+	
 
 	}
 	

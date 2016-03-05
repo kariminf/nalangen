@@ -13,8 +13,7 @@ public class StonMap extends ModelingMap {
 		int idx = StonLex.getTenseIndex(langTense);
 		
 		switch (idx){
-		case 0: return Tense.PAST;
-		case 1: return Tense.PRESENT;
+		case 1: return Tense.PAST;
 		case 2: return Tense.FUTURE;
 		
 		}
@@ -28,9 +27,9 @@ public class StonMap extends ModelingMap {
 		int idx = StonLex.getModalIndex(langModal);
 		
 		switch (idx){
-		case 0: return Modality.CAN;
-		case 1: return Modality.MAY;
-		case 2: return Modality.MUST;
+		case 1: return Modality.CAN;
+		case 2: return Modality.MAY;
+		case 3: return Modality.MUST;
 		
 		}
 		return Modality.NONE;

@@ -43,6 +43,19 @@ public abstract class UnivRealizer {
 		return nlMap.getTense(tense);
 	}
 	
+	public Tense getTense(String modelTense){
+		return mdMap.mapTense(modelTense);
+	}
+	
+	public Modality getModality(String modelModal){
+		return mdMap.mapModal(modelModal);
+	}
+	
+	public Mood getMood(String modelMood){
+		//TODO complete mood
+		return Mood.AFFIRMATIVE;
+	}
+	
 	public String mapRelation(String retation, String noun, String verb){
 		
 		Relation rel = mdMap.mapAdposition(retation);
@@ -53,7 +66,7 @@ public abstract class UnivRealizer {
 	public abstract void beginSentPhrase(String id, String verb);
 	
 	public abstract void addVerbSpecif(Tense tense, Modality modality, boolean progressive, boolean negated);
-	public abstract void addConjunctions(List<String> phraseIDs);
+	public abstract void addConjunctions(Set<String> phraseIDs);
 	
 	public abstract void beginSubject();
 	public abstract void beginObject();

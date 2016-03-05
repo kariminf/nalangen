@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Set;
 
 import dz.aak.nalangen.nlg.ModelingMap;
+import dz.aak.nalangen.nlg.RealizerMap;
+import dz.aak.nalangen.nlg.Types.Determiner;
 import dz.aak.nalangen.nlg.UnivRealizer;
 import dz.aak.nalangen.nlg.Types;
 
@@ -24,15 +26,15 @@ import simplenlg.phrasespec.NPPhraseSpec;
 import simplenlg.phrasespec.PPPhraseSpec;
 import simplenlg.phrasespec.SPhraseSpec;
 import simplenlg.phrasespec.VPPhraseSpec;
-import simplenlg.realiser.english.Realiser;
+import simplenlg.realiser.Realiser;
 
-public class SNLGRealizer extends UnivRealizer {
+public abstract class SNLGRealizer extends UnivRealizer {
 	
 	private boolean debugMsg = false;
 	
-	private Lexicon lexicon = Lexicon.getDefaultLexicon();
-	private NLGFactory nlgFactory = new NLGFactory(lexicon);
-	private Realiser realiser = new Realiser(lexicon);
+	private Lexicon lexicon;
+	private NLGFactory nlgFactory;
+	private Realiser realiser;
 	//private static DocumentElement paragraph = nlgFactory.createParagraph();
 	
 	private NPPhraseSpec np;
@@ -53,8 +55,11 @@ public class SNLGRealizer extends UnivRealizer {
 	
 	private String result = "";
 
-	public SNLGRealizer(ModelingMap mdMap) {
-		super(new EngSnlgMap(), mdMap);
+	public SNLGRealizer(RealizerMap rlMap, ModelingMap mdMap, Lexicon lexicon) {
+		super(rlMap, mdMap);
+		this.lexicon = lexicon;
+		nlgFactory = new NLGFactory(lexicon);
+		realiser = new Realiser();
 	}
 
 	@Override
@@ -119,7 +124,8 @@ public class SNLGRealizer extends UnivRealizer {
 
 	@Override
 	public void beginNounPhrase(String id, String noun) {
-		np = nlgFactory.createNounPhrase("the", noun);
+		String det = nlMap.getDeterminer(Determiner.YES);
+		np = nlgFactory.createNounPhrase(det, noun);
 		pe = np;
 		nps.put(id, np);
 		//lastNP = id;
@@ -152,7 +158,7 @@ public class SNLGRealizer extends UnivRealizer {
 	}
 
 	@Override
-	public void addConjunctions(List<String> phraseIDs) {
+	public void addConjunctions(Set<String> phraseIDs) {
 		
 		if (debugMsg)
 			System.out.println("        add conjunctions: " + phraseIDs);

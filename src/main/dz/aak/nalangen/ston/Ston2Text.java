@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import dz.aak.nalangen.nlg.Types;
 import dz.aak.nalangen.nlg.UnivRealizer;
 import dz.aak.nalangen.wordnet.SqliteReqExceptions.LangNotFound;
 import dz.aak.nalangen.wordnet.SqliteReqExceptions.NoSqliteBase;
@@ -68,7 +69,10 @@ public class Ston2Text extends Parser {
 
 	@Override
 	protected void addVerbSpecif(String tense, String modality, boolean progressive, boolean negated) {
-		realizer.addVerbSpecif(tense, modality, progressive, negated);
+		Types.Tense theTense = realizer.getTense(tense);
+		Types.Modality theModal = realizer.getModality(modality);
+		System.out.println("Modal= " + theModal);
+		realizer.addVerbSpecif(theTense, theModal, progressive, negated);
 		
 	}
 
@@ -115,7 +119,6 @@ public class Ston2Text extends Parser {
 
 	@Override
 	protected void parseSuccess() {
-		realizer.endParagraph();
 		
 	}
 
@@ -132,10 +135,7 @@ public class Ston2Text extends Parser {
 	@Override
 	protected void addConjunctions(Set<String> IDs) {
 		if (IDs.size() < 1) return;
-		realizer.beginDisjunction();
-		for(String ID: IDs)
-			realizer.addConjunction(ID);
-		realizer.endDisjunction();
+		realizer.addConjunctions(IDs);
 	}
 
 
@@ -161,11 +161,11 @@ public class Ston2Text extends Parser {
 		
 		if (isAction){
 			realizer.addPrepositionPhrase(lastID, prep);
-			realizer.beginDisjunction();
 		} else {
+			realizer.beginComplementizer(prep);
+			/*
 			String relID = "rel" + currentRelID;
 			//realizer.addComplementizer(relID, prep);
-			realizer.beginDisjunction();
 			if (refs.containsKey(lastID)){
 				refs.get(lastID).add(currentRelID);
 			} else {
@@ -173,7 +173,7 @@ public class Ston2Text extends Parser {
 				r.add(currentRelID);
 				refs.put(lastID, r);
 			}
-			currentRelID++;
+			currentRelID++;*/
 			
 		}
 		
@@ -202,16 +202,8 @@ public class Ston2Text extends Parser {
 	@Override
 	protected void beginSentence(String type) {
 		
-		for (String mainCl : refs.keySet()){
-			
-			for (int relClNum: refs.get(mainCl)){
-				String relCl = "rel" + relClNum;
-				//realizer.linkComplementizer(mainCl, relCl);
-			}
-			
-		}
-		
-		realizer.beginSentence(type);
+		Types.Mood mood = realizer.getMood(type);
+		realizer.beginSentence(mood);
 	}
 
 

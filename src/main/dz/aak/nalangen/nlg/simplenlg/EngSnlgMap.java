@@ -1,6 +1,7 @@
 package dz.aak.nalangen.nlg.simplenlg;
 
 import dz.aak.nalangen.nlg.RealizerMap;
+import dz.aak.nalangen.nlg.Types.Determiner;
 import dz.aak.nalangen.nlg.Types.Relation;
 import dz.aak.nalangen.nlg.Types.Modality;
 import dz.aak.nalangen.nlg.Types.Tense;
@@ -65,6 +66,17 @@ public class EngSnlgMap extends RealizerMap {
 		}
 		
 		return "";
+	}
+
+	@Override
+	public String getDeterminer(Determiner det) {
+		switch (det){
+		case YES: return "the";
+		case NO: return "a";
+		case NONE: return "";
+		default:
+			return "";
+		}
 	}
 	
 	

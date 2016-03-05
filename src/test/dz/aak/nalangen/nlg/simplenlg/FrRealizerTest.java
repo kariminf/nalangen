@@ -10,37 +10,37 @@ import dz.aak.nalangen.nlg.Types;
 import dz.aak.nalangen.nlg.UnivRealizer;
 import dz.aak.nalangen.ston.StonMap;
 
-public class EnRealizerTest {
+public class FrRealizerTest {
 
 	
 	private static void thatTest(){
 		
 		ModelingMap stonMap = new StonMap();
-		UnivRealizer realizer = new EngRealizer(stonMap);
+		UnivRealizer realizer = new FraRealizer(stonMap);
 		
 		//Roles
-		realizer.beginNounPhrase("mother", "mother");
-		realizer.beginNounPhrase("food", "food");
-		realizer.beginComplementizer("which");
-		Set<String> compRefs = new HashSet<String>();
+		realizer.beginNounPhrase("mother", "mère");
+		realizer.beginNounPhrase("food", "nourriture");
+		realizer.beginComplementizer("que");
+		HashSet<String> compRefs = new HashSet<String>();
 		compRefs.add("m_ate");
 		realizer.addConjunctions(compRefs);
 		realizer.endComplementizer();
 		
-		realizer.beginNounPhrase("+goodfood", "food");
+		realizer.beginNounPhrase("+goodfood", "nourriture");
 		HashSet<String> adv1= new HashSet<String>();
-		adv1.add("extremely");
-		realizer.addAdjective("good", adv1);
+		adv1.add("extrêmement");
+		realizer.addAdjective("bon", adv1);
 		
 		//Actions
-		realizer.beginSentPhrase("m_ate", "eat");
+		realizer.beginSentPhrase("m_ate", "manger");
 		realizer.addVerbSpecif(Types.Tense.PAST, Types.Modality.NONE, false, false);
 		realizer.beginSubject();
-		Set<String> subjRefs = new HashSet<String>();
+		HashSet<String> subjRefs = new HashSet<String>();
 		subjRefs.add("mother");
 		realizer.addConjunctions(subjRefs);
 		realizer.endSubject();
-		realizer.beginSentPhrase("was", "be");
+		realizer.beginSentPhrase("was", "être");
 		realizer.addVerbSpecif(Types.Tense.PAST, Types.Modality.NONE, false, false);
 		
 		realizer.beginSubject();
@@ -69,16 +69,16 @@ public class EnRealizerTest {
 	
 	private static void simpleTest(){
 		ModelingMap stonMap = new StonMap();
-		UnivRealizer realizer = new EngRealizer(stonMap);
+		UnivRealizer realizer = new FraRealizer(stonMap);
 		
 		//Roles
-		realizer.beginNounPhrase("mother", "mother");
+		realizer.beginNounPhrase("mother", "mère");
 		
-		realizer.beginNounPhrase("food", "food");
+		realizer.beginNounPhrase("food", "nourriture");
 		
 		//Actions
 		
-		realizer.beginSentPhrase("ate", "eat");
+		realizer.beginSentPhrase("ate", "manger");
 		realizer.addVerbSpecif(Types.Tense.PAST, Types.Modality.NONE, false, false);
 		
 		realizer.beginSubject();

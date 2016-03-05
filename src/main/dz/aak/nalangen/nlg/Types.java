@@ -62,5 +62,11 @@ public class Types {
 		WITH,
 		TO
 	}
+	
+	public static enum Determiner {
+		NONE,
+		NO,
+		YES
+	}
 
 }
