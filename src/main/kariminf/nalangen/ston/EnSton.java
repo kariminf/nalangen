@@ -1,4 +1,4 @@
-package dz.aak.nalangen.ston;
+package kariminf.nalangen.ston;
 
 public class EnSton {
 	

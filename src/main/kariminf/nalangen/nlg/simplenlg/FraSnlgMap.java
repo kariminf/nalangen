@@ -1,10 +1,10 @@
-package dz.aak.nalangen.nlg.simplenlg;
+package kariminf.nalangen.nlg.simplenlg;
 
-import dz.aak.nalangen.nlg.RealizerMap;
-import dz.aak.nalangen.nlg.Types.Determiner;
-import dz.aak.nalangen.nlg.Types.Relation;
-import dz.aak.nalangen.nlg.Types.Modality;
-import dz.aak.nalangen.nlg.Types.Tense;
+import kariminf.nalangen.nlg.RealizerMap;
+import kariminf.nalangen.nlg.Types.Determiner;
+import kariminf.nalangen.nlg.Types.Modality;
+import kariminf.nalangen.nlg.Types.Relation;
+import kariminf.nalangen.nlg.Types.Tense;
 
 public class FraSnlgMap extends RealizerMap {
 

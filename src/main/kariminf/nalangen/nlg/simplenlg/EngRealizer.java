@@ -1,7 +1,7 @@
-package dz.aak.nalangen.nlg.simplenlg;
+package kariminf.nalangen.nlg.simplenlg;
 
+import kariminf.nalangen.nlg.ModelingMap;
 import simplenlg.lexicon.Lexicon;
-import dz.aak.nalangen.nlg.ModelingMap;
 
 public class EngRealizer extends SNLGRealizer {
 

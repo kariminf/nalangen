@@ -1,4 +1,4 @@
-package dz.aak.nalangen.nlg;
+package kariminf.nalangen.nlg;
 
 public class Types {
 	
@@ -65,8 +65,8 @@ public class Types {
 	
 	public static enum Determiner {
 		NONE,
-		NO,
-		YES
+		YES,
+		NO
 	}
 
 }

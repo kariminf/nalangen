@@ -17,7 +17,7 @@
  */
 
 
-package dz.aak.nalangen.wfreq;
+package kariminf.nalangen.wfreq;
 
 public interface WordFrequency {
 	

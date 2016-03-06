@@ -17,20 +17,21 @@
  */
 
 
-package dz.aak.nalangen.ston;
+package kariminf.nalangen.ston;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import dz.aak.nalangen.nlg.Types;
-import dz.aak.nalangen.nlg.UnivRealizer;
-import dz.aak.nalangen.wordnet.SqliteReqExceptions.LangNotFound;
-import dz.aak.nalangen.wordnet.SqliteReqExceptions.NoSqliteBase;
-import dz.aak.nalangen.wordnet.SqliteRequestor;
-import dz.aak.nalangen.wordnet.WNRequestor;
-import dz.aak.sentrep.ston.Parser;
+import kariminf.nalangen.nlg.Types;
+import kariminf.nalangen.nlg.UnivRealizer;
+import kariminf.nalangen.wordnet.SqliteRequestor;
+import kariminf.nalangen.wordnet.WNRequestor;
+import kariminf.nalangen.wordnet.SqliteReqExceptions.LangNotFound;
+import kariminf.nalangen.wordnet.SqliteReqExceptions.NoSqliteBase;
+import kariminf.sentrep.ston.Parser;
+
 
 public class Ston2Text extends Parser {
 
@@ -71,7 +72,7 @@ public class Ston2Text extends Parser {
 	protected void addVerbSpecif(String tense, String modality, boolean progressive, boolean negated) {
 		Types.Tense theTense = realizer.getTense(tense);
 		Types.Modality theModal = realizer.getModality(modality);
-		System.out.println("Modal= " + theModal);
+		//System.out.println("Modal= " + theModal);
 		realizer.addVerbSpecif(theTense, theModal, progressive, negated);
 		
 	}
@@ -242,8 +243,8 @@ public class Ston2Text extends Parser {
 
 
 	@Override
-	protected void addRoleSpecif(String name, boolean def, String quantity) {
-		// TODO Auto-generated method stub
+	protected void addRoleSpecif(String name, String def, String quantity) {
+		realizer.addNPSpecifs(name, def, quantity);
 		
 	}
 

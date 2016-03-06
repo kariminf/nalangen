@@ -1,15 +1,16 @@
-package dz.aak.nalangen.nlg.simplenlg;
+package kariminf.nalangen.nlg.simplenlg;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-import dz.aak.nalangen.nlg.ModelingMap;
-import dz.aak.nalangen.nlg.RealizerMap;
-import dz.aak.nalangen.nlg.Types.Determiner;
-import dz.aak.nalangen.nlg.UnivRealizer;
-import dz.aak.nalangen.nlg.Types;
+import kariminf.nalangen.nlg.ModelingMap;
+import kariminf.nalangen.nlg.RealizerMap;
+import kariminf.nalangen.nlg.Types;
+import kariminf.nalangen.nlg.UnivRealizer;
+import kariminf.nalangen.nlg.Types.Determiner;
+
 
 import simplenlg.features.ClauseStatus;
 import simplenlg.features.DiscourseFunction;
@@ -50,7 +51,7 @@ public abstract class SNLGRealizer extends UnivRealizer {
 	private CoordinatedPhraseElement conjunctions;
 	
 	
-	//private String lastNP = "";
+	private String lastNP = "";
 	//private String lastVP = "";
 	
 	private String result = "";
@@ -124,14 +125,35 @@ public abstract class SNLGRealizer extends UnivRealizer {
 
 	@Override
 	public void beginNounPhrase(String id, String noun) {
-		String det = nlMap.getDeterminer(Determiner.YES);
-		np = nlgFactory.createNounPhrase(det, noun);
+		np = nlgFactory.createNounPhrase("", noun);
 		pe = np;
 		nps.put(id, np);
-		//lastNP = id;
+		lastNP = id;
 		
 		if (debugMsg)
 			System.out.println("Begin noun phrase: " + id + ", noun= " + noun);
+	}
+	
+	@Override
+	public void addNPSpecifs(String name, String def, String quantity){
+		if (name != null && name.length() > 0){
+			System.out.println(">>" + name);
+			np = nlgFactory.createNounPhrase("", name);
+			nps.put(lastNP, np);
+		}
+		
+		Types.Determiner det= mdMap.mapDeterminer(def);
+		
+		String determiner = nlMap.getDeterminer(det);
+		np.setSpecifier(determiner);
+		
+		if(quantity.length()<1 || quantity.matches("1")) return;
+		np.setPlural(true);
+		
+		if(quantity.matches("PL")) return;
+		
+		np.addPreModifier(quantity);
+		
 	}
 
 	@Override

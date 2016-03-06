@@ -1,18 +1,21 @@
-package dz.aak.nalangen.nlg.simplenlg;
+package kariminf.nalangen.nlg.simplenlg;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import dz.aak.nalangen.nlg.ModelingMap;
-import dz.aak.nalangen.nlg.UnivRealizer;
-import dz.aak.nalangen.nlg.simplenlg.SNLGRealizer;
-import dz.aak.nalangen.ston.Ston2Text;
-import dz.aak.nalangen.ston.StonMap;
+import kariminf.nalangen.nlg.ModelingMap;
+import kariminf.nalangen.nlg.UnivRealizer;
+import kariminf.nalangen.nlg.simplenlg.EngRealizer;
+import kariminf.nalangen.nlg.simplenlg.FraRealizer;
+import kariminf.nalangen.nlg.simplenlg.SNLGRealizer;
+import kariminf.nalangen.ston.Ston2Text;
+import kariminf.nalangen.ston.StonMap;
+
 
 public class Ston2TextTest {
 
-	static String stonFile = "../SentRep/ston/that.ston";
+	static String stonFile = "../SentRep/ston/pn_quant.ston";
 	static String wordnetPath = "wordnet/wordnet.sqlite";
 	/**
 	 * @param args

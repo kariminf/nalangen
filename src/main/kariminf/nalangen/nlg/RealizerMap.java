@@ -1,9 +1,9 @@
-package dz.aak.nalangen.nlg;
+package kariminf.nalangen.nlg;
 
-import dz.aak.nalangen.nlg.Types.Determiner;
-import dz.aak.nalangen.nlg.Types.Relation;
-import dz.aak.nalangen.nlg.Types.Modality;
-import dz.aak.nalangen.nlg.Types.Tense;
+import kariminf.nalangen.nlg.Types.Determiner;
+import kariminf.nalangen.nlg.Types.Modality;
+import kariminf.nalangen.nlg.Types.Relation;
+import kariminf.nalangen.nlg.Types.Tense;
 
 public abstract class RealizerMap {
 	

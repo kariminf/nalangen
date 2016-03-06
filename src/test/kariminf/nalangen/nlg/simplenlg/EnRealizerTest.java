@@ -1,14 +1,16 @@
-package dz.aak.nalangen.nlg.simplenlg;
+package kariminf.nalangen.nlg.simplenlg;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import dz.aak.nalangen.nlg.ModelingMap;
-import dz.aak.nalangen.nlg.Types;
-import dz.aak.nalangen.nlg.UnivRealizer;
-import dz.aak.nalangen.ston.StonMap;
+import kariminf.nalangen.nlg.ModelingMap;
+import kariminf.nalangen.nlg.Types;
+import kariminf.nalangen.nlg.UnivRealizer;
+import kariminf.nalangen.nlg.simplenlg.EngRealizer;
+import kariminf.nalangen.ston.StonMap;
+
 
 public class EnRealizerTest {
 

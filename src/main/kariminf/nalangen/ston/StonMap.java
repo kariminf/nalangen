@@ -1,10 +1,11 @@
-package dz.aak.nalangen.ston;
+package kariminf.nalangen.ston;
 
-import dz.aak.nalangen.nlg.ModelingMap;
-import dz.aak.nalangen.nlg.Types.Relation;
-import dz.aak.nalangen.nlg.Types.Modality;
-import dz.aak.nalangen.nlg.Types.Tense;
-import dz.aak.sentrep.ston.StonLex;
+import kariminf.nalangen.nlg.ModelingMap;
+import kariminf.nalangen.nlg.Types.Determiner;
+import kariminf.nalangen.nlg.Types.Modality;
+import kariminf.nalangen.nlg.Types.Relation;
+import kariminf.nalangen.nlg.Types.Tense;
+import kariminf.sentrep.ston.StonLex;
 
 public class StonMap extends ModelingMap {
 
@@ -41,6 +42,16 @@ public class StonMap extends ModelingMap {
 		Relation adpos = Relation.valueOf(langAdpos);
 		
 		return adpos;
+	}
+
+	@Override
+	public Determiner mapDeterminer(String langDet) {
+		int idx = StonLex.getDetIndex(langDet);
+		switch (idx){
+		case 1: return Determiner.YES;
+		case 2: return Determiner.NO;
+		default: return Determiner.NONE;
+		}
 	}
 
 }

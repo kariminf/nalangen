@@ -17,15 +17,16 @@
  */
 
 
-package dz.aak.nalangen.nlg;
+package kariminf.nalangen.nlg;
 
 import java.util.List;
 import java.util.Set;
 
-import dz.aak.nalangen.nlg.Types.Modality;
-import dz.aak.nalangen.nlg.Types.Mood;
-import dz.aak.nalangen.nlg.Types.Relation;
-import dz.aak.nalangen.nlg.Types.Tense;
+import kariminf.nalangen.nlg.Types.Modality;
+import kariminf.nalangen.nlg.Types.Mood;
+import kariminf.nalangen.nlg.Types.Relation;
+import kariminf.nalangen.nlg.Types.Tense;
+
 
 
 public abstract class UnivRealizer {
@@ -76,6 +77,7 @@ public abstract class UnivRealizer {
 	
 	
 	public abstract void beginNounPhrase(String id, String noun);
+	public abstract void addNPSpecifs(String name, String def, String quantity);
 	public abstract void addAdjective(String adjective, Set<String> adverbs);
 	
 	public abstract void addPrepositionPhrase(String parentID, String preposition);
