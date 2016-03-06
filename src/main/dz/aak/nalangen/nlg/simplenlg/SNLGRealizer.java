@@ -64,7 +64,6 @@ public abstract class SNLGRealizer extends UnivRealizer {
 
 	@Override
 	public void beginSentPhrase(String id, String verb) {
-		VPPhraseSpec verbP = nlgFactory.createVerbPhrase(verb);
 		
 		if (sps.containsKey(id)){
 			sp = sps.get(id);
@@ -73,7 +72,7 @@ public abstract class SNLGRealizer extends UnivRealizer {
 			sps.put(id, sp);
 		}
 		pe = sp;	
-		sp.setVerb(verbP);
+		sp.setVerb(verb);
 		//lastVP = id;
 		if (debugMsg)
 			System.out.println("Begin verbal phrase: " + id + ", verb= " + verb);
@@ -94,8 +93,9 @@ public abstract class SNLGRealizer extends UnivRealizer {
 		String rTense = nlMap.getTense(tense);
 		
 		//Types.Modality theModality = mdMap.mapModal(modality);
-				
+		
 		if(modality == Types.Modality.NONE){
+			//System.out.println(sp.getVerb().toString());
 			sp.setFeature(Feature.TENSE, Tense.valueOf(rTense));
 		} else {
 			
