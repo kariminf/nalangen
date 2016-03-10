@@ -68,5 +68,13 @@ public class Types {
 		YES,
 		NO
 	}
+	
+	public static enum Comparison {
+		MORE,
+		LESS,
+		MOST,
+		LEAST,
+		EQUAL
+	}
 
 }

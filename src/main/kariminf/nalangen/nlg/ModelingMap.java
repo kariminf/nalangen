@@ -1,5 +1,6 @@
 package kariminf.nalangen.nlg;
 
+import kariminf.nalangen.nlg.Types.Comparison;
 import kariminf.nalangen.nlg.Types.Determiner;
 import kariminf.nalangen.nlg.Types.Modality;
 import kariminf.nalangen.nlg.Types.Relation;
@@ -11,5 +12,6 @@ public abstract class ModelingMap {
 	public abstract Modality mapModal(String langModal);
 	public abstract Relation mapAdposition(String langAdpos);
 	public abstract Determiner mapDeterminer(String langDet);
+	public abstract Comparison mapComparison(String comp);
 
 }

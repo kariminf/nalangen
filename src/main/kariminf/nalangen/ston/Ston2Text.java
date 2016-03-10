@@ -251,7 +251,17 @@ public class Ston2Text extends Parser {
 
 	@Override
 	protected void addComparison(String type, Set<Integer> adjSynSets) {
-		// TODO Auto-generated method stub
+		Types.Comparison comp = realizer.getComparison(type);
+		
+		HashSet<String> adjectives = new HashSet<String>();
+		
+		for (int synset: adjSynSets){
+			String adjective = wordnet.getWord(synset, "ADJECTIVE");
+			if (adjective != null && adjective.trim().length() >  0)
+				adjectives.add(adjective);
+		}
+		
+		realizer.addComparison(comp, adjectives);
 		
 	}
 

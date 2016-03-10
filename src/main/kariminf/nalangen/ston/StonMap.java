@@ -1,6 +1,7 @@
 package kariminf.nalangen.ston;
 
 import kariminf.nalangen.nlg.ModelingMap;
+import kariminf.nalangen.nlg.Types.Comparison;
 import kariminf.nalangen.nlg.Types.Determiner;
 import kariminf.nalangen.nlg.Types.Modality;
 import kariminf.nalangen.nlg.Types.Relation;
@@ -52,6 +53,18 @@ public class StonMap extends ModelingMap {
 		case 2: return Determiner.NO;
 		default: return Determiner.NONE;
 		}
+	}
+
+	@Override
+	public Comparison mapComparison(String comp) {
+		int idx = StonLex.getCompIndex(comp);
+		
+		Comparison[] compValues = Comparison.values();
+		
+		if (idx < compValues.length)
+			return Comparison.values()[idx];
+		
+		return Comparison.EQUAL;
 	}
 
 }

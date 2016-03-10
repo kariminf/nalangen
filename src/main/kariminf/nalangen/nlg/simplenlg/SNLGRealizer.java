@@ -137,7 +137,7 @@ public abstract class SNLGRealizer extends UnivRealizer {
 	@Override
 	public void addNPSpecifs(String name, String def, String quantity){
 		if (name != null && name.length() > 0){
-			System.out.println(">>" + name);
+			//System.out.println(">>" + name);
 			np = nlgFactory.createNounPhrase("", name);
 			nps.put(lastNP, np);
 		}
@@ -307,6 +307,11 @@ public abstract class SNLGRealizer extends UnivRealizer {
 		pe.addComplement(disjunctions);
 		if (debugMsg)
 			System.out.println("    Begin complimentizer:" + pronoun);
+		
+	}
+	
+	@Override
+	public void addComparison(Types.Comparison comp, Set<String> IDs){
 		
 	}
 

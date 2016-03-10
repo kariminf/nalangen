@@ -19,9 +19,9 @@
 
 package kariminf.nalangen.nlg;
 
-import java.util.List;
 import java.util.Set;
 
+import kariminf.nalangen.nlg.Types.Comparison;
 import kariminf.nalangen.nlg.Types.Modality;
 import kariminf.nalangen.nlg.Types.Mood;
 import kariminf.nalangen.nlg.Types.Relation;
@@ -53,8 +53,11 @@ public abstract class UnivRealizer {
 	}
 	
 	public Mood getMood(String modelMood){
-		//TODO complete mood
 		return Mood.AFFIRMATIVE;
+	}
+	
+	public Comparison getComparison(String modelComp){
+		return mdMap.mapComparison(modelComp);
 	}
 	
 	public String mapRelation(String retation, String noun, String verb){
@@ -95,6 +98,8 @@ public abstract class UnivRealizer {
 	
 	public abstract void beginSentence (Mood type);
 	public abstract void endSentence ();
+	
+	public abstract void addComparison(Types.Comparison comp, Set<String> IDs);
 	
 	public abstract void showDebugMsg(boolean yes);
 }
