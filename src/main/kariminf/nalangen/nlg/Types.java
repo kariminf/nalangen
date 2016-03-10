@@ -76,5 +76,10 @@ public class Types {
 		LEAST,
 		EQUAL
 	}
+	
+	public static enum Coordination {
+		AND,
+		OR
+	}
 
 }

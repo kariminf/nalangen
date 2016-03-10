@@ -99,7 +99,7 @@ public abstract class UnivRealizer {
 	public abstract void beginSentence (Mood type);
 	public abstract void endSentence ();
 	
-	public abstract void addComparison(Types.Comparison comp, Set<String> IDs);
+	public abstract void addComparison(Types.Comparison comp, Set<String> adjs);
 	
 	public abstract void showDebugMsg(boolean yes);
 }

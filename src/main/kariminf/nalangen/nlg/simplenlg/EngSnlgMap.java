@@ -1,6 +1,7 @@
 package kariminf.nalangen.nlg.simplenlg;
 
 import kariminf.nalangen.nlg.RealizerMap;
+import kariminf.nalangen.nlg.Types.Coordination;
 import kariminf.nalangen.nlg.Types.Determiner;
 import kariminf.nalangen.nlg.Types.Modality;
 import kariminf.nalangen.nlg.Types.Relation;
@@ -76,6 +77,15 @@ public class EngSnlgMap extends RealizerMap {
 		case NONE: return "";
 		default:
 			return "";
+		}
+	}
+
+	@Override
+	public String getCoordination(Coordination coord) {
+		switch (coord){
+		case AND: return "and";
+		case OR: return "or";
+		default: return "";
 		}
 	}
 	

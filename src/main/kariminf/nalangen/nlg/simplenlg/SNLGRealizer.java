@@ -1,19 +1,16 @@
 package kariminf.nalangen.nlg.simplenlg;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
 
 import kariminf.nalangen.nlg.ModelingMap;
 import kariminf.nalangen.nlg.RealizerMap;
 import kariminf.nalangen.nlg.Types;
-import kariminf.nalangen.nlg.UnivRealizer;
+import kariminf.nalangen.nlg.Types.Coordination;
 import kariminf.nalangen.nlg.Types.Determiner;
+import kariminf.nalangen.nlg.UnivRealizer;
 
 
-import simplenlg.features.ClauseStatus;
-import simplenlg.features.DiscourseFunction;
 import simplenlg.features.Feature;
 import simplenlg.features.LexicalFeature;
 import simplenlg.features.Tense;
@@ -26,7 +23,6 @@ import simplenlg.phrasespec.AdjPhraseSpec;
 import simplenlg.phrasespec.NPPhraseSpec;
 import simplenlg.phrasespec.PPPhraseSpec;
 import simplenlg.phrasespec.SPhraseSpec;
-import simplenlg.phrasespec.VPPhraseSpec;
 import simplenlg.realiser.Realiser;
 
 public abstract class SNLGRealizer extends UnivRealizer {
@@ -196,7 +192,7 @@ public abstract class SNLGRealizer extends UnivRealizer {
 			System.out.println("       ...");
 		*/
 		conjunctions = nlgFactory.createCoordinatedPhrase();
-		conjunctions.setFeature(Feature.CONJUNCTION, "and");
+		conjunctions.setFeature(Feature.CONJUNCTION, nlMap.getCoordination(Coordination.AND));
 
 		for (String phraseID: phraseIDs){
 			if (nps.containsKey(phraseID)){
@@ -226,7 +222,7 @@ public abstract class SNLGRealizer extends UnivRealizer {
 	@Override
 	public void beginSubject() {
 		disjunctions = nlgFactory.createCoordinatedPhrase();
-		disjunctions.setFeature(Feature.CONJUNCTION, "or");
+		disjunctions.setFeature(Feature.CONJUNCTION, nlMap.getCoordination(Coordination.OR));
 		if (debugMsg)
 			System.out.println("    Begin subject");
 	}
@@ -234,7 +230,7 @@ public abstract class SNLGRealizer extends UnivRealizer {
 	@Override
 	public void beginObject() {
 		disjunctions = nlgFactory.createCoordinatedPhrase();
-		disjunctions.setFeature(Feature.CONJUNCTION, "or");
+		disjunctions.setFeature(Feature.CONJUNCTION, nlMap.getCoordination(Coordination.OR));
 		if (debugMsg)
 			System.out.println("    Begin object");
 	}
@@ -264,7 +260,7 @@ public abstract class SNLGRealizer extends UnivRealizer {
 		PPPhraseSpec prepositional = nlgFactory.createPrepositionPhrase(preposition);
 		
 		disjunctions = nlgFactory.createCoordinatedPhrase();
-		disjunctions.setFeature(Feature.CONJUNCTION, "or");
+		disjunctions.setFeature(Feature.CONJUNCTION, nlMap.getCoordination(Coordination.OR));
 		prepositional.addComplement(disjunctions);
 		parent.addPostModifier(prepositional);
 		
@@ -276,7 +272,7 @@ public abstract class SNLGRealizer extends UnivRealizer {
 	@Override
 	public void beginSentence(Types.Mood type) {
 		disjunctions = nlgFactory.createCoordinatedPhrase();
-		disjunctions.setFeature(Feature.CONJUNCTION, "or");
+		disjunctions.setFeature(Feature.CONJUNCTION, nlMap.getCoordination(Coordination.OR));
 		if (debugMsg)
 			System.out.println("Begin sentence type:" + type);
 		
@@ -298,7 +294,7 @@ public abstract class SNLGRealizer extends UnivRealizer {
 		//complementPronoun = pronoun;
 		
 		disjunctions = nlgFactory.createCoordinatedPhrase();
-		disjunctions.setFeature(Feature.CONJUNCTION, "or");
+		disjunctions.setFeature(Feature.CONJUNCTION, nlMap.getCoordination(Coordination.OR));
 		//SPhraseSpec clause = nlgFactory.createClause();
 		//clause.setFeature(Feature.COMPLEMENTISER, "lool");
 		//clause.setComplement(disjunctions);
@@ -311,7 +307,58 @@ public abstract class SNLGRealizer extends UnivRealizer {
 	}
 	
 	@Override
-	public void addComparison(Types.Comparison comp, Set<String> IDs){
+	public void addComparison(Types.Comparison comp, Set<String> adjs){
+		
+		CoordinatedPhraseElement adjCoord = 
+				nlgFactory.createCoordinatedPhrase();
+		adjCoord.setFeature(Feature.CONJUNCTION, nlMap.getCoordination(Coordination.AND));
+		
+		String pre = "";
+		String post = "";
+		String feature = "";
+		
+		//TODO multilingualism here
+		switch (comp){
+		
+		case EQUAL: 
+			pre = "as";
+			post = "as";
+			break;
+		
+		case LESS: 
+			pre = "less";
+			post = "than";
+			break;
+		
+		case MORE: 
+			pre = "";
+			post = "than";
+			feature = Feature.IS_COMPARATIVE;
+			break;
+			
+		case MOST:
+			pre = nlMap.getDeterminer(Determiner.YES);
+			feature = Feature.IS_SUPERLATIVE;
+			break;
+			
+		case LEAST:
+			pre = nlMap.getDeterminer(Determiner.YES) + "least";
+			break;
+			
+		}
+		
+		adjCoord.addPreModifier(pre);
+		adjCoord.addPostModifier(post);
+		
+		
+		for (String adj: adjs){
+			AdjPhraseSpec adjPh = nlgFactory.createAdjectivePhrase(adj);
+			
+			if (feature.length() > 0)
+				adjPh.setFeature(feature, true);
+			
+			adjCoord.addCoordinate(adjPh);
+		}
 		
 	}
 
