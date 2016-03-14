@@ -1,6 +1,7 @@
 package kariminf.nalangen.nlg.simplenlg;
 
 import kariminf.nalangen.nlg.RealizerMap;
+import kariminf.nalangen.nlg.Types.Comparison;
 import kariminf.nalangen.nlg.Types.Coordination;
 import kariminf.nalangen.nlg.Types.Determiner;
 import kariminf.nalangen.nlg.Types.Modality;
@@ -84,6 +85,30 @@ public class FraSnlgMap extends RealizerMap {
 		case AND: return "et";
 		case OR: return "ou";
 		default: return "et";
+		}
+	}
+
+	@Override
+	public String getPreComparison(Comparison comp, boolean hasAdj) {
+		switch (comp){
+		case MORE: return "plus";
+		case LESS: return "moins";
+		case MOST: return "le plus";
+		case LEAST: return "le moins";
+		case EQUAL: return "";
+		default: return "";
+		}
+	}
+
+	@Override
+	public String getPostComparison(Comparison comp, boolean hasAdj) {
+		switch (comp){
+		case MORE: return "que";
+		case LESS: return "que";
+		case MOST: return "";
+		case LEAST: return "";
+		case EQUAL: return "comme";
+		default: return "";
 		}
 	}
 	

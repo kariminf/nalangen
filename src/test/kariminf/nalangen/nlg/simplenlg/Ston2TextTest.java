@@ -8,13 +8,14 @@ import kariminf.nalangen.nlg.ModelingMap;
 import kariminf.nalangen.nlg.UnivRealizer;
 import kariminf.nalangen.nlg.simplenlg.EngRealizer;
 import kariminf.nalangen.nlg.simplenlg.FraRealizer;
-import kariminf.nalangen.nlg.simplenlg.SNLGRealizer;
 import kariminf.nalangen.ston.Ston2Text;
 import kariminf.nalangen.ston.StonMap;
 
 
 public class Ston2TextTest {
 
+	//static String stonFile = "../SentRep/ston/comp1.ston";
+	//static String stonFile = "../SentRep/ston/comp2.ston";
 	static String stonFile = "../SentRep/ston/pn_quant.ston";
 	static String wordnetPath = "wordnet/wordnet.sqlite";
 	/**

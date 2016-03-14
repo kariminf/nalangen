@@ -61,8 +61,8 @@ public class StonMap extends ModelingMap {
 		
 		Comparison[] compValues = Comparison.values();
 		
-		if (idx < compValues.length)
-			return Comparison.values()[idx];
+		if (idx < compValues.length && idx >=0)
+			return compValues[idx];
 		
 		return Comparison.EQUAL;
 	}

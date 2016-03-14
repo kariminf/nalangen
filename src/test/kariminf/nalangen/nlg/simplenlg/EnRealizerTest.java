@@ -1,8 +1,6 @@
 package kariminf.nalangen.nlg.simplenlg;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import kariminf.nalangen.nlg.ModelingMap;
@@ -106,6 +104,47 @@ public class EnRealizerTest {
 		
 		System.out.println(realizer.getText());
 	}
+	
+	private static void compTest(){
+		ModelingMap stonMap = new StonMap();
+		UnivRealizer realizer = new EngRealizer(stonMap);
+		
+		//Roles
+		realizer.beginNounPhrase("karim", "karim");
+		
+		realizer.beginNounPhrase("bother", "his brother");
+		
+		//Actions
+		
+		realizer.beginSentPhrase("is", "be");
+		realizer.addVerbSpecif(Types.Tense.PRESENT, Types.Modality.NONE, false, false);
+		
+		realizer.beginSubject();
+		HashSet<String> subjRefs2 = new HashSet<String>();
+		subjRefs2.add("karim");
+		realizer.addConjunctions(subjRefs2);
+		realizer.endSubject();
+		
+		/*realizer.beginObject();
+		HashSet<String>  objRefs = new HashSet<String>();
+		objRefs.add("food");
+		realizer.addConjunctions(objRefs);
+		realizer.endObject();*/
+		
+		realizer.endSentPhrase();
+		
+		
+		//realizer.linkComplimentizers();
+		
+		realizer.beginSentence(Types.Mood.AFFIRMATIVE);
+		HashSet<String>  sentRefs = new HashSet<String>();
+		sentRefs.add("ate");
+		realizer.addConjunctions(sentRefs);
+		realizer.endSentence();
+		
+		System.out.println(realizer.getText());
+	}
+	
 	/**
 	 * @param args
 	 */

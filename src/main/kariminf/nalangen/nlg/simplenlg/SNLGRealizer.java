@@ -6,6 +6,7 @@ import java.util.Set;
 import kariminf.nalangen.nlg.ModelingMap;
 import kariminf.nalangen.nlg.RealizerMap;
 import kariminf.nalangen.nlg.Types;
+import kariminf.nalangen.nlg.Types.Comparison;
 import kariminf.nalangen.nlg.Types.Coordination;
 import kariminf.nalangen.nlg.Types.Determiner;
 import kariminf.nalangen.nlg.UnivRealizer;
@@ -68,7 +69,7 @@ public abstract class SNLGRealizer extends UnivRealizer {
 			sp = nlgFactory.createClause();
 			sps.put(id, sp);
 		}
-		pe = sp;	
+		pe = sp;
 		sp.setVerb(verb);
 		//lastVP = id;
 		if (debugMsg)
@@ -134,6 +135,8 @@ public abstract class SNLGRealizer extends UnivRealizer {
 	public void addNPSpecifs(String name, String def, String quantity){
 		if (name != null && name.length() > 0){
 			//System.out.println(">>" + name);
+			if (nps.containsKey(np));
+				nps.remove(np);
 			np = nlgFactory.createNounPhrase("", name);
 			nps.put(lastNP, np);
 		}
@@ -309,43 +312,24 @@ public abstract class SNLGRealizer extends UnivRealizer {
 	@Override
 	public void addComparison(Types.Comparison comp, Set<String> adjs){
 		
+		
+		boolean hasAdjectives = false;
+		
+		if (adjs != null && adjs.size() > 0)
+			hasAdjectives = true;
+		
 		CoordinatedPhraseElement adjCoord = 
 				nlgFactory.createCoordinatedPhrase();
 		adjCoord.setFeature(Feature.CONJUNCTION, nlMap.getCoordination(Coordination.AND));
 		
-		String pre = "";
-		String post = "";
+		String pre = nlMap.getPreComparison(comp, hasAdjectives);
+		String post = nlMap.getPostComparison(comp, hasAdjectives);
 		String feature = "";
 		
-		//TODO multilingualism here
-		switch (comp){
-		
-		case EQUAL: 
-			pre = "as";
-			post = "as";
-			break;
-		
-		case LESS: 
-			pre = "less";
-			post = "than";
-			break;
-		
-		case MORE: 
-			pre = "";
-			post = "than";
+		if (comp == Comparison.MORE)
 			feature = Feature.IS_COMPARATIVE;
-			break;
-			
-		case MOST:
-			pre = nlMap.getDeterminer(Determiner.YES);
+		else if (comp == Comparison.MOST)
 			feature = Feature.IS_SUPERLATIVE;
-			break;
-			
-		case LEAST:
-			pre = nlMap.getDeterminer(Determiner.YES) + "least";
-			break;
-			
-		}
 		
 		adjCoord.addPreModifier(pre);
 		adjCoord.addPostModifier(post);
@@ -359,6 +343,12 @@ public abstract class SNLGRealizer extends UnivRealizer {
 			
 			adjCoord.addCoordinate(adjPh);
 		}
+		
+		sp.addComplement(adjCoord);
+		
+		disjunctions = nlgFactory.createCoordinatedPhrase();
+		disjunctions.setFeature(Feature.CONJUNCTION, nlMap.getCoordination(Coordination.OR));
+		sp.addComplement(disjunctions);
 		
 	}
 
