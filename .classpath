@@ -4,8 +4,7 @@
 	<classpathentry kind="src" path="src/test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/SentRep"/>
-	<classpathentry kind="lib" path="lib/sqlite-jdbc-3.8.11.2.jar"/>
-	<classpathentry kind="lib" path="lib/edu.mit.jwi_2.3.3.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/SimpleNLG-EnFr"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/LangPi"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

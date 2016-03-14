@@ -26,10 +26,10 @@ import java.util.Set;
 
 import kariminf.nalangen.nlg.Types;
 import kariminf.nalangen.nlg.UnivRealizer;
-import kariminf.nalangen.wordnet.SqliteRequestor;
-import kariminf.nalangen.wordnet.WNRequestor;
-import kariminf.nalangen.wordnet.SqliteReqExceptions.LangNotFound;
-import kariminf.nalangen.wordnet.SqliteReqExceptions.NoSqliteBase;
+import kariminf.langpi.wordnet.SqliteRequestor;
+import kariminf.langpi.wordnet.WNRequestor;
+import kariminf.langpi.wordnet.SqliteReqExceptions.LangNotFound;
+import kariminf.langpi.wordnet.SqliteReqExceptions.NoSqliteBase;
 import kariminf.sentrep.ston.Parser;
 
 

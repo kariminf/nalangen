@@ -17,7 +17,7 @@ public class Ston2TextTest {
 	//static String stonFile = "../SentRep/ston/comp1.ston";
 	//static String stonFile = "../SentRep/ston/comp2.ston";
 	static String stonFile = "../SentRep/ston/pn_quant.ston";
-	static String wordnetPath = "wordnet/wordnet.sqlite";
+	static String wordnetPath = "../LangPi/wordnetDB/wordnet.sqlite";
 	/**
 	 * @param args
 	 */
