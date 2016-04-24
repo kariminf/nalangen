@@ -146,10 +146,11 @@ public abstract class SNLGRealizer extends UnivRealizer {
 		String determiner = nlMap.getDeterminer(det);
 		np.setSpecifier(determiner);
 		
-		if(quantity.length()<1 || quantity.matches("1")) return;
+		if(quantity.length() < 1 || quantity.matches("1")) return;
+		
 		np.setPlural(true);
 		
-		if(quantity.matches("PL")) return;
+		if(quantity.equals("pl")) return;
 		
 		np.addPreModifier(quantity);
 		
