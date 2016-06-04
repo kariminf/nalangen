@@ -21,30 +21,26 @@ package kariminf.nalangen.nlg;
 
 import java.util.Set;
 
-import kariminf.nalangen.nlg.Types.Comparison;
-import kariminf.nalangen.nlg.Types.Modality;
-import kariminf.nalangen.nlg.Types.Mood;
-import kariminf.nalangen.nlg.Types.Relation;
-import kariminf.nalangen.nlg.Types.Tense;
-
+import kariminf.sentrep.univ.types.*;
+import kariminf.sentrep.univ.*;
 
 
 public abstract class UnivRealizer {
 	
-	protected RealizerMap nlMap;
-	protected ModelingMap mdMap;
+	protected LangMap nlMap;
+	protected UnivMap mdMap;
 	
-	public UnivRealizer(RealizerMap nlMap, ModelingMap mdMap){
+	public UnivRealizer(LangMap nlMap, UnivMap mdMap){
 		this.nlMap = nlMap;
 		this.mdMap = mdMap;
 	}
 	
 	public String getRealizerTense(String modelTense){
-		Tense tense = mdMap.mapTense(modelTense);
+		VerbTense tense = mdMap.mapTense(modelTense);
 		return nlMap.getTense(tense);
 	}
 	
-	public Tense getTense(String modelTense){
+	public VerbTense getTense(String modelTense){
 		return mdMap.mapTense(modelTense);
 	}
 	
@@ -52,8 +48,8 @@ public abstract class UnivRealizer {
 		return mdMap.mapModal(modelModal);
 	}
 	
-	public Mood getMood(String modelMood){
-		return Mood.AFFIRMATIVE;
+	public SentMood getMood(String modelMood){
+		return SentMood.AFFIRMATIVE;
 	}
 	
 	public Comparison getComparison(String modelComp){
@@ -69,7 +65,7 @@ public abstract class UnivRealizer {
 	
 	public abstract void beginSentPhrase(String id, String verb);
 	
-	public abstract void addVerbSpecif(Tense tense, Modality modality, boolean progressive, boolean negated);
+	public abstract void addVerbSpecif(VerbTense tense, Modality modality, boolean progressive, boolean negated);
 	public abstract void addConjunctions(Set<String> phraseIDs);
 	
 	public abstract void beginSubject();
@@ -96,10 +92,10 @@ public abstract class UnivRealizer {
 	public abstract void beginComplementizer(String pronoun);
 	public abstract void endComplementizer();
 	
-	public abstract void beginSentence (Mood type);
+	public abstract void beginSentence (SentMood type);
 	public abstract void endSentence ();
 	
-	public abstract void addComparison(Types.Comparison comp, Set<String> adjs);
+	public abstract void addComparison(Comparison comp, Set<String> adjs);
 	
 	public abstract void showDebugMsg(boolean yes);
 }

@@ -24,7 +24,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import kariminf.nalangen.nlg.Types;
+import kariminf.sentrep.univ.types.*;
+
 import kariminf.nalangen.nlg.UnivRealizer;
 import kariminf.langpi.wordnet.SqliteRequestor;
 import kariminf.langpi.wordnet.WNRequestor;
@@ -70,8 +71,8 @@ public class Ston2Text extends Parser {
 
 	@Override
 	protected void addVerbSpecif(String tense, String modality, boolean progressive, boolean negated) {
-		Types.Tense theTense = realizer.getTense(tense);
-		Types.Modality theModal = realizer.getModality(modality);
+		VerbTense theTense = realizer.getTense(tense);
+		Modality theModal = realizer.getModality(modality);
 		//System.out.println("Modal= " + theModal);
 		realizer.addVerbSpecif(theTense, theModal, progressive, negated);
 		
@@ -203,7 +204,7 @@ public class Ston2Text extends Parser {
 	@Override
 	protected void beginSentence(String type) {
 		
-		Types.Mood mood = realizer.getMood(type);
+		SentMood mood = realizer.getMood(type);
 		realizer.beginSentence(mood);
 	}
 
@@ -251,7 +252,7 @@ public class Ston2Text extends Parser {
 
 	@Override
 	protected void addComparison(String type, Set<Integer> adjSynSets) {
-		Types.Comparison comp = realizer.getComparison(type);
+		Comparison comp = realizer.getComparison(type);
 		
 		HashSet<String> adjectives = new HashSet<String>();
 		

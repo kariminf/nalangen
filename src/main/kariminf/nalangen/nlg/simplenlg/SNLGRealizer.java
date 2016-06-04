@@ -3,19 +3,16 @@ package kariminf.nalangen.nlg.simplenlg;
 import java.util.HashMap;
 import java.util.Set;
 
-import kariminf.nalangen.nlg.ModelingMap;
-import kariminf.nalangen.nlg.RealizerMap;
-import kariminf.nalangen.nlg.Types;
-import kariminf.nalangen.nlg.Types.Comparison;
-import kariminf.nalangen.nlg.Types.Coordination;
-import kariminf.nalangen.nlg.Types.Determiner;
 import kariminf.nalangen.nlg.UnivRealizer;
 
+import kariminf.sentrep.univ.types.*;
+import kariminf.sentrep.univ.*;
 
 import simplenlg.features.Feature;
 import simplenlg.features.LexicalFeature;
 import simplenlg.features.Tense;
 import simplenlg.framework.CoordinatedPhraseElement;
+import simplenlg.framework.NLGElement;
 import simplenlg.framework.NLGFactory;
 import simplenlg.framework.PhraseElement;
 import simplenlg.framework.WordElement;
@@ -41,7 +38,7 @@ public abstract class SNLGRealizer extends UnivRealizer {
 	private SPhraseSpec sp;
 	private HashMap<String, SPhraseSpec> sps = new HashMap<String, SPhraseSpec>();
 	
-	
+	//For complementizer: can be for sp or np
 	private PhraseElement pe;
 	
 	private CoordinatedPhraseElement disjunctions;
@@ -53,7 +50,7 @@ public abstract class SNLGRealizer extends UnivRealizer {
 	
 	private String result = "";
 
-	public SNLGRealizer(RealizerMap rlMap, ModelingMap mdMap, Lexicon lexicon) {
+	public SNLGRealizer(LangMap rlMap, UnivMap mdMap, Lexicon lexicon) {
 		super(rlMap, mdMap);
 		this.lexicon = lexicon;
 		nlgFactory = new NLGFactory(lexicon);
@@ -85,20 +82,20 @@ public abstract class SNLGRealizer extends UnivRealizer {
 	}
 
 	@Override
-	public void addVerbSpecif(Types.Tense tense, Types.Modality modality, boolean progressive, boolean negated) {
+	public void addVerbSpecif(VerbTense tense, Modality modality, boolean progressive, boolean negated) {
 		
 		//Types.Tense theTense = mdMap.mapTense(tense);
 		String rTense = nlMap.getTense(tense);
 		
 		//Types.Modality theModality = mdMap.mapModal(modality);
 		
-		if(modality == Types.Modality.NONE){
+		if(modality == Modality.NONE){
 			//System.out.println(sp.getVerb().toString());
 			sp.setFeature(Feature.TENSE, Tense.valueOf(rTense));
 		} else {
 			
 			String modal = nlMap.getModal(modality);
-			if (tense == Types.Tense.PAST){
+			if (tense == VerbTense.PAST){
 				WordElement pastmodal = lexicon.getWord(modal);
 				modal = pastmodal.getFeatureAsString(LexicalFeature.PAST);
 				//modal = "had to";
@@ -114,7 +111,8 @@ public abstract class SNLGRealizer extends UnivRealizer {
 
 		if (debugMsg){
 			System.out.print("    (tense, modal, progressive, negated): ");
-		System.out.println("(" + tense + ", " + modality + ", " + progressive + ", " + negated + ")");
+			System.out.println("(" + tense + ", " + modality + ", " 
+					+ progressive + ", " + negated + ")");
 	
 		}
 	}
@@ -135,22 +133,25 @@ public abstract class SNLGRealizer extends UnivRealizer {
 	public void addNPSpecifs(String name, String def, String quantity){
 		if (name != null && name.length() > 0){
 			//System.out.println(">>" + name);
-			if (nps.containsKey(np));
-				nps.remove(np);
+			if (nps.containsKey(lastNP));
+				nps.remove(lastNP);
 			np = nlgFactory.createNounPhrase("", name);
 			nps.put(lastNP, np);
+			pe = np;
+		} else {
+			Determiner det= mdMap.mapDeterminer(def);
+			
+			String determiner = nlMap.getDeterminer(det);
+			np.setSpecifier(determiner);
 		}
 		
-		Types.Determiner det= mdMap.mapDeterminer(def);
 		
-		String determiner = nlMap.getDeterminer(det);
-		np.setSpecifier(determiner);
 		
-		if(quantity.length() < 1 || quantity.matches("1")) return;
+		if(quantity.length() < 1 || quantity.equals("1")) return;
 		
 		np.setPlural(true);
 		
-		if(quantity.equals("pl")) return;
+		if(quantity.toLowerCase().equals("pl")) return;
 		
 		np.addPreModifier(quantity);
 		
@@ -200,7 +201,10 @@ public abstract class SNLGRealizer extends UnivRealizer {
 
 		for (String phraseID: phraseIDs){
 			if (nps.containsKey(phraseID)){
-				conjunctions.addCoordinate(nps.get(phraseID));
+				NPPhraseSpec npph = nps.get(phraseID);
+				conjunctions.addCoordinate(npph);
+				if(npph.isPlural())
+					conjunctions.setPlural(true);
 				if (debugMsg)
 					System.out.println("       " + phraseID + ">> Nominal phrase");
 				continue;
@@ -220,6 +224,10 @@ public abstract class SNLGRealizer extends UnivRealizer {
 		}
 		
 		disjunctions.addCoordinate(conjunctions);
+		
+		//Coordinated phrase elements doesn't take the child's plural property
+		if (conjunctions.isPlural())
+			disjunctions.setPlural(true);
 		
 	}
 
@@ -241,6 +249,7 @@ public abstract class SNLGRealizer extends UnivRealizer {
 
 	@Override
 	public void endSubject() {
+		
 		sp.setSubject(disjunctions);
 		disjunctions = null;
 		if (debugMsg)
@@ -274,7 +283,7 @@ public abstract class SNLGRealizer extends UnivRealizer {
 	}
 
 	@Override
-	public void beginSentence(Types.Mood type) {
+	public void beginSentence(SentMood type) {
 		disjunctions = nlgFactory.createCoordinatedPhrase();
 		disjunctions.setFeature(Feature.CONJUNCTION, nlMap.getCoordination(Coordination.OR));
 		if (debugMsg)
@@ -311,7 +320,7 @@ public abstract class SNLGRealizer extends UnivRealizer {
 	}
 	
 	@Override
-	public void addComparison(Types.Comparison comp, Set<String> adjs){
+	public void addComparison(Comparison comp, Set<String> adjs){
 		
 		
 		boolean hasAdjectives = false;

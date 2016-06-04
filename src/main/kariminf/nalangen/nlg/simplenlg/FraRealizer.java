@@ -1,13 +1,11 @@
 package kariminf.nalangen.nlg.simplenlg;
 
 
-import kariminf.nalangen.nlg.ModelingMap;
-import simplenlg.framework.NLGFactory;
-import simplenlg.realiser.Realiser;
+import kariminf.sentrep.univ.UnivMap;
 
 public class FraRealizer extends SNLGRealizer {
 	
-	public FraRealizer(ModelingMap mdMap) {
+	public FraRealizer(UnivMap mdMap) {
 		super(new FraSnlgMap(), mdMap, new simplenlg.lexicon.french.XMLLexicon());
 	}
 

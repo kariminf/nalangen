@@ -1,17 +1,12 @@
 package kariminf.nalangen.nlg.simplenlg;
 
-import kariminf.nalangen.nlg.RealizerMap;
-import kariminf.nalangen.nlg.Types.Comparison;
-import kariminf.nalangen.nlg.Types.Coordination;
-import kariminf.nalangen.nlg.Types.Determiner;
-import kariminf.nalangen.nlg.Types.Modality;
-import kariminf.nalangen.nlg.Types.Relation;
-import kariminf.nalangen.nlg.Types.Tense;
+import kariminf.sentrep.univ.types.*;
+import kariminf.sentrep.univ.LangMap;
 
-public class EngSnlgMap extends RealizerMap {
+public class EngSnlgMap implements LangMap {
 
 	@Override
-	public String getTense(Tense tense) {
+	public String getTense(VerbTense tense) {
 		return tense.toString();
 	}
 
@@ -31,15 +26,15 @@ public class EngSnlgMap extends RealizerMap {
 		case OF: return "of";
 		//TODO time returns at, on, in
 		//on sundays, in 1986, at 2 pm
-		case T_TIME: return "at";
+		case T_AT: return "at";
 		//since 1986
-		case T_PERIOD: return "since";
+		case T_SNC: return "since";
 		//I worked for 10 hours
-		case T_AMOUNT: return "for";
+		case T_FOR: return "for";
 		//2 years ago
 		case T_AGO: return "ago";
-		case T_BEFORE: return "before";
-		case T_AFTER: return "after";
+		case T_BEF: return "before";
+		case T_AFT: return "after";
 		//till, untill
 		case T_TILL: return "till";
 		case T_BY: return "by";
@@ -49,18 +44,18 @@ public class EngSnlgMap extends RealizerMap {
 		case P_OUT: return "out";
 		//TODO place: in, at
 		//exact place: at, in 
-		case P_PLACE: return "at";
+		case P_AT: return "at";
 		case P_ON: return "on";
-		case P_BELOW: return "under";
-		case P_ABOVE: return "above";
+		case P_LOW: return "under";
+		case P_UP: return "above";
 		//TODO fix by
 		//by, next to, nesides, near
 		case P_BY: return "near";
 		//
-		case P_BETWEEN: return "between";
-		case P_BEHIND: return "behind";
-		case P_FRONT: return "in front of";
-		case P_THROUGH: return "through";
+		case P_BET: return "between";
+		case P_BEH: return "behind";
+		case P_FRN: return "in front of";
+		case P_THR: return "through";
 		case ABOUT: return "about";
 		case FROM: return "from";
 		case WITH: return "with";

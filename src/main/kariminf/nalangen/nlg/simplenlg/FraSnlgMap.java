@@ -1,17 +1,12 @@
 package kariminf.nalangen.nlg.simplenlg;
 
-import kariminf.nalangen.nlg.RealizerMap;
-import kariminf.nalangen.nlg.Types.Comparison;
-import kariminf.nalangen.nlg.Types.Coordination;
-import kariminf.nalangen.nlg.Types.Determiner;
-import kariminf.nalangen.nlg.Types.Modality;
-import kariminf.nalangen.nlg.Types.Relation;
-import kariminf.nalangen.nlg.Types.Tense;
+import kariminf.sentrep.univ.types.*;
+import kariminf.sentrep.univ.LangMap;
 
-public class FraSnlgMap extends RealizerMap {
+public class FraSnlgMap implements LangMap {
 
 	@Override
-	public String getTense(Tense tense) {
+	public String getTense(VerbTense tense) {
 		return tense.toString();
 	}
 
@@ -29,15 +24,15 @@ public class FraSnlgMap extends RealizerMap {
 		case POSS: return "dont";
 		case REAS: return "pourquoi";
 		case OF: return "de";
-		case T_TIME: return "à";
-		case T_PERIOD: return "depuis";
+		case T_AT: return "à";
+		case T_SNC: return "depuis";
 		//I worked for 10 hours
-		case T_AMOUNT: return "durant";
+		case T_FOR: return "durant";
 		//2 years ago
 		//TODO fr-ago
 		case T_AGO: return "";
-		case T_BEFORE: return "avant";
-		case T_AFTER: return "après";
+		case T_BEF: return "avant";
+		case T_AFT: return "après";
 		//till, untill
 		case T_TILL: return "jusqu'à";
 		case T_BY: return "environ";
@@ -47,18 +42,18 @@ public class FraSnlgMap extends RealizerMap {
 		case P_OUT: return "dehors";
 		//TODO place: in, at
 		//exact place: at, in 
-		case P_PLACE: return "à";
+		case P_AT: return "à";
 		case P_ON: return "sur";
-		case P_BELOW: return "sous";
-		case P_ABOVE: return "au dessus de";
+		case P_LOW: return "sous";
+		case P_UP: return "au dessus de";
 		//TODO fix by
 		//by, next to, nesides, near
 		case P_BY: return "près de";
 		//
-		case P_BETWEEN: return "entre";
-		case P_BEHIND: return "derrière";
-		case P_FRONT: return "devant";
-		case P_THROUGH: return "à travers";
+		case P_BET: return "entre";
+		case P_BEH: return "derrière";
+		case P_FRN: return "devant";
+		case P_THR: return "à travers";
 		case ABOUT: return "à propos de";
 		case FROM: return "de";
 		case WITH: return "avec";
@@ -73,7 +68,7 @@ public class FraSnlgMap extends RealizerMap {
 		switch (det){
 		case YES: return "le";
 		case NO: return "un";
-		case NONE: return "";
+		case NONE: return "un";
 		default:
 			return "";
 		}
