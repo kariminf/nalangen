@@ -1,6 +1,6 @@
 package kariminf.nalangen.nlg.simplenlg;
 
-import kariminf.sentrep.univ.UnivMap;
+import kariminf.sentrep.UnivMap;
 import simplenlg.lexicon.Lexicon;
 
 public class EngRealizer extends SNLGRealizer {

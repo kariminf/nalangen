@@ -5,6 +5,8 @@ import java.util.Set;
 
 import kariminf.nalangen.nlg.UnivRealizer;
 
+import kariminf.sentrep.LangMap;
+import kariminf.sentrep.UnivMap;
 import kariminf.sentrep.univ.types.*;
 import kariminf.sentrep.univ.*;
 
@@ -266,6 +268,7 @@ public abstract class SNLGRealizer extends UnivRealizer {
 
 	@Override
 	public void addPrepositionPhrase(String parentID, String preposition) {
+		
 		if (! sps.containsKey(parentID)) return;
 		
 		SPhraseSpec parent = sps.get(parentID);

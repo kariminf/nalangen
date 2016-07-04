@@ -1,7 +1,8 @@
 package kariminf.nalangen.nlg.simplenlg;
 
+import kariminf.sentrep.LangMap;
 import kariminf.sentrep.univ.types.*;
-import kariminf.sentrep.univ.LangMap;
+import kariminf.sentrep.univ.types.Pronoun.Proximity;
 
 public class EngSnlgMap implements LangMap {
 
@@ -109,6 +110,58 @@ public class EngSnlgMap implements LangMap {
 		case EQUAL: return "as";
 		default: return "";
 		}
+	}
+
+	@Override
+	public String getPronoun(Pronoun pronoun) {
+		
+		switch (pronoun.getHead()) {
+		case DEMONSTRATIVE:
+			switch (pronoun.getNumber()) {
+			case SINGLE:
+				if (pronoun.getProximity() == Proximity.PROXIMAL){
+					return "this";
+				}
+				return "that";
+
+			default:
+				if (pronoun.getProximity() == Proximity.PROXIMAL){
+					return "these";
+				}
+				return "those";
+			}
+
+		case PERSONNAL:
+			switch (pronoun.getPerson()){
+			case FIRST:
+				return "I";
+			case SECOND:
+				return "you";
+			default:
+				break;
+			}
+			
+			switch (pronoun.getNumber()) {
+			case NONE:
+				return "no one";
+				
+			case SINGLE:
+				switch (pronoun.getGender()) {
+				case FEMALE:
+					return "she";
+				case MALE:
+					return "he";
+				default:
+					return "it";
+				}
+			default:
+				return "they";
+			}
+			
+		default:
+			return "";
+		}
+
 	}
 	
 	

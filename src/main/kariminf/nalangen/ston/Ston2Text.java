@@ -32,6 +32,7 @@ import kariminf.langpi.wordnet.WNRequestor;
 import kariminf.langpi.wordnet.SqliteReqExceptions.LangNotFound;
 import kariminf.langpi.wordnet.SqliteReqExceptions.NoSqliteBase;
 import kariminf.sentrep.ston.Parser;
+import kariminf.sentrep.ston.types.SPronoun;
 
 
 public class Ston2Text extends Parser {
@@ -125,12 +126,12 @@ public class Ston2Text extends Parser {
 	}
 
 	@Override
-	protected void addSubjects() {
+	protected void beginAgents() {
 		realizer.beginSubject();
 	}
 
 	@Override
-	protected void addObjects() {
+	protected void beginThemes() {
 		realizer.beginObject();
 	}
 
@@ -190,13 +191,13 @@ public class Ston2Text extends Parser {
 
 
 	@Override
-	protected void endSubjects() {
+	protected void endAgents() {
 		realizer.endSubject();
 	}
 
 
 	@Override
-	protected void endObjects() {
+	protected void endThemes() {
 		realizer.endObject();
 	}
 
@@ -245,7 +246,7 @@ public class Ston2Text extends Parser {
 
 	@Override
 	protected void addRoleSpecif(String name, String def, String quantity) {
-		realizer.addNPSpecifs(name, def, quantity);
+		realizer.addNPSpecifs(name.replace("_", " "), def, quantity);
 		
 	}
 
@@ -263,6 +264,17 @@ public class Ston2Text extends Parser {
 		}
 		
 		realizer.addComparison(comp, adjectives);
+		
+	}
+
+
+	@Override
+	protected void addRole(String id, SPronoun pronoun) {
+		//String noun = wordnet.getWord(synSet, "NOUN");
+		/*String pronoun = "";
+		realizer.beginNounPhrase(id, noun);
+		lastID = id;
+		isAction = false;*/
 		
 	}
 

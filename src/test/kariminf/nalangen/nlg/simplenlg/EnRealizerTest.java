@@ -3,11 +3,11 @@ package kariminf.nalangen.nlg.simplenlg;
 import java.util.HashSet;
 import java.util.Set;
 
-import kariminf.nalangen.nlg.ModelingMap;
-import kariminf.nalangen.nlg.Types;
 import kariminf.nalangen.nlg.UnivRealizer;
 import kariminf.nalangen.nlg.simplenlg.EngRealizer;
-import kariminf.nalangen.ston.StonMap;
+import kariminf.sentrep.UnivMap;
+import kariminf.sentrep.ston.Ston2UnivMap;
+import kariminf.sentrep.univ.types.*;
 
 
 public class EnRealizerTest {
@@ -15,7 +15,7 @@ public class EnRealizerTest {
 	
 	private static void thatTest(){
 		
-		ModelingMap stonMap = new StonMap();
+		UnivMap stonMap = new Ston2UnivMap();
 		UnivRealizer realizer = new EngRealizer(stonMap);
 		
 		//Roles
@@ -34,14 +34,14 @@ public class EnRealizerTest {
 		
 		//Actions
 		realizer.beginSentPhrase("m_ate", "eat");
-		realizer.addVerbSpecif(Types.Tense.PAST, Types.Modality.NONE, false, false);
+		realizer.addVerbSpecif(VerbTense.PAST, Modality.NONE, false, false);
 		realizer.beginSubject();
 		Set<String> subjRefs = new HashSet<String>();
 		subjRefs.add("mother");
 		realizer.addConjunctions(subjRefs);
 		realizer.endSubject();
 		realizer.beginSentPhrase("was", "be");
-		realizer.addVerbSpecif(Types.Tense.PAST, Types.Modality.NONE, false, false);
+		realizer.addVerbSpecif(VerbTense.PAST, Modality.NONE, false, false);
 		
 		realizer.beginSubject();
 		HashSet<String> subjRefs2 = new HashSet<String>();
@@ -57,7 +57,7 @@ public class EnRealizerTest {
 		
 		realizer.endSentPhrase();
 		
-		realizer.beginSentence(Types.Mood.AFFIRMATIVE);
+		realizer.beginSentence(SentMood.AFFIRMATIVE);
 		HashSet<String>  sentRefs = new HashSet<String>();
 		sentRefs.add("was");
 		realizer.addConjunctions(sentRefs);
@@ -68,18 +68,19 @@ public class EnRealizerTest {
 	}
 	
 	private static void simpleTest(){
-		ModelingMap stonMap = new StonMap();
+		UnivMap stonMap = new Ston2UnivMap();
 		UnivRealizer realizer = new EngRealizer(stonMap);
-		
+		//realizer.showDebugMsg(true);
 		//Roles
 		realizer.beginNounPhrase("mother", "mother");
+		realizer.addNPSpecifs("", "Y", "PL");
 		
 		realizer.beginNounPhrase("food", "food");
 		
 		//Actions
 		
 		realizer.beginSentPhrase("ate", "eat");
-		realizer.addVerbSpecif(Types.Tense.PAST, Types.Modality.NONE, false, false);
+		realizer.addVerbSpecif(VerbTense.PRESENT, Modality.NONE, false, false);
 		
 		realizer.beginSubject();
 		HashSet<String> subjRefs2 = new HashSet<String>();
@@ -96,7 +97,7 @@ public class EnRealizerTest {
 		realizer.endSentPhrase();
 		//realizer.linkComplimentizers();
 		
-		realizer.beginSentence(Types.Mood.AFFIRMATIVE);
+		realizer.beginSentence(SentMood.AFFIRMATIVE);
 		HashSet<String>  sentRefs = new HashSet<String>();
 		sentRefs.add("ate");
 		realizer.addConjunctions(sentRefs);
@@ -106,7 +107,7 @@ public class EnRealizerTest {
 	}
 	
 	private static void compTest(){
-		ModelingMap stonMap = new StonMap();
+		UnivMap stonMap = new Ston2UnivMap();
 		UnivRealizer realizer = new EngRealizer(stonMap);
 		
 		//Roles
@@ -117,7 +118,7 @@ public class EnRealizerTest {
 		//Actions
 		
 		realizer.beginSentPhrase("is", "be");
-		realizer.addVerbSpecif(Types.Tense.PRESENT, Types.Modality.NONE, false, false);
+		realizer.addVerbSpecif(VerbTense.PRESENT, Modality.NONE, false, false);
 		
 		realizer.beginSubject();
 		HashSet<String> subjRefs2 = new HashSet<String>();
@@ -136,7 +137,7 @@ public class EnRealizerTest {
 		
 		//realizer.linkComplimentizers();
 		
-		realizer.beginSentence(Types.Mood.AFFIRMATIVE);
+		realizer.beginSentence(SentMood.AFFIRMATIVE);
 		HashSet<String>  sentRefs = new HashSet<String>();
 		sentRefs.add("ate");
 		realizer.addConjunctions(sentRefs);

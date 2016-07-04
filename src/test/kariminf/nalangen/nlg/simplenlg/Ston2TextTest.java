@@ -4,26 +4,26 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import kariminf.nalangen.nlg.ModelingMap;
 import kariminf.nalangen.nlg.UnivRealizer;
 import kariminf.nalangen.nlg.simplenlg.EngRealizer;
 import kariminf.nalangen.nlg.simplenlg.FraRealizer;
 import kariminf.nalangen.ston.Ston2Text;
-import kariminf.nalangen.ston.StonMap;
+import kariminf.sentrep.UnivMap;
+import kariminf.sentrep.ston.Ston2UnivMap;
 
 
 public class Ston2TextTest {
-
+	static String stonFile = "../SentRep/ston/at.ston";
 	//static String stonFile = "../SentRep/ston/comp1.ston";
 	//static String stonFile = "../SentRep/ston/comp2.ston";
-	static String stonFile = "../SentRep/ston/pn_quant.ston";
+	//static String stonFile = "../SentRep/ston/pn_quant.ston";
 	static String wordnetPath = "../LangPi/wordnetDB/wordnet.sqlite";
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		String specif = readFile(stonFile);
-		ModelingMap stonMap = new StonMap();
+		UnivMap stonMap = new Ston2UnivMap();
 		UnivRealizer realizer;
 		Ston2Text translator;
 		

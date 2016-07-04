@@ -1,7 +1,7 @@
 package kariminf.nalangen.nlg.simplenlg;
 
 
-import kariminf.sentrep.univ.UnivMap;
+import kariminf.sentrep.UnivMap;
 
 public class FraRealizer extends SNLGRealizer {
 	

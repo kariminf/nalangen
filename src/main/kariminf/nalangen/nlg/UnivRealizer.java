@@ -21,6 +21,8 @@ package kariminf.nalangen.nlg;
 
 import java.util.Set;
 
+import kariminf.sentrep.LangMap;
+import kariminf.sentrep.UnivMap;
 import kariminf.sentrep.univ.types.*;
 import kariminf.sentrep.univ.*;
 

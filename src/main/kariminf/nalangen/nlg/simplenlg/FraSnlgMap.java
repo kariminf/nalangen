@@ -1,7 +1,7 @@
 package kariminf.nalangen.nlg.simplenlg;
 
+import kariminf.sentrep.LangMap;
 import kariminf.sentrep.univ.types.*;
-import kariminf.sentrep.univ.LangMap;
 
 public class FraSnlgMap implements LangMap {
 
@@ -105,6 +105,11 @@ public class FraSnlgMap implements LangMap {
 		case EQUAL: return "comme";
 		default: return "";
 		}
+	}
+
+	@Override
+	public String getPronoun(Pronoun pronoun) {
+		return "";
 	}
 	
 	
