@@ -17,13 +17,23 @@ public class EngSnlgMap implements LangMap {
 	}
 
 	@Override
-	public String getAdposition(Relation adpos, String name) {
+	public String getAdposition(Relation adpos, String param) {
 		
 		switch (adpos){
-		case SUBJ: return "that";
-		case OBJ: return "that";
+		case SUBJ: 
+			if (param.contains("person"))
+				return "who";
+			return "that";
+		case OBJ: 
+			if (param.contains("person"))
+				return "who";
+			return "that";
 		case POSS: return "that";
 		case REAS: return "why";
+		
+		case WHERE: return "where";
+		case WHEN: return "when";
+		
 		case OF: return "of";
 		//TODO time returns at, on, in
 		//on sundays, in 1986, at 2 pm
@@ -39,20 +49,17 @@ public class EngSnlgMap implements LangMap {
 		//till, untill
 		case T_TILL: return "till";
 		case T_BY: return "by";
-		//in, inside
-		case P_IN: return "in";
+		//in
+		case P_IN: return "in"; // wide space In London
 		//out, outside
 		case P_OUT: return "out";
-		//TODO place: in, at
-		//exact place: at, in 
-		case P_AT: return "at";
+		//exact place: at 
+		case P_AT: return "at"; //narrow space
 		case P_ON: return "on";
 		case P_LOW: return "under";
 		case P_UP: return "above";
-		//TODO fix by
 		//by, next to, nesides, near
 		case P_BY: return "near";
-		//
 		case P_BET: return "between";
 		case P_BEH: return "behind";
 		case P_FRN: return "in front of";
@@ -61,6 +68,10 @@ public class EngSnlgMap implements LangMap {
 		case FROM: return "from";
 		case WITH: return "with";
 		case TO: return "to";
+		case P_INS: return "inside";
+		case T_IN: return "in";
+		default:
+			break;
 		}
 		
 		return "";
@@ -163,6 +174,7 @@ public class EngSnlgMap implements LangMap {
 		}
 
 	}
+
 	
 	
 

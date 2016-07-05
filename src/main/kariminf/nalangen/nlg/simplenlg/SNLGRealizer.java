@@ -1,20 +1,18 @@
 package kariminf.nalangen.nlg.simplenlg;
 
+import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Set;
 
 import kariminf.nalangen.nlg.UnivRealizer;
 
 import kariminf.sentrep.LangMap;
-import kariminf.sentrep.UnivMap;
 import kariminf.sentrep.univ.types.*;
-import kariminf.sentrep.univ.*;
 
 import simplenlg.features.Feature;
 import simplenlg.features.LexicalFeature;
 import simplenlg.features.Tense;
 import simplenlg.framework.CoordinatedPhraseElement;
-import simplenlg.framework.NLGElement;
 import simplenlg.framework.NLGFactory;
 import simplenlg.framework.PhraseElement;
 import simplenlg.framework.WordElement;
@@ -25,7 +23,7 @@ import simplenlg.phrasespec.PPPhraseSpec;
 import simplenlg.phrasespec.SPhraseSpec;
 import simplenlg.realiser.Realiser;
 
-public abstract class SNLGRealizer extends UnivRealizer {
+public abstract class SNLGRealizer implements UnivRealizer {
 	
 	private boolean debugMsg = false;
 	
@@ -46,14 +44,24 @@ public abstract class SNLGRealizer extends UnivRealizer {
 	private CoordinatedPhraseElement disjunctions;
 	private CoordinatedPhraseElement conjunctions;
 	
+	/*
+	private ArrayDeque<CoordinatedPhraseElement> disjunctionsQue =
+			new ArrayDeque<CoordinatedPhraseElement>();
+	private ArrayDeque<CoordinatedPhraseElement> conjunctionsQue =
+			new ArrayDeque<CoordinatedPhraseElement>();
+	*/
 	
 	private String lastNP = "";
 	//private String lastVP = "";
 	
+	//To detect if the nominal phrase is the last to help the complementizer
+	
 	private String result = "";
+	
+	private LangMap nlMap;
 
-	public SNLGRealizer(LangMap rlMap, UnivMap mdMap, Lexicon lexicon) {
-		super(rlMap, mdMap);
+	public SNLGRealizer(LangMap nlMap, Lexicon lexicon) {
+		this.nlMap = nlMap;
 		this.lexicon = lexicon;
 		nlgFactory = new NLGFactory(lexicon);
 		realiser = new Realiser();
@@ -70,7 +78,9 @@ public abstract class SNLGRealizer extends UnivRealizer {
 		}
 		pe = sp;
 		sp.setVerb(verb);
+		
 		//lastVP = id;
+
 		if (debugMsg)
 			System.out.println("Begin verbal phrase: " + id + ", verb= " + verb);
 		
@@ -78,6 +88,12 @@ public abstract class SNLGRealizer extends UnivRealizer {
 
 	@Override
 	public void endSentPhrase() {
+		
+		if (sp.getSubject() == null){
+			sp.setFeature(Feature.PASSIVE, true);
+			//System.out.println("no subject= " + lastVP);
+		}
+		
 		if (debugMsg)
 			System.out.println("End verbal phrase");
 		
@@ -126,13 +142,26 @@ public abstract class SNLGRealizer extends UnivRealizer {
 		pe = np;
 		nps.put(id, np);
 		lastNP = id;
-		
+	
 		if (debugMsg)
 			System.out.println("Begin noun phrase: " + id + ", noun= " + noun);
 	}
 	
 	@Override
-	public void addNPSpecifs(String name, String def, String quantity){
+	public void beginNounPhrase(String id, Pronoun p) {
+		String pronoun = nlMap.getPronoun(p);
+		//System.out.println( p);
+		np = nlgFactory.createNounPhrase(pronoun);
+		pe = np;
+		nps.put(id, np);
+		lastNP = id;
+		
+		if (debugMsg)
+			System.out.println("Begin noun phrase: " + id + ", pronoun= " + pronoun);
+	}
+	
+	@Override
+	public void addNPSpecifs(String name, Determiner det, String quantity){
 		if (name != null && name.length() > 0){
 			//System.out.println(">>" + name);
 			if (nps.containsKey(lastNP));
@@ -140,14 +169,10 @@ public abstract class SNLGRealizer extends UnivRealizer {
 			np = nlgFactory.createNounPhrase("", name);
 			nps.put(lastNP, np);
 			pe = np;
-		} else {
-			Determiner det= mdMap.mapDeterminer(def);
-			
+		} else {		
 			String determiner = nlMap.getDeterminer(det);
 			np.setSpecifier(determiner);
 		}
-		
-		
 		
 		if(quantity.length() < 1 || quantity.equals("1")) return;
 		
@@ -267,13 +292,20 @@ public abstract class SNLGRealizer extends UnivRealizer {
 	}
 
 	@Override
-	public void addPrepositionPhrase(String parentID, String preposition) {
+	public void addPrepositionPhrase(Relation preposition, String params) {
+		
+		if (! params.contains("parentID:"))
+			return;
+		String parentID = params.substring(params.indexOf("parentID") + 9);
+		parentID = parentID.split(",")[0];
 		
 		if (! sps.containsKey(parentID)) return;
 		
+		String prep = nlMap.getAdposition(preposition, "");
+		
 		SPhraseSpec parent = sps.get(parentID);
 		
-		PPPhraseSpec prepositional = nlgFactory.createPrepositionPhrase(preposition);
+		PPPhraseSpec prepositional = nlgFactory.createPrepositionPhrase(prep);
 		
 		disjunctions = nlgFactory.createCoordinatedPhrase();
 		disjunctions.setFeature(Feature.CONJUNCTION, nlMap.getCoordination(Coordination.OR));
@@ -281,7 +313,7 @@ public abstract class SNLGRealizer extends UnivRealizer {
 		parent.addPostModifier(prepositional);
 		
 		if (debugMsg)
-			System.out.println("    Add preposition: " + preposition);
+			System.out.println("    Add preposition: " + prep);
 		
 	}
 
@@ -306,19 +338,20 @@ public abstract class SNLGRealizer extends UnivRealizer {
 	}
 
 	@Override
-	public void beginComplementizer(String pronoun) {
+	public void beginComplementizer(Relation pronoun, String params) {
 		//complementPronoun = pronoun;
-		
+		String relPron = nlMap.getAdposition(pronoun, params);
 		disjunctions = nlgFactory.createCoordinatedPhrase();
 		disjunctions.setFeature(Feature.CONJUNCTION, nlMap.getCoordination(Coordination.OR));
 		//SPhraseSpec clause = nlgFactory.createClause();
 		//clause.setFeature(Feature.COMPLEMENTISER, "lool");
 		//clause.setComplement(disjunctions);
 		//TODO complimentizer pronoun
-	
-		pe.addComplement(disjunctions);
+		disjunctions.addPreModifier(relPron);
+		pe.addPostModifier(disjunctions);
+		//pe.addComplement(disjunctions);
 		if (debugMsg)
-			System.out.println("    Begin complimentizer:" + pronoun);
+			System.out.println("    Begin complimentizer:" + relPron);
 		
 	}
 	

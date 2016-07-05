@@ -5,8 +5,8 @@ import kariminf.sentrep.UnivMap;
 
 public class FraRealizer extends SNLGRealizer {
 	
-	public FraRealizer(UnivMap mdMap) {
-		super(new FraSnlgMap(), mdMap, new simplenlg.lexicon.french.XMLLexicon());
+	public FraRealizer() {
+		super(new FraSnlgMap(), new simplenlg.lexicon.french.XMLLexicon());
 	}
 
 }

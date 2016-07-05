@@ -27,8 +27,8 @@ public class Ston2TextTest {
 		UnivRealizer realizer;
 		Ston2Text translator;
 		
-		realizer = new EngRealizer(stonMap);
-		translator = new Ston2Text(realizer, "eng", wordnetPath);
+		realizer = new EngRealizer();
+		translator = new Ston2Text(realizer, stonMap, "eng", wordnetPath);
 		translator.parse(specif);
 		if(translator.parsed()){
 			System.out.println(realizer.getText());
@@ -37,8 +37,8 @@ public class Ston2TextTest {
 		}
 		
 		
-		realizer = new FraRealizer(stonMap);
-		translator = new Ston2Text(realizer, "fra", wordnetPath);
+		realizer = new FraRealizer();
+		translator = new Ston2Text(realizer, stonMap, "fra", wordnetPath);
 		translator.parse(specif);
 		if(translator.parsed()){
 			System.out.println(realizer.getText());

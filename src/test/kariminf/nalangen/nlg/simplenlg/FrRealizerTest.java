@@ -17,13 +17,13 @@ public class FrRealizerTest {
 	
 	private static void thatTest(){
 		
-		UnivMap stonMap = new Ston2UnivMap();
-		UnivRealizer realizer = new FraRealizer(stonMap);
+		UnivRealizer realizer = new FraRealizer();
 		
 		//Roles
 		realizer.beginNounPhrase("mother", "mère");
+		realizer.addNPSpecifs("", Determiner.YES, "1");
 		realizer.beginNounPhrase("food", "nourriture");
-		realizer.beginComplementizer("que");
+		realizer.beginComplementizer(Relation.OBJ, "");
 		HashSet<String> compRefs = new HashSet<String>();
 		compRefs.add("m_ate");
 		realizer.addConjunctions(compRefs);
@@ -70,14 +70,13 @@ public class FrRealizerTest {
 	}
 	
 	private static void simpleTest(){
-		UnivMap stonMap = new Ston2UnivMap();
-		UnivRealizer realizer = new FraRealizer(stonMap);
+		UnivRealizer realizer = new FraRealizer();
 		
 		//Roles
 		realizer.beginNounPhrase("mother", "mère");
-		
+		realizer.addNPSpecifs("", Determiner.YES, "1");
 		realizer.beginNounPhrase("food", "nourriture");
-		
+		realizer.addNPSpecifs("", Determiner.YES, "1");
 		//Actions
 		
 		realizer.beginSentPhrase("ate", "manger");

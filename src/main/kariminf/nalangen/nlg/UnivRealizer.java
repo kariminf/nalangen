@@ -27,43 +27,7 @@ import kariminf.sentrep.univ.types.*;
 import kariminf.sentrep.univ.*;
 
 
-public abstract class UnivRealizer {
-	
-	protected LangMap nlMap;
-	protected UnivMap mdMap;
-	
-	public UnivRealizer(LangMap nlMap, UnivMap mdMap){
-		this.nlMap = nlMap;
-		this.mdMap = mdMap;
-	}
-	
-	public String getRealizerTense(String modelTense){
-		VerbTense tense = mdMap.mapTense(modelTense);
-		return nlMap.getTense(tense);
-	}
-	
-	public VerbTense getTense(String modelTense){
-		return mdMap.mapTense(modelTense);
-	}
-	
-	public Modality getModality(String modelModal){
-		return mdMap.mapModal(modelModal);
-	}
-	
-	public SentMood getMood(String modelMood){
-		return SentMood.AFFIRMATIVE;
-	}
-	
-	public Comparison getComparison(String modelComp){
-		return mdMap.mapComparison(modelComp);
-	}
-	
-	public String mapRelation(String retation, String noun, String verb){
-		
-		Relation rel = mdMap.mapAdposition(retation);
-		String result = nlMap.getAdposition(rel, noun);
-		return result;
-	}
+public interface UnivRealizer {
 	
 	public abstract void beginSentPhrase(String id, String verb);
 	
@@ -78,10 +42,12 @@ public abstract class UnivRealizer {
 	
 	
 	public abstract void beginNounPhrase(String id, String noun);
-	public abstract void addNPSpecifs(String name, String def, String quantity);
+	public abstract void beginNounPhrase(String id, Pronoun p);
+	
+	public abstract void addNPSpecifs(String name, Determiner det, String quantity);
 	public abstract void addAdjective(String adjective, Set<String> adverbs);
 	
-	public abstract void addPrepositionPhrase(String parentID, String preposition);
+	public abstract void addPrepositionPhrase(Relation preposition, String params);
 	
 	public abstract String getText();
 	
@@ -91,7 +57,7 @@ public abstract class UnivRealizer {
 	public abstract void linkComplementizer(String parentId, String id);
 	*/
 	
-	public abstract void beginComplementizer(String pronoun);
+	public abstract void beginComplementizer(Relation pronoun, String params);
 	public abstract void endComplementizer();
 	
 	public abstract void beginSentence (SentMood type);

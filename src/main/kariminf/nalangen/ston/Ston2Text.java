@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import kariminf.sentrep.UnivMap;
 import kariminf.sentrep.univ.types.*;
 
 import kariminf.nalangen.nlg.UnivRealizer;
@@ -48,10 +49,11 @@ public class Ston2Text extends Parser {
 	private int currentRelID = 0;
 	private HashMap<String, ArrayList<Integer>> refs = 
 			new HashMap<String, ArrayList<Integer>>();
+	private UnivMap uMap;
 	
-	
-	public Ston2Text(UnivRealizer realizer, String lang, String basePath) {
+	public Ston2Text(UnivRealizer realizer, UnivMap uMap, String lang, String basePath) {
 		this.realizer = realizer;
+		this.uMap = uMap;
 		this.lang = lang;
 		try {
 			wordnet = SqliteRequestor.create(lang, basePath);
@@ -72,8 +74,8 @@ public class Ston2Text extends Parser {
 
 	@Override
 	protected void addVerbSpecif(String tense, String modality, boolean progressive, boolean negated) {
-		VerbTense theTense = realizer.getTense(tense);
-		Modality theModal = realizer.getModality(modality);
+		VerbTense theTense = uMap.mapTense(tense);
+		Modality theModal = uMap.mapModal(modality);
 		//System.out.println("Modal= " + theModal);
 		realizer.addVerbSpecif(theTense, theModal, progressive, negated);
 		
@@ -160,12 +162,16 @@ public class Ston2Text extends Parser {
 	protected void addRelative(String type) {
 		// TODO complete, for now just adpositional phrases
 		type = type.toUpperCase();
-		String prep = realizer.mapRelation(type, "", "");
+		Relation rel = uMap.mapAdposition(type);
 		
+		String params = "";
 		if (isAction){
-			realizer.addPrepositionPhrase(lastID, prep);
+			params = "parentID:" + lastID;
+			realizer.addPrepositionPhrase(rel, params);
 		} else {
-			realizer.beginComplementizer(prep);
+			//TODO modify according to the agent (person)
+			params = "person";
+			realizer.beginComplementizer(rel, params);
 			/*
 			String relID = "rel" + currentRelID;
 			//realizer.addComplementizer(relID, prep);
@@ -204,8 +210,7 @@ public class Ston2Text extends Parser {
 
 	@Override
 	protected void beginSentence(String type) {
-		
-		SentMood mood = realizer.getMood(type);
+		SentMood mood = uMap.mapMood(type);
 		realizer.beginSentence(mood);
 	}
 
@@ -246,14 +251,15 @@ public class Ston2Text extends Parser {
 
 	@Override
 	protected void addRoleSpecif(String name, String def, String quantity) {
-		realizer.addNPSpecifs(name.replace("_", " "), def, quantity);
+		Determiner det = uMap.mapDeterminer(def);
+		realizer.addNPSpecifs(name.replace("_", " "), det, quantity);
 		
 	}
 
 
 	@Override
 	protected void addComparison(String type, Set<Integer> adjSynSets) {
-		Comparison comp = realizer.getComparison(type);
+		Comparison comp = uMap.mapComparison(type);
 		
 		HashSet<String> adjectives = new HashSet<String>();
 		
@@ -269,12 +275,11 @@ public class Ston2Text extends Parser {
 
 
 	@Override
-	protected void addRole(String id, SPronoun pronoun) {
-		//String noun = wordnet.getWord(synSet, "NOUN");
-		/*String pronoun = "";
-		realizer.beginNounPhrase(id, noun);
+	protected void addPRole(String id, String pronoun) {
+		Pronoun p = uMap.mapPronoun(pronoun);
+		realizer.beginNounPhrase(id, p);
 		lastID = id;
-		isAction = false;*/
+		isAction = false;
 		
 	}
 

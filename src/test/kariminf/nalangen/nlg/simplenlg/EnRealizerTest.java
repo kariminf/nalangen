@@ -15,13 +15,14 @@ public class EnRealizerTest {
 	
 	private static void thatTest(){
 		
-		UnivMap stonMap = new Ston2UnivMap();
-		UnivRealizer realizer = new EngRealizer(stonMap);
+		UnivRealizer realizer = new EngRealizer();
 		
 		//Roles
 		realizer.beginNounPhrase("mother", "mother");
+		realizer.addNPSpecifs("", Determiner.YES, "PL");
 		realizer.beginNounPhrase("food", "food");
-		realizer.beginComplementizer("which");
+		realizer.addNPSpecifs("", Determiner.YES, "1");
+		realizer.beginComplementizer(Relation.OBJ, "");
 		Set<String> compRefs = new HashSet<String>();
 		compRefs.add("m_ate");
 		realizer.addConjunctions(compRefs);
@@ -68,12 +69,11 @@ public class EnRealizerTest {
 	}
 	
 	private static void simpleTest(){
-		UnivMap stonMap = new Ston2UnivMap();
-		UnivRealizer realizer = new EngRealizer(stonMap);
+		UnivRealizer realizer = new EngRealizer();
 		//realizer.showDebugMsg(true);
 		//Roles
 		realizer.beginNounPhrase("mother", "mother");
-		realizer.addNPSpecifs("", "Y", "PL");
+		realizer.addNPSpecifs("", Determiner.YES, "PL");
 		
 		realizer.beginNounPhrase("food", "food");
 		
@@ -107,8 +107,7 @@ public class EnRealizerTest {
 	}
 	
 	private static void compTest(){
-		UnivMap stonMap = new Ston2UnivMap();
-		UnivRealizer realizer = new EngRealizer(stonMap);
+		UnivRealizer realizer = new EngRealizer();
 		
 		//Roles
 		realizer.beginNounPhrase("karim", "karim");
