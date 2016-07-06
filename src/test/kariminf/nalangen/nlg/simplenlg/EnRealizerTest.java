@@ -1,5 +1,6 @@
 package kariminf.nalangen.nlg.simplenlg;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,13 +24,13 @@ public class EnRealizerTest {
 		realizer.beginNounPhrase("food", "food");
 		realizer.addNPSpecifs("", Determiner.YES, "1");
 		realizer.beginComplementizer(Relation.OBJ, "");
-		Set<String> compRefs = new HashSet<String>();
+		ArrayList<String> compRefs = new ArrayList<String>();
 		compRefs.add("m_ate");
 		realizer.addConjunctions(compRefs);
 		realizer.endComplementizer();
 		
 		realizer.beginNounPhrase("+goodfood", "food");
-		HashSet<String> adv1= new HashSet<String>();
+		ArrayList<String> adv1= new ArrayList<String>();
 		adv1.add("extremely");
 		realizer.addAdjective("good", adv1);
 		
@@ -37,7 +38,7 @@ public class EnRealizerTest {
 		realizer.beginSentPhrase("m_ate", "eat");
 		realizer.addVerbSpecif(VerbTense.PAST, Modality.NONE, false, false);
 		realizer.beginSubject();
-		Set<String> subjRefs = new HashSet<String>();
+		ArrayList<String> subjRefs = new ArrayList<String>();
 		subjRefs.add("mother");
 		realizer.addConjunctions(subjRefs);
 		realizer.endSubject();
@@ -45,13 +46,13 @@ public class EnRealizerTest {
 		realizer.addVerbSpecif(VerbTense.PAST, Modality.NONE, false, false);
 		
 		realizer.beginSubject();
-		HashSet<String> subjRefs2 = new HashSet<String>();
+		ArrayList<String> subjRefs2 = new ArrayList<String>();
 		subjRefs2.add("food");
 		realizer.addConjunctions(subjRefs2);
 		realizer.endSubject();
 		
 		realizer.beginObject();
-		HashSet<String>  objRefs = new HashSet<String>();
+		ArrayList<String>  objRefs = new ArrayList<String>();
 		objRefs.add("+goodfood");
 		realizer.addConjunctions(objRefs);
 		realizer.endObject();
@@ -59,7 +60,7 @@ public class EnRealizerTest {
 		realizer.endSentPhrase();
 		
 		realizer.beginSentence(SentMood.AFFIRMATIVE);
-		HashSet<String>  sentRefs = new HashSet<String>();
+		ArrayList<String>  sentRefs = new ArrayList<String>();
 		sentRefs.add("was");
 		realizer.addConjunctions(sentRefs);
 		realizer.endSentence();
@@ -83,13 +84,13 @@ public class EnRealizerTest {
 		realizer.addVerbSpecif(VerbTense.PRESENT, Modality.NONE, false, false);
 		
 		realizer.beginSubject();
-		HashSet<String> subjRefs2 = new HashSet<String>();
+		ArrayList<String> subjRefs2 = new ArrayList<String>();
 		subjRefs2.add("mother");
 		realizer.addConjunctions(subjRefs2);
 		realizer.endSubject();
 		
 		realizer.beginObject();
-		HashSet<String>  objRefs = new HashSet<String>();
+		ArrayList<String>  objRefs = new ArrayList<String>();
 		objRefs.add("food");
 		realizer.addConjunctions(objRefs);
 		realizer.endObject();
@@ -98,7 +99,7 @@ public class EnRealizerTest {
 		//realizer.linkComplimentizers();
 		
 		realizer.beginSentence(SentMood.AFFIRMATIVE);
-		HashSet<String>  sentRefs = new HashSet<String>();
+		ArrayList<String>  sentRefs = new ArrayList<String>();
 		sentRefs.add("ate");
 		realizer.addConjunctions(sentRefs);
 		realizer.endSentence();
@@ -120,7 +121,7 @@ public class EnRealizerTest {
 		realizer.addVerbSpecif(VerbTense.PRESENT, Modality.NONE, false, false);
 		
 		realizer.beginSubject();
-		HashSet<String> subjRefs2 = new HashSet<String>();
+		ArrayList<String> subjRefs2 = new ArrayList<String>();
 		subjRefs2.add("karim");
 		realizer.addConjunctions(subjRefs2);
 		realizer.endSubject();
@@ -137,7 +138,7 @@ public class EnRealizerTest {
 		//realizer.linkComplimentizers();
 		
 		realizer.beginSentence(SentMood.AFFIRMATIVE);
-		HashSet<String>  sentRefs = new HashSet<String>();
+		ArrayList<String>  sentRefs = new ArrayList<String>();
 		sentRefs.add("ate");
 		realizer.addConjunctions(sentRefs);
 		realizer.endSentence();

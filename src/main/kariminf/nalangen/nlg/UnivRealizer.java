@@ -19,6 +19,7 @@
 
 package kariminf.nalangen.nlg;
 
+import java.util.List;
 import java.util.Set;
 
 import kariminf.sentrep.LangMap;
@@ -32,7 +33,7 @@ public interface UnivRealizer {
 	public abstract void beginSentPhrase(String id, String verb);
 	
 	public abstract void addVerbSpecif(VerbTense tense, Modality modality, boolean progressive, boolean negated);
-	public abstract void addConjunctions(Set<String> phraseIDs);
+	public abstract void addConjunctions(List<String> phraseIDs);
 	
 	public abstract void beginSubject();
 	public abstract void beginObject();
@@ -45,7 +46,7 @@ public interface UnivRealizer {
 	public abstract void beginNounPhrase(String id, Pronoun p);
 	
 	public abstract void addNPSpecifs(String name, Determiner det, String quantity);
-	public abstract void addAdjective(String adjective, Set<String> adverbs);
+	public abstract void addAdjective(String adjective, List<String> adverbs);
 	
 	public abstract void addPrepositionPhrase(Relation preposition, String params);
 	
@@ -63,7 +64,7 @@ public interface UnivRealizer {
 	public abstract void beginSentence (SentMood type);
 	public abstract void endSentence ();
 	
-	public abstract void addComparison(Comparison comp, Set<String> adjs);
+	public abstract void addComparison(Comparison comp, List<String> adjs);
 	
 	public abstract void showDebugMsg(boolean yes);
 }

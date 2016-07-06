@@ -22,6 +22,7 @@ package kariminf.nalangen.ston;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import kariminf.sentrep.UnivMap;
@@ -47,6 +48,9 @@ public class Ston2Text extends Parser {
 	private boolean isAction = false;
 	
 	private int currentRelID = 0;
+	
+	private boolean ignoreReferences = false;
+	
 	private HashMap<String, ArrayList<Integer>> refs = 
 			new HashMap<String, ArrayList<Integer>>();
 	private UnivMap uMap;
@@ -96,9 +100,9 @@ public class Ston2Text extends Parser {
 	}
 
 	@Override
-	protected void addAdjective(int synSet, Set<Integer> advSynSets) {
+	protected void addAdjective(int synSet, List<Integer> advSynSets) {
 		String adjective = wordnet.getWord(synSet, "ADJECTIVE");		
-		Set<String> adverbs = new HashSet<String>();
+		ArrayList<String> adverbs = new ArrayList<String>();
 		
 		for(int advsyn : advSynSets){
 			String adverb = wordnet.getWord(advsyn, "ADVERB");
@@ -138,7 +142,9 @@ public class Ston2Text extends Parser {
 	}
 
 	@Override
-	protected void addConjunctions(Set<String> IDs) {
+	protected void addConjunctions(List<String> IDs) {
+		if (ignoreReferences)
+			return;
 		if (IDs.size() < 1) return;
 		realizer.addConjunctions(IDs);
 	}
@@ -236,7 +242,7 @@ public class Ston2Text extends Parser {
 
 
 	@Override
-	protected void addActionAdverb(int advSynSet, Set<Integer> advSynSets) {
+	protected void addActionAdverb(int advSynSet, List<Integer> advSynSets) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -258,10 +264,10 @@ public class Ston2Text extends Parser {
 
 
 	@Override
-	protected void addComparison(String type, Set<Integer> adjSynSets) {
+	protected void addComparison(String type, List<Integer> adjSynSets) {
 		Comparison comp = uMap.mapComparison(type);
 		
-		HashSet<String> adjectives = new HashSet<String>();
+		ArrayList<String> adjectives = new ArrayList<String>();
 		
 		for (int synset: adjSynSets){
 			String adjective = wordnet.getWord(synset, "ADJECTIVE");
@@ -281,6 +287,18 @@ public class Ston2Text extends Parser {
 		lastID = id;
 		isAction = false;
 		
+	}
+
+
+	@Override
+	protected void beginPRelatives() {
+		ignoreReferences = true;
+	}
+
+
+	@Override
+	protected void endPRelatives() {
+		ignoreReferences = false;
 	}
 
 

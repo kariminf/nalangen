@@ -2,6 +2,7 @@ package kariminf.nalangen.nlg.simplenlg;
 
 import java.util.ArrayDeque;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 import kariminf.nalangen.nlg.UnivRealizer;
@@ -30,6 +31,7 @@ public abstract class SNLGRealizer implements UnivRealizer {
 	private Lexicon lexicon;
 	private NLGFactory nlgFactory;
 	private Realiser realiser;
+	
 	//private static DocumentElement paragraph = nlgFactory.createParagraph();
 	
 	private NPPhraseSpec np;
@@ -185,7 +187,7 @@ public abstract class SNLGRealizer implements UnivRealizer {
 	}
 
 	@Override
-	public void addAdjective(String adjective, Set<String> adverbs) {
+	public void addAdjective(String adjective, List<String> adverbs) {
 		AdjPhraseSpec adjectiveP = nlgFactory.createAdjectivePhrase(adjective);
 		
 		for(String adverb : adverbs){
@@ -208,7 +210,7 @@ public abstract class SNLGRealizer implements UnivRealizer {
 	}
 
 	@Override
-	public void addConjunctions(Set<String> phraseIDs) {
+	public void addConjunctions(List<String> phraseIDs) {
 		
 		if (debugMsg)
 			System.out.println("        add conjunctions: " + phraseIDs);
@@ -356,8 +358,7 @@ public abstract class SNLGRealizer implements UnivRealizer {
 	}
 	
 	@Override
-	public void addComparison(Comparison comp, Set<String> adjs){
-		
+	public void addComparison(Comparison comp, List<String> adjs){
 		
 		boolean hasAdjectives = false;
 		

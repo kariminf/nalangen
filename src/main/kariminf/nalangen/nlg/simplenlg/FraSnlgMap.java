@@ -77,7 +77,7 @@ public class FraSnlgMap implements LangMap {
 		switch (det){
 		case YES: return "le";
 		case NO: return "un";
-		case NONE: return "";
+		case NONE: return "un";
 		default:
 			return "";
 		}
