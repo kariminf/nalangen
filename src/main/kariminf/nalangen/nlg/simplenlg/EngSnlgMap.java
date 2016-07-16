@@ -70,6 +70,10 @@ public class EngSnlgMap implements LangMap {
 		case TO: return "to";
 		case P_INS: return "inside";
 		case T_IN: return "in";
+		case AS: return "as";
+		case UND: return "under";
+		case ON: return "on";
+		case FOR: return "for";
 		default:
 			break;
 		}

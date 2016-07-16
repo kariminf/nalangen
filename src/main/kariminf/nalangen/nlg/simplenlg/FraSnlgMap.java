@@ -65,6 +65,10 @@ public class FraSnlgMap implements LangMap {
 		case WITH: return "avec";
 		case TO: return "vers";
 		case T_IN: return "en";
+		case AS: return "comme";
+		case UND: return "sous";
+		case ON: return "sur";
+		case FOR: return "pour";
 		default:
 			break;
 		}
