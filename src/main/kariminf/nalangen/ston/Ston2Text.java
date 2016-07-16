@@ -176,7 +176,7 @@ public class Ston2Text extends Parser {
 			realizer.addPrepositionPhrase(rel, params);
 		} else {
 			//TODO modify according to the agent (person)
-			params = "person";
+			//params = "person";
 			realizer.beginComplementizer(rel, params);
 			/*
 			String relID = "rel" + currentRelID;

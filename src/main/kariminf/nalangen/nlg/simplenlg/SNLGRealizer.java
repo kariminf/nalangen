@@ -32,6 +32,9 @@ public abstract class SNLGRealizer implements UnivRealizer {
 	private NLGFactory nlgFactory;
 	private Realiser realiser;
 	
+	//This is to prevent passive voice when we use relative subject "who"
+	private boolean notRelSubject = true;
+	
 	//private static DocumentElement paragraph = nlgFactory.createParagraph();
 	
 	private NPPhraseSpec np;
@@ -91,11 +94,11 @@ public abstract class SNLGRealizer implements UnivRealizer {
 	@Override
 	public void endSentPhrase() {
 		
-		if (sp.getSubject() == null){
+		if (sp.getSubject() == null && notRelSubject){
 			sp.setFeature(Feature.PASSIVE, true);
 			//System.out.println("no subject= " + lastVP);
 		}
-		
+
 		if (debugMsg)
 			System.out.println("End verbal phrase");
 		
@@ -352,6 +355,9 @@ public abstract class SNLGRealizer implements UnivRealizer {
 		disjunctions.addPreModifier(relPron);
 		pe.addPostModifier(disjunctions);
 		//pe.addComplement(disjunctions);
+		
+		if (pronoun == Relation.SUBJ)
+			notRelSubject = false;
 		if (debugMsg)
 			System.out.println("    Begin complimentizer:" + relPron);
 		
@@ -401,7 +407,7 @@ public abstract class SNLGRealizer implements UnivRealizer {
 
 	@Override
 	public void endComplementizer() {
-		
+		notRelSubject = true;
 	}
 
 	@Override
