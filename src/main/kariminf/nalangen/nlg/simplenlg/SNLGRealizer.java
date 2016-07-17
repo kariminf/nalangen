@@ -1,6 +1,7 @@
 package kariminf.nalangen.nlg.simplenlg;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -34,7 +35,6 @@ public abstract class SNLGRealizer implements UnivRealizer {
 	
 	//This is to prevent passive voice when we use relative subject "who"
 	private boolean notRelSubject = true;
-	private boolean noSubject = true;
 	
 	
 	//private HashMap<String, HashMap<String, Relation>> relations = new HashMap<String, HashMap<String, Relation>>();
@@ -89,8 +89,7 @@ public abstract class SNLGRealizer implements UnivRealizer {
 		sp.setVerb(verb);
 		
 		//lastVP = id;
-		
-		noSubject = true;
+
 
 		if (debugMsg)
 			System.out.println("Begin verbal phrase: " + id + ", verb= " + verb);
@@ -100,8 +99,9 @@ public abstract class SNLGRealizer implements UnivRealizer {
 	@Override
 	public void endSentPhrase() {
 		//sp.getSubject() == null
-		if ( noSubject && notRelSubject){//&& notRelSubject
-			sp.setFeature(Feature.PASSIVE, true);
+		
+		if ( sp.getSubject() != null && sp.getFeatureAsBoolean(Feature.PASSIVE)){
+			sp.setFeature(Feature.PASSIVE, false);
 			//System.out.println("no subject= " + lastVP);
 		}
 
@@ -256,6 +256,7 @@ public abstract class SNLGRealizer implements UnivRealizer {
 		conjunctions.setFeature(Feature.CONJUNCTION, nlMap.getCoordination(Coordination.AND));
 
 		for (String phraseID: phraseIDs){
+			
 			if (nps.containsKey(phraseID)){
 				NPPhraseSpec npph = nps.get(phraseID);
 				conjunctions.addCoordinate(npph);
@@ -267,7 +268,13 @@ public abstract class SNLGRealizer implements UnivRealizer {
 			}
 
 			if (sps.containsKey(phraseID)){
-				conjunctions.addCoordinate(sps.get(phraseID));
+				SPhraseSpec spTmp = sps.get(phraseID);
+				
+				if (spTmp.getSubject() == null && notRelSubject){//&& notRelSubject
+					spTmp.setFeature(Feature.PASSIVE, true);
+					//System.out.println("no subject= " + lastVP);
+				}
+				conjunctions.addCoordinate(spTmp);
 				if (debugMsg)
 					System.out.println("       " + phraseID + ">> Verbal phrase");
 				continue;
@@ -275,6 +282,10 @@ public abstract class SNLGRealizer implements UnivRealizer {
 			
 			//When not found; it is a late verbal phrase
 			sp = nlgFactory.createClause();
+			if (notRelSubject){//&& notRelSubject
+				sp.setFeature(Feature.PASSIVE, true);
+				//System.out.println("no subject= " + lastVP);
+			}
 			sps.put(phraseID, sp);
 			conjunctions.addCoordinate(sp);
 		}
@@ -289,7 +300,6 @@ public abstract class SNLGRealizer implements UnivRealizer {
 
 	@Override
 	public void beginSubject() {
-		noSubject = false;
 		disjunctions = nlgFactory.createCoordinatedPhrase();
 		disjunctions.setFeature(Feature.CONJUNCTION, nlMap.getCoordination(Coordination.OR));
 		if (debugMsg)
@@ -381,8 +391,14 @@ public abstract class SNLGRealizer implements UnivRealizer {
 		pe.addPostModifier(disjunctions);
 		//pe.addComplement(disjunctions);
 		
-		if (pronoun == Relation.SUBJ)
+		if (pronoun == Relation.SUBJ){
 			notRelSubject = false;
+		}
+		else{
+			notRelSubject = true;
+		}
+			
+		
 		if (debugMsg)
 			System.out.println("    Begin complimentizer:" + relPron);
 		

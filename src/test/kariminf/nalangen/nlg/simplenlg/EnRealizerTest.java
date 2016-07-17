@@ -42,21 +42,20 @@ public class EnRealizerTest {
 		subjRefs.add("mother");
 		realizer.addConjunctions(subjRefs);
 		realizer.endSubject();
+		realizer.endSentPhrase();
+		
 		realizer.beginSentPhrase("was", "be");
 		realizer.addVerbSpecif(VerbTense.PAST, Modality.NONE, false, false);
-		
 		realizer.beginSubject();
 		ArrayList<String> subjRefs2 = new ArrayList<String>();
 		subjRefs2.add("food");
 		realizer.addConjunctions(subjRefs2);
 		realizer.endSubject();
-		
 		realizer.beginObject();
 		ArrayList<String>  objRefs = new ArrayList<String>();
 		objRefs.add("+goodfood");
 		realizer.addConjunctions(objRefs);
 		realizer.endObject();
-		
 		realizer.endSentPhrase();
 		
 		realizer.beginSentence(SentMood.AFFIRMATIVE);
