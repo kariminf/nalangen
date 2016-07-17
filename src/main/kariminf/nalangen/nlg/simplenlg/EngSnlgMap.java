@@ -146,7 +146,7 @@ public class EngSnlgMap implements LangMap {
 				return "those";
 			}
 
-		case PERSONNAL:
+		case SUBJECTIVE:
 			switch (pronoun.getPerson()){
 			case FIRST:
 				return "I";
@@ -171,6 +171,60 @@ public class EngSnlgMap implements LangMap {
 				}
 			default:
 				return "they";
+			}
+			
+		case OBJECTIVE:
+			switch (pronoun.getPerson()){
+			case FIRST:
+				return "me";
+			case SECOND:
+				return "you";
+			default:
+				break;
+			}
+			
+			switch (pronoun.getNumber()) {
+			case NONE:
+				return "no one";
+				
+			case SINGLE:
+				switch (pronoun.getGender()) {
+				case FEMALE:
+					return "her";
+				case MALE:
+					return "him";
+				default:
+					return "it";
+				}
+			default:
+				return "them";
+			}	
+			
+		case POSSESSIVE:
+			switch (pronoun.getPerson()){
+			case FIRST:
+				return "my";
+			case SECOND:
+				return "your";
+			default:
+				break;
+			}
+			
+			switch (pronoun.getNumber()) {
+			case NONE:
+				return "no one's";
+				
+			case SINGLE:
+				switch (pronoun.getGender()) {
+				case FEMALE:
+					return "her";
+				case MALE:
+					return "his";
+				default:
+					return "its";
+				}
+			default:
+				return "their";
 			}
 			
 		default:

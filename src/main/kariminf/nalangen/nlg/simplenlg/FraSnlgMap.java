@@ -165,7 +165,7 @@ public class FraSnlgMap implements LangMap {
 				}
 			}
 
-		case PERSONNAL:
+		case SUBJECTIVE:
 			switch (pronoun.getPerson()){
 			case FIRST:
 				return "je";
@@ -196,6 +196,74 @@ public class FraSnlgMap implements LangMap {
 					return "ils";
 				default:
 					return "ils";
+				}
+			}
+		
+		case OBJECTIVE:
+			switch (pronoun.getPerson()){
+			case FIRST:
+				return "moi";
+			case SECOND:
+				return "toi";
+			default:
+				break;
+			}
+			
+			switch (pronoun.getNumber()) {
+			case NONE:
+				return "lui";
+				
+			case SINGLE:
+				switch (pronoun.getGender()) {
+				case FEMALE:
+					return "elle";
+				case MALE:
+					return "lui";
+				default:
+					return "lui";
+				}
+			default:
+				switch (pronoun.getGender()) {
+				case FEMALE:
+					return "elles";
+				case MALE:
+					return "eux";
+				default:
+					return "eux";
+				}
+			}
+			
+		case POSSESSIVE:
+			switch (pronoun.getPerson()){
+			case FIRST:
+				return "mon";
+			case SECOND:
+				return "ton";
+			default:
+				break;
+			}
+			
+			switch (pronoun.getNumber()) {
+			case NONE:
+				return "son";
+				
+			case SINGLE:
+				switch (pronoun.getGender()) {
+				case FEMALE:
+					return "son";
+				case MALE:
+					return "son";
+				default:
+					return "son";
+				}
+			default:
+				switch (pronoun.getGender()) {
+				case FEMALE:
+					return "leur";
+				case MALE:
+					return "leur";
+				default:
+					return "leur";
 				}
 			}
 			

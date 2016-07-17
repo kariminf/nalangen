@@ -34,6 +34,10 @@ public abstract class SNLGRealizer implements UnivRealizer {
 	
 	//This is to prevent passive voice when we use relative subject "who"
 	private boolean notRelSubject = true;
+	private boolean noSubject = true;
+	
+	
+	//private HashMap<String, HashMap<String, Relation>> relations = new HashMap<String, HashMap<String, Relation>>();
 	
 	//private static DocumentElement paragraph = nlgFactory.createParagraph();
 	
@@ -85,6 +89,8 @@ public abstract class SNLGRealizer implements UnivRealizer {
 		sp.setVerb(verb);
 		
 		//lastVP = id;
+		
+		noSubject = true;
 
 		if (debugMsg)
 			System.out.println("Begin verbal phrase: " + id + ", verb= " + verb);
@@ -93,8 +99,8 @@ public abstract class SNLGRealizer implements UnivRealizer {
 
 	@Override
 	public void endSentPhrase() {
-		
-		if (sp.getSubject() == null && notRelSubject){
+		//sp.getSubject() == null
+		if ( noSubject && notRelSubject){//&& notRelSubject
 			sp.setFeature(Feature.PASSIVE, true);
 			//System.out.println("no subject= " + lastVP);
 		}
@@ -145,6 +151,10 @@ public abstract class SNLGRealizer implements UnivRealizer {
 	public void beginNounPhrase(String id, String noun) {
 		np = nlgFactory.createNounPhrase("", noun);
 		pe = np;
+		//A pronoun
+		if (nps.containsKey(id)){
+			np.addPreModifier(nps.get(id));
+		}
 		nps.put(id, np);
 		lastNP = id;
 	
@@ -179,11 +189,25 @@ public abstract class SNLGRealizer implements UnivRealizer {
 			np.setSpecifier(determiner);
 		}
 		
+		quantity = quantity.toLowerCase();
+		
 		if(quantity.length() < 1 || quantity.equals("1")) return;
+		
+		if (quantity.startsWith("o")){
+			quantity = quantity.substring(1);
+			
+			
+			if (! quantity.endsWith("pl")){
+				np.addPreModifier(getOrdinal(quantity));
+				return;
+			}
+			quantity = quantity.substring(0, quantity.length()-2);
+			quantity = getOrdinal(quantity);
+		}
 		
 		np.setPlural(true);
 		
-		if(quantity.toLowerCase().equals("pl")) return;
+		if(quantity.equals("pl")) return;
 		
 		np.addPreModifier(quantity);
 		
@@ -265,6 +289,7 @@ public abstract class SNLGRealizer implements UnivRealizer {
 
 	@Override
 	public void beginSubject() {
+		noSubject = false;
 		disjunctions = nlgFactory.createCoordinatedPhrase();
 		disjunctions.setFeature(Feature.CONJUNCTION, nlMap.getCoordination(Coordination.OR));
 		if (debugMsg)
@@ -415,6 +440,8 @@ public abstract class SNLGRealizer implements UnivRealizer {
 		debugMsg = yes;
 		
 	}
+	
+	abstract protected String getOrdinal(String number);
 
 
 }
