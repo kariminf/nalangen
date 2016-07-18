@@ -352,6 +352,13 @@ public abstract class SNLGRealizer implements UnivRealizer {
 		prepositional.addComplement(disjunctions);
 		parent.addPostModifier(prepositional);
 		
+		if (preposition == Relation.SUBJ || preposition == Relation.TO){
+			notRelSubject = false;
+		}
+		else{
+			notRelSubject = true;
+		}
+		
 		if (debugMsg)
 			System.out.println("    Add preposition: " + prep);
 		
@@ -391,7 +398,7 @@ public abstract class SNLGRealizer implements UnivRealizer {
 		pe.addPostModifier(disjunctions);
 		//pe.addComplement(disjunctions);
 		
-		if (pronoun == Relation.SUBJ){
+		if (pronoun == Relation.SUBJ || pronoun == Relation.TO){
 			notRelSubject = false;
 		}
 		else{

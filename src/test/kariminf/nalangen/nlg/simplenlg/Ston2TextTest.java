@@ -13,10 +13,11 @@ import kariminf.sentrep.ston.Ston2UnivMap;
 
 
 public class Ston2TextTest {
-	static String stonFile = "../SentRep/ston/at.ston";
-	//static String stonFile = "../SentRep/ston/comp1.ston";
-	//static String stonFile = "../SentRep/ston/comp2.ston";
-	//static String stonFile = "../SentRep/ston/pn_quant.ston";
+	static String stonFile = "../SentRep/ston/exp/that.ston";
+	//static String stonFile = "../SentRep/ston/exp/at.ston";
+	//static String stonFile = "../SentRep/ston/exp/comp1.ston";
+	//static String stonFile = "../SentRep/ston/exp/comp2.ston";
+	//static String stonFile = "../SentRep/ston/exp/pn_quant.ston";
 	static String wordnetPath = "../LangPi/wordnetDB/wordnet.sqlite";
 	/**
 	 * @param args
