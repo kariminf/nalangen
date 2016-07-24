@@ -3,6 +3,9 @@ package kariminf.nalangen.nlg.simplenlg;
 import kariminf.sentrep.LangMap;
 import kariminf.sentrep.univ.types.*;
 import kariminf.sentrep.univ.types.Pronoun.Proximity;
+import kariminf.sentrep.univ.types.Relation.Adpositional;
+import kariminf.sentrep.univ.types.Relation.Adverbial;
+import kariminf.sentrep.univ.types.Relation.Relative;
 
 public class EngSnlgMap implements LangMap {
 
@@ -15,69 +18,95 @@ public class EngSnlgMap implements LangMap {
 	public String getModal(Modality modal) {
 		return modal.toString().toLowerCase();
 	}
-
+	
 	@Override
-	public String getAdposition(Relation adpos, String param) {
+	public String getAdposition(Adpositional adpos, String param) {
 		
 		switch (adpos){
-		case SUBJ: 
-			if (param.contains("person"))
-				return "who";
-			return "that";
-		case OBJ: 
-			if (param.contains("person"))
-				return "who";
-			return "that";
-		case POSS: return "that";
-		case REAS: return "why";
-		
-		case WHERE: return "where";
-		case WHEN: return "when";
-		
-		case OF: return "of";
-		//TODO time returns at, on, in
-		//on sundays, in 1986, at 2 pm
-		case T_AT: return "at";
-		//since 1986
-		case T_SNC: return "since";
-		//I worked for 10 hours
-		case T_FOR: return "for";
-		//2 years ago
-		case T_AGO: return "ago";
-		case T_BEF: return "before";
-		case T_AFT: return "after";
-		//till, untill
-		case T_TILL: return "till";
-		case T_BY: return "by";
-		//in
-		case P_IN: return "in"; // wide space In London
-		//out, outside
-		case P_OUT: return "out";
-		//exact place: at 
-		case P_AT: return "at"; //narrow space
-		case P_ON: return "on";
-		case P_LOW: return "under";
-		case P_UP: return "above";
-		//by, next to, nesides, near
-		case P_BY: return "near";
-		case P_BET: return "between";
-		case P_BEH: return "behind";
-		case P_FRN: return "in front of";
-		case P_THR: return "through";
-		case ABOUT: return "about";
-		case FROM: return "from";
-		case WITH: return "with";
-		case TO: return "to";
-		case P_INS: return "inside";
-		case T_IN: return "in";
-		case AS: return "as";
-		case UND: return "under";
-		case ON: return "on";
-		case FOR: return "for";
+		case ABOVE: return "above";
+		case ACCOMPANY: return "with";
+		case AFTER:
+			if (param.contains("place")) return "behind";
+			return "after";
+		case INTENTION: return "for";
+		case BEFORE: 
+			if (param.contains("place")) return "in front";
+			return "before";
+		case BELOW: return "below";
+		case BETWEEN: return "between";
+		case DESTINATION: return "to";
+		case EXIST: //on sundays, in 1986, at 2 pm
+			//place and time
+			if (param.contains("small")) return "at";
+			if (param.contains("many")) return "on";
+			return "in";
+		case INSIDE: return "inside";
+		case OUTSIDE: return "outside";
+		case PAST: return "ago";
+		case POSSESSION: return "of";
+		case PROXIMITY: return "by";
+		case ROLE: return "as";
+		case SINCE: return "since";
+		case SITUATION: return "under";
+		case SOURCE: return "from";
+		case SUBJECT: return "about"; // or "on"
+		case THROUGH: return "through";
 		default:
 			break;
+		
 		}
 		
+		return "";
+	}
+	
+	@Override
+	public String getAdverbial(Adverbial adv, String param) {
+		switch (adv){
+		case CONDITION: return "if";
+		case CONSESSION: return "although";
+		case MANNER: return "as";
+		case PLACE: return "where";
+		case PURPOSE: return "in order to";
+		case REASON: return "because";
+		case TIME: return "when";
+		default:
+			break;
+		
+		}
+		return "";
+	}
+
+	@Override
+	public String getRelative(Relative rel, String param) {
+		
+		if (rel.name().equals("IO_IN")){
+			if (param.contains("place"))
+				return "where";
+			else if (param.contains("time"))
+				return "when";
+		}
+		
+		if (rel.name().startsWith("IO_")){
+			String objPronoun = param.contains("person")? "whom": "which";
+			Adpositional adp = Adpositional.valueOf(rel.name().split("_")[1]);
+			return getAdposition(adp, param) + " " + objPronoun;
+		}
+		
+		switch (rel){
+		case OBJECT:
+			if (param.contains("person"))
+				return "whom";
+			return "which";
+		case POSSESSIVE: return "whose";
+		case REASON: return "why";
+		case SUBJECT:
+			if (param.contains("person"))
+				return "who";
+			return "which";
+		default:
+			break;
+		
+		}
 		return "";
 	}
 
@@ -232,8 +261,5 @@ public class EngSnlgMap implements LangMap {
 		}
 
 	}
-
-	
-	
 
 }

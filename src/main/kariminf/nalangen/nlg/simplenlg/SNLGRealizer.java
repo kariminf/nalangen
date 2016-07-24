@@ -10,11 +10,15 @@ import kariminf.nalangen.nlg.UnivRealizer;
 
 import kariminf.sentrep.LangMap;
 import kariminf.sentrep.univ.types.*;
+import kariminf.sentrep.univ.types.Relation.Adpositional;
+import kariminf.sentrep.univ.types.Relation.Adverbial;
+import kariminf.sentrep.univ.types.Relation.Relative;
 
 import simplenlg.features.Feature;
 import simplenlg.features.LexicalFeature;
 import simplenlg.features.Tense;
 import simplenlg.framework.CoordinatedPhraseElement;
+import simplenlg.framework.ElementCategory;
 import simplenlg.framework.NLGFactory;
 import simplenlg.framework.PhraseElement;
 import simplenlg.framework.WordElement;
@@ -52,6 +56,8 @@ public abstract class SNLGRealizer implements UnivRealizer {
 	
 	private CoordinatedPhraseElement disjunctions;
 	private CoordinatedPhraseElement conjunctions;
+	
+	private boolean thereIsPronoun = false;
 	
 	/*
 	private ArrayDeque<CoordinatedPhraseElement> disjunctionsQue =
@@ -164,9 +170,14 @@ public abstract class SNLGRealizer implements UnivRealizer {
 	
 	@Override
 	public void beginNounPhrase(String id, Pronoun p) {
+		
+		thereIsPronoun = true;
+		
 		String pronoun = nlMap.getPronoun(p);
 		//System.out.println( p);
+		//np = nlgFactory.createNounPhrase(pronoun);
 		np = nlgFactory.createNounPhrase(pronoun);
+		//np.setPronoun(pronoun);
 		pe = np;
 		nps.put(id, np);
 		lastNP = id;
@@ -184,10 +195,12 @@ public abstract class SNLGRealizer implements UnivRealizer {
 			np = nlgFactory.createNounPhrase("", name);
 			nps.put(lastNP, np);
 			pe = np;
-		} else {		
+		} else if (!thereIsPronoun) {
 			String determiner = nlMap.getDeterminer(det);
 			np.setSpecifier(determiner);
 		}
+		
+		thereIsPronoun = false;
 		
 		quantity = quantity.toLowerCase();
 		
@@ -332,18 +345,21 @@ public abstract class SNLGRealizer implements UnivRealizer {
 	}
 
 	@Override
-	public void addPrepositionPhrase(Relation preposition, String params) {
+	public void beginPrepositionPhrase(Adpositional preposition, String params) {
 		
 		if (! params.contains("parentID:"))
 			return;
 		String parentID = params.substring(params.indexOf("parentID") + 9);
 		parentID = parentID.split(",")[0];
 		
-		if (! sps.containsKey(parentID)) return;
+		PhraseElement parent;
+		if (sps.containsKey(parentID)){
+			parent = sps.get(parentID);
+		} else if (nps.containsKey(parentID)){
+			parent = nps.get(parentID);
+		} else return;
 		
-		String prep = nlMap.getAdposition(preposition, "");
-		
-		SPhraseSpec parent = sps.get(parentID);
+		String prep = nlMap.getAdposition(preposition, params);
 		
 		PPPhraseSpec prepositional = nlgFactory.createPrepositionPhrase(prep);
 		
@@ -351,16 +367,41 @@ public abstract class SNLGRealizer implements UnivRealizer {
 		disjunctions.setFeature(Feature.CONJUNCTION, nlMap.getCoordination(Coordination.OR));
 		prepositional.addComplement(disjunctions);
 		parent.addPostModifier(prepositional);
+
+		if (debugMsg)
+			System.out.println("    Add preposition: " + preposition.name() + ": " + prep);
 		
-		if (preposition == Relation.SUBJ || preposition == Relation.TO){
+	}
+	
+	@Override
+	public void endPrepositionPhrase() {
+		
+	}
+	
+	@Override
+	public void beginAdverbialClause(Adverbial advPronoun, String params) {
+		
+		String advPron = nlMap.getAdverbial(advPronoun, params);
+		disjunctions = nlgFactory.createCoordinatedPhrase();
+		disjunctions.setFeature(Feature.CONJUNCTION, nlMap.getCoordination(Coordination.OR));
+		disjunctions.addPreModifier(advPron);
+		pe.addPostModifier(disjunctions);
+		//pe.addComplement(disjunctions);
+		
+		if (advPronoun == Adverbial.PURPOSE){
 			notRelSubject = false;
 		}
 		else{
 			notRelSubject = true;
 		}
-		
+
 		if (debugMsg)
-			System.out.println("    Add preposition: " + prep);
+			System.out.println("    Add adverbial: " + advPronoun.name() + ": " + advPron);
+		
+	}
+	
+	@Override
+	public void endAdverbialClause(){
 		
 	}
 
@@ -385,9 +426,9 @@ public abstract class SNLGRealizer implements UnivRealizer {
 	}
 
 	@Override
-	public void beginComplementizer(Relation pronoun, String params) {
+	public void beginComplementizer(Relative ComPronoun, String params) {
 		//complementPronoun = pronoun;
-		String relPron = nlMap.getAdposition(pronoun, params);
+		String relPron = nlMap.getRelative(ComPronoun, params);
 		disjunctions = nlgFactory.createCoordinatedPhrase();
 		disjunctions.setFeature(Feature.CONJUNCTION, nlMap.getCoordination(Coordination.OR));
 		//SPhraseSpec clause = nlgFactory.createClause();
@@ -398,7 +439,7 @@ public abstract class SNLGRealizer implements UnivRealizer {
 		pe.addPostModifier(disjunctions);
 		//pe.addComplement(disjunctions);
 		
-		if (pronoun == Relation.SUBJ || pronoun == Relation.TO){
+		if (ComPronoun == Relative.SUBJECT){
 			notRelSubject = false;
 		}
 		else{

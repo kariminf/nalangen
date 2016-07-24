@@ -10,6 +10,7 @@ import kariminf.nalangen.nlg.simplenlg.FraRealizer;
 import kariminf.sentrep.UnivMap;
 import kariminf.sentrep.ston.Ston2UnivMap;
 import kariminf.sentrep.univ.types.*;
+import kariminf.sentrep.univ.types.Relation.Relative;
 
 
 public class FrRealizerTest {
@@ -23,7 +24,7 @@ public class FrRealizerTest {
 		realizer.beginNounPhrase("mother", "mère");
 		realizer.addNPSpecifs("", Determiner.YES, "1");
 		realizer.beginNounPhrase("food", "nourriture");
-		realizer.beginComplementizer(Relation.OBJ, "");
+		realizer.beginComplementizer(Relative.OBJECT, "");
 		ArrayList<String> compRefs = new ArrayList<String>();
 		compRefs.add("m_ate");
 		realizer.addConjunctions(compRefs);

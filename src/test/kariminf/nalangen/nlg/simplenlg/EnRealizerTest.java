@@ -9,6 +9,7 @@ import kariminf.nalangen.nlg.simplenlg.EngRealizer;
 import kariminf.sentrep.UnivMap;
 import kariminf.sentrep.ston.Ston2UnivMap;
 import kariminf.sentrep.univ.types.*;
+import kariminf.sentrep.univ.types.Relation.Relative;
 
 
 public class EnRealizerTest {
@@ -23,7 +24,7 @@ public class EnRealizerTest {
 		realizer.addNPSpecifs("", Determiner.YES, "PL");
 		realizer.beginNounPhrase("food", "food");
 		realizer.addNPSpecifs("", Determiner.YES, "1");
-		realizer.beginComplementizer(Relation.OBJ, "");
+		realizer.beginComplementizer(Relative.OBJECT, "");
 		ArrayList<String> compRefs = new ArrayList<String>();
 		compRefs.add("m_ate");
 		realizer.addConjunctions(compRefs);

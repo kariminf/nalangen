@@ -11,7 +11,7 @@ public class FraRealizer extends SNLGRealizer {
 
 	@Override
 	protected String getOrdinal(String number) {
-int nbr = 0;
+		int nbr = 0;
 		
 		try {
 			nbr = Integer.parseInt(number);
@@ -21,8 +21,8 @@ int nbr = 0;
 		}
 		
 		switch(nbr){
-		case 0: return "premier";
-		case 1: return "deuxième";
+		case 1: return "premier";
+		case 2: return "deuxième";
 		case 3: return "troisième";
 		case 4: return "quatrième";
 		case 5: return "cinquième";

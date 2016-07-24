@@ -27,6 +27,7 @@ import java.util.Set;
 
 import kariminf.sentrep.UnivMap;
 import kariminf.sentrep.univ.types.*;
+import kariminf.sentrep.univ.types.Relation.*;
 
 import kariminf.nalangen.nlg.UnivRealizer;
 import kariminf.langpi.wordnet.SqliteRequestor;
@@ -34,6 +35,7 @@ import kariminf.langpi.wordnet.WNRequestor;
 import kariminf.langpi.wordnet.SqliteReqExceptions.LangNotFound;
 import kariminf.langpi.wordnet.SqliteReqExceptions.NoSqliteBase;
 import kariminf.sentrep.ston.Parser;
+import kariminf.sentrep.ston.StonLex;
 import kariminf.sentrep.ston.types.SPronoun;
 
 
@@ -166,32 +168,36 @@ public class Ston2Text extends Parser {
 
 	@Override
 	protected void addRelative(String type) {
-		// TODO complete, for now just adpositional phrases
-		type = type.toUpperCase();
-		Relation rel = uMap.mapAdposition(type);
 		
-		String params = "";
-		if (isAction){
-			params = "parentID:" + lastID;
-			realizer.addPrepositionPhrase(rel, params);
-		} else {
-			//TODO modify according to the agent (person)
-			//params = "person";
-			realizer.beginComplementizer(rel, params);
-			/*
-			String relID = "rel" + currentRelID;
-			//realizer.addComplementizer(relID, prep);
-			if (refs.containsKey(lastID)){
-				refs.get(lastID).add(currentRelID);
-			} else {
-				ArrayList<Integer> r = new ArrayList<Integer>();
-				r.add(currentRelID);
-				refs.put(lastID, r);
-			}
-			currentRelID++;*/
-			
+		type = type.toUpperCase();
+		
+		String params = "parentID:" + lastID;
+		
+		//If the predicate (destination) is a role
+		//We reach a role only by adpositionals
+		if (StonLex.isPredicateRole(type)){
+			Adpositional adp = uMap.mapAdposition(type);
+			realizer.beginPrepositionPhrase(adp, params);
+			//System.out.println("Prepositional: " + adp);
+			return;
 		}
 		
+		//The destination is an action
+		
+		//The main clause is an action
+		if (isAction){
+			//from action to action (adverbials)
+			Adverbial adv = uMap.mapAdverbial(type);
+			realizer.beginAdverbialClause(adv, params);
+			//System.out.println("Adverbial: " + adv);
+			return;
+		}
+		
+		//The main clause is a role
+		//from role to action
+		Relative rel = uMap.mapRelative(type);
+		realizer.beginComplementizer(rel, params);
+		//System.out.println("Complementizer: " + rel);
 		
 	}
 

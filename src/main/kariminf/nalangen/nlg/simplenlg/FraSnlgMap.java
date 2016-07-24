@@ -3,6 +3,9 @@ package kariminf.nalangen.nlg.simplenlg;
 import kariminf.sentrep.LangMap;
 import kariminf.sentrep.univ.types.*;
 import kariminf.sentrep.univ.types.Pronoun.Proximity;
+import kariminf.sentrep.univ.types.Relation.Adpositional;
+import kariminf.sentrep.univ.types.Relation.Adverbial;
+import kariminf.sentrep.univ.types.Relation.Relative;
 
 public class FraSnlgMap implements LangMap {
 
@@ -17,62 +20,85 @@ public class FraSnlgMap implements LangMap {
 	}
 
 	@Override
-	public String getAdposition(Relation adpos, String param) {
+	public String getAdposition(Adpositional adpos, String param) {
 		
 		switch (adpos){
-		case SUBJ: return "qui";
-		case OBJ: 
+		case ABOVE: return "sur";
+		case ACCOMPANY: return "avec";
+		case AFTER:
+			if (param.contains("place")) return "derrière";
+			return "après";
+		case INTENTION: return "pour";
+		case BEFORE: 
+			if (param.contains("place")) return "devant";
+			return "avant";
+		case BELOW: return "sous";
+		case BETWEEN: return "entre";
+		case DESTINATION: return "vers";
+		case EXIST: //on sundays, in 1986, at 2 pm
+			return "à";
+		case INSIDE: return "dans";
+		case OUTSIDE: return "dehors";
+		case PAST: return "il y a";
+		case POSSESSION: return "de";
+		case PROXIMITY: return "par";
+		case ROLE: return "comme";
+		case SINCE: return "depuis";
+		case SITUATION: return "sous";
+		case SOURCE: return "de";
+		case SUBJECT: return "sur"; //
+		case THROUGH: return "par"; // à travers
+		default:
+			break;
+		
+		}
+		
+		return "";
+	}
+	
+	@Override
+	public String getAdverbial(Adverbial adv, String param) {
+		switch (adv){
+		case CONDITION: return "si";
+		case CONSESSION: return "bien que";
+		case MANNER: return "comme";
+		case PLACE: return "où";
+		case PURPOSE: return "afin de";
+		case REASON: return "puisque";
+		case TIME: return "quand";
+		default:
+			break;
+		
+		}
+		return "";
+	}
+
+	@Override
+	public String getRelative(Relative rel, String param) {
+		
+		if (rel.name().startsWith("IO_")){
+			String objPronoun = param.contains("person")? "whom": "which";
+			Adpositional adp = Adpositional.valueOf(rel.name().split("_")[1]);
+			return getAdposition(adp, param) + " " + objPronoun;
+		}
+		
+		//lequel, laquelle, etc.
+		switch (rel){
+		case OBJECT:
 			if (param.contains("person"))
 				return "qui";
 			return "que";
-		case POSS: return "dont";
-		case REAS: return "pourquoi";
-		
-		case WHERE: return "où";
-		case WHEN: return "quand";
-		
-		case OF: return "de";
-		//exact time le 3 juillet, le matin
-		case T_AT: return "le";
-		case T_SNC: return "depuis";
-		//I worked for 10 hours
-		case T_FOR: return "durant";
-		//2 years ago
-		case T_AGO: return "depuis";
-		case T_BEF: return "avant";
-		case T_AFT: return "après";
-		//till, untill
-		case T_TILL: return "jusqu'à";
-		case T_BY: return "environ";
-		//in
-		case P_IN: return "à";
-		case P_INS: return "dans";
-		//out, outside
-		case P_OUT: return "dehors";
-		//exact place: at
-		case P_AT: return "à";
-		case P_ON: return "sur";
-		case P_LOW: return "sous";
-		case P_UP: return "au dessus de";
-		//by, next to, nesides, near
-		case P_BY: return "près de";
-		case P_BET: return "entre";
-		case P_BEH: return "derrière";
-		case P_FRN: return "devant";
-		case P_THR: return "à travers";
-		case ABOUT: return "à propos de";
-		case FROM: return "de";
-		case WITH: return "avec";
-		case TO: return "vers";
-		case T_IN: return "en";
-		case AS: return "comme";
-		case UND: return "sous";
-		case ON: return "sur";
-		case FOR: return "pour";
+		case POSSESSIVE: return "dont";
+		//TODO lequel, laquelle
+		case REASON: return "pour lequel"; 
+		case SUBJECT:
+			if (param.contains("person"))
+				return "qui";
+			return "qui";
 		default:
 			break;
-		}
 		
+		}
 		return "";
 	}
 

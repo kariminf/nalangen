@@ -20,12 +20,9 @@
 package kariminf.nalangen.nlg;
 
 import java.util.List;
-import java.util.Set;
 
-import kariminf.sentrep.LangMap;
-import kariminf.sentrep.UnivMap;
 import kariminf.sentrep.univ.types.*;
-import kariminf.sentrep.univ.*;
+import kariminf.sentrep.univ.types.Relation.*;
 
 
 public interface UnivRealizer {
@@ -48,17 +45,13 @@ public interface UnivRealizer {
 	public abstract void addNPSpecifs(String name, Determiner det, String quantity);
 	public abstract void addAdjective(String adjective, List<String> adverbs);
 	
-	public abstract void addPrepositionPhrase(Relation preposition, String params);
+	public abstract void beginPrepositionPhrase(Adpositional preposition, String params);
+	public abstract void endPrepositionPhrase();
 	
-	public abstract String getText();
+	public abstract void beginAdverbialClause(Adverbial advPronoun, String params);
+	public abstract void endAdverbialClause();
 	
-	/*
-	public abstract void addComplementizer(String id, String pronoun);
-	
-	public abstract void linkComplementizer(String parentId, String id);
-	*/
-	
-	public abstract void beginComplementizer(Relation pronoun, String params);
+	public abstract void beginComplementizer(Relative ComPronoun, String params);
 	public abstract void endComplementizer();
 	
 	public abstract void beginSentence (SentMood type);
@@ -67,4 +60,5 @@ public interface UnivRealizer {
 	public abstract void addComparison(Comparison comp, List<String> adjs);
 	
 	public abstract void showDebugMsg(boolean yes);
+	public abstract String getText();
 }
