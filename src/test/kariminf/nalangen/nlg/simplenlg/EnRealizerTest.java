@@ -24,11 +24,11 @@ public class EnRealizerTest {
 		realizer.addNPSpecifs("", Determiner.YES, "PL");
 		realizer.beginNounPhrase("food", "food");
 		realizer.addNPSpecifs("", Determiner.YES, "1");
-		realizer.beginComplementizer(Relative.OBJECT, "");
+		realizer.beginRelative(Relative.OBJECT, "");
 		ArrayList<String> compRefs = new ArrayList<String>();
 		compRefs.add("m_ate");
 		realizer.addConjunctions(compRefs);
-		realizer.endComplementizer();
+		realizer.endRelative();
 		
 		realizer.beginNounPhrase("+goodfood", "food");
 		ArrayList<String> adv1= new ArrayList<String>();

@@ -55,6 +55,9 @@ public class Ston2Text extends Parser {
 	
 	private HashMap<String, ArrayList<Integer>> refs = 
 			new HashMap<String, ArrayList<Integer>>();
+	
+	private HashSet<String> rolesID = new HashSet<String>();
+	
 	private UnivMap uMap;
 	
 	public Ston2Text(UnivRealizer realizer, UnivMap uMap, String lang, String basePath) {
@@ -99,6 +102,8 @@ public class Ston2Text extends Parser {
 		realizer.beginNounPhrase(id, noun);
 		lastID = id;
 		isAction = false;
+		
+		rolesID.add(id);
 	}
 
 	@Override
@@ -176,6 +181,7 @@ public class Ston2Text extends Parser {
 		//If the predicate (destination) is a role
 		//We reach a role only by adpositionals
 		if (StonLex.isPredicateRole(type)){
+			
 			Adpositional adp = uMap.mapAdposition(type);
 			realizer.beginPrepositionPhrase(adp, params);
 			//System.out.println("Prepositional: " + adp);
@@ -196,7 +202,7 @@ public class Ston2Text extends Parser {
 		//The main clause is a role
 		//from role to action
 		Relative rel = uMap.mapRelative(type);
-		realizer.beginComplementizer(rel, params);
+		realizer.beginRelative(rel, params);
 		//System.out.println("Complementizer: " + rel);
 		
 	}
@@ -249,7 +255,15 @@ public class Ston2Text extends Parser {
 
 	@Override
 	protected void addActionAdverb(int advSynSet, List<Integer> advSynSets) {
-		// TODO Auto-generated method stub
+		String adverb = wordnet.getWord(advSynSet, "ADVERB");		
+		ArrayList<String> adverbs = new ArrayList<String>();
+		
+		for(int advsyn : advSynSets){
+			String adv = wordnet.getWord(advsyn, "ADVERB");
+			adverbs.add(adv);
+		}
+		
+		realizer.addAdverb(adverb, adverbs);
 		
 	}
 

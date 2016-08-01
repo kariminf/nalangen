@@ -45,14 +45,16 @@ public interface UnivRealizer {
 	public abstract void addNPSpecifs(String name, Determiner det, String quantity);
 	public abstract void addAdjective(String adjective, List<String> adverbs);
 	
+	public abstract void addAdverb(String adverb, List<String> adverbs);
+	
 	public abstract void beginPrepositionPhrase(Adpositional preposition, String params);
 	public abstract void endPrepositionPhrase();
 	
 	public abstract void beginAdverbialClause(Adverbial advPronoun, String params);
 	public abstract void endAdverbialClause();
 	
-	public abstract void beginComplementizer(Relative ComPronoun, String params);
-	public abstract void endComplementizer();
+	public abstract void beginRelative(Relative ComPronoun, String params);
+	public abstract void endRelative();
 	
 	public abstract void beginSentence (SentMood type);
 	public abstract void endSentence ();

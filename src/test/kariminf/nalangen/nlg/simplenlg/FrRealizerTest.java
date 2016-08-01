@@ -24,11 +24,11 @@ public class FrRealizerTest {
 		realizer.beginNounPhrase("mother", "mère");
 		realizer.addNPSpecifs("", Determiner.YES, "1");
 		realizer.beginNounPhrase("food", "nourriture");
-		realizer.beginComplementizer(Relative.OBJECT, "");
+		realizer.beginRelative(Relative.OBJECT, "");
 		ArrayList<String> compRefs = new ArrayList<String>();
 		compRefs.add("m_ate");
 		realizer.addConjunctions(compRefs);
-		realizer.endComplementizer();
+		realizer.endRelative();
 		
 		realizer.beginNounPhrase("+goodfood", "nourriture");
 		ArrayList<String> adv1= new ArrayList<String>();

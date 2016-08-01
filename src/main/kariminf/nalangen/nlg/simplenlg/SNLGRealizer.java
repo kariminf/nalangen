@@ -1,10 +1,8 @@
 package kariminf.nalangen.nlg.simplenlg;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 import kariminf.nalangen.nlg.UnivRealizer;
 
@@ -24,6 +22,7 @@ import simplenlg.framework.PhraseElement;
 import simplenlg.framework.WordElement;
 import simplenlg.lexicon.Lexicon;
 import simplenlg.phrasespec.AdjPhraseSpec;
+import simplenlg.phrasespec.AdvPhraseSpec;
 import simplenlg.phrasespec.NPPhraseSpec;
 import simplenlg.phrasespec.PPPhraseSpec;
 import simplenlg.phrasespec.SPhraseSpec;
@@ -58,6 +57,17 @@ public abstract class SNLGRealizer implements UnivRealizer {
 	private CoordinatedPhraseElement conjunctions;
 	
 	private boolean thereIsPronoun = false;
+	
+	private static enum Refs {
+		NONE,
+		SUBJ,
+		OBJ,
+		PREP,
+		ADV,
+		REL
+	}
+	
+	private Refs lastRef = Refs.NONE;
 	
 	/*
 	private ArrayDeque<CoordinatedPhraseElement> disjunctionsQue =
@@ -254,32 +264,12 @@ public abstract class SNLGRealizer implements UnivRealizer {
 		
 		if (debugMsg)
 			System.out.println("        add conjunctions: " + phraseIDs);
-		/*
-		if (complementPronoun.length() > 0){
-			complementPronoun += "|";
-			for (String phraseID: phraseIDs)
-				complementPronoun += phraseID + ",";
-			return;
-		}
-		
-		if (debugMsg)
-			System.out.println("       ...");
-		*/
+
 		conjunctions = nlgFactory.createCoordinatedPhrase();
 		conjunctions.setFeature(Feature.CONJUNCTION, nlMap.getCoordination(Coordination.AND));
 
 		for (String phraseID: phraseIDs){
 			
-			if (nps.containsKey(phraseID)){
-				NPPhraseSpec npph = nps.get(phraseID);
-				conjunctions.addCoordinate(npph);
-				if(npph.isPlural())
-					conjunctions.setPlural(true);
-				if (debugMsg)
-					System.out.println("       " + phraseID + ">> Nominal phrase");
-				continue;
-			}
-
 			if (sps.containsKey(phraseID)){
 				SPhraseSpec spTmp = sps.get(phraseID);
 				
@@ -293,7 +283,17 @@ public abstract class SNLGRealizer implements UnivRealizer {
 				continue;
 			}
 			
-			//When not found; it is a late verbal phrase
+			if (nps.containsKey(phraseID)){
+				NPPhraseSpec npph = nps.get(phraseID);
+				conjunctions.addCoordinate(npph);
+				if(npph.isPlural())
+					conjunctions.setPlural(true);
+				if (debugMsg)
+					System.out.println("       " + phraseID + ">> Nominal phrase");
+				continue;
+			}
+			
+			//When not found; it is a late verbal phrase or nominal phrase
 			sp = nlgFactory.createClause();
 			if (notRelSubject){//&& notRelSubject
 				sp.setFeature(Feature.PASSIVE, true);
@@ -313,6 +313,7 @@ public abstract class SNLGRealizer implements UnivRealizer {
 
 	@Override
 	public void beginSubject() {
+		lastRef = Refs.SUBJ;
 		disjunctions = nlgFactory.createCoordinatedPhrase();
 		disjunctions.setFeature(Feature.CONJUNCTION, nlMap.getCoordination(Coordination.OR));
 		if (debugMsg)
@@ -321,6 +322,7 @@ public abstract class SNLGRealizer implements UnivRealizer {
 
 	@Override
 	public void beginObject() {
+		lastRef = Refs.OBJ;
 		disjunctions = nlgFactory.createCoordinatedPhrase();
 		disjunctions.setFeature(Feature.CONJUNCTION, nlMap.getCoordination(Coordination.OR));
 		if (debugMsg)
@@ -332,6 +334,7 @@ public abstract class SNLGRealizer implements UnivRealizer {
 		
 		sp.setSubject(disjunctions);
 		disjunctions = null;
+		lastRef = Refs.NONE;
 		if (debugMsg)
 			System.out.println("    End subject");
 	}
@@ -340,6 +343,7 @@ public abstract class SNLGRealizer implements UnivRealizer {
 	public void endObject() {
 		sp.setObject(disjunctions);
 		disjunctions = null;
+		lastRef = Refs.NONE;
 		if (debugMsg)
 			System.out.println("    End object");
 	}
@@ -367,6 +371,7 @@ public abstract class SNLGRealizer implements UnivRealizer {
 		disjunctions.setFeature(Feature.CONJUNCTION, nlMap.getCoordination(Coordination.OR));
 		prepositional.addComplement(disjunctions);
 		parent.addPostModifier(prepositional);
+		lastRef = Refs.PREP;
 
 		if (debugMsg)
 			System.out.println("    Add preposition: " + preposition.name() + ": " + prep);
@@ -375,19 +380,38 @@ public abstract class SNLGRealizer implements UnivRealizer {
 	
 	@Override
 	public void endPrepositionPhrase() {
-		
+		lastRef = Refs.NONE;
 	}
 	
 	@Override
 	public void beginAdverbialClause(Adverbial advPronoun, String params) {
 		
+		//*******************************************************
+		if (! params.contains("parentID:"))
+			return;
+		String parentID = params.substring(params.indexOf("parentID") + 9);
+		parentID = parentID.split(",")[0];
+		
+		PhraseElement parent;
+		if (sps.containsKey(parentID)){
+			parent = sps.get(parentID);
+		} else return;
+		//********************************************************
 		String advPron = nlMap.getAdverbial(advPronoun, params);
+		
+		AdvPhraseSpec adverbial = nlgFactory.createAdverbPhrase(advPron);
+		/*
 		disjunctions = nlgFactory.createCoordinatedPhrase();
 		disjunctions.setFeature(Feature.CONJUNCTION, nlMap.getCoordination(Coordination.OR));
 		disjunctions.addPreModifier(advPron);
-		pe.addPostModifier(disjunctions);
-		//pe.addComplement(disjunctions);
+		*/
+		disjunctions = nlgFactory.createCoordinatedPhrase();
+		disjunctions.setFeature(Feature.CONJUNCTION, nlMap.getCoordination(Coordination.OR));
+		adverbial.addComplement(disjunctions);
+		parent.addModifier(adverbial);
 		
+		//pe.addComplement(disjunctions);
+		lastRef = Refs.ADV;
 		if (advPronoun == Adverbial.PURPOSE){
 			notRelSubject = false;
 		}
@@ -402,7 +426,7 @@ public abstract class SNLGRealizer implements UnivRealizer {
 	
 	@Override
 	public void endAdverbialClause(){
-		
+		lastRef = Refs.NONE;
 	}
 
 	@Override
@@ -426,7 +450,7 @@ public abstract class SNLGRealizer implements UnivRealizer {
 	}
 
 	@Override
-	public void beginComplementizer(Relative ComPronoun, String params) {
+	public void beginRelative(Relative ComPronoun, String params) {
 		//complementPronoun = pronoun;
 		String relPron = nlMap.getRelative(ComPronoun, params);
 		disjunctions = nlgFactory.createCoordinatedPhrase();
@@ -438,7 +462,7 @@ public abstract class SNLGRealizer implements UnivRealizer {
 		disjunctions.addPreModifier(relPron);
 		pe.addPostModifier(disjunctions);
 		//pe.addComplement(disjunctions);
-		
+		lastRef = Refs.REL;
 		if (ComPronoun == Relative.SUBJECT){
 			notRelSubject = false;
 		}
@@ -495,13 +519,24 @@ public abstract class SNLGRealizer implements UnivRealizer {
 	}
 
 	@Override
-	public void endComplementizer() {
+	public void endRelative() {
 		notRelSubject = true;
+		lastRef = Refs.NONE;
 	}
+	
 
 	@Override
 	public void showDebugMsg(boolean yes) {
 		debugMsg = yes;
+		
+	}
+	
+	@Override
+	public void addAdverb(String adverb, List<String> adverbs){
+		AdvPhraseSpec adverbial = nlgFactory.createAdverbPhrase(adverb);
+		for (String adv: adverbs)
+			adverbial.addModifier(adv);
+		sp.addModifier(adverbial);
 		
 	}
 	

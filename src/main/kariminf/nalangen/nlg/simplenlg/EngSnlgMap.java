@@ -63,12 +63,15 @@ public class EngSnlgMap implements LangMap {
 	public String getAdverbial(Adverbial adv, String param) {
 		switch (adv){
 		case CONDITION: return "if";
+		case CONTINUUM: return "while";
 		case CONSESSION: return "although";
 		case MANNER: return "as";
 		case PLACE: return "where";
 		case PURPOSE: return "in order to";
 		case REASON: return "because";
 		case TIME: return "when";
+		case AFTER: return "after";
+		case BEFORE: return "before";
 		default:
 			break;
 		
@@ -232,7 +235,10 @@ public class EngSnlgMap implements LangMap {
 		case POSSESSIVE:
 			switch (pronoun.getPerson()){
 			case FIRST:
-				return "my";
+				if (pronoun.getNumber() == Pronoun.Number.SINGLE)
+					return "my";
+				else
+					return "our";
 			case SECOND:
 				return "your";
 			default:

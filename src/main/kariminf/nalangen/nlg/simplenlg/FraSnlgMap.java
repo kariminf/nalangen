@@ -60,12 +60,15 @@ public class FraSnlgMap implements LangMap {
 	public String getAdverbial(Adverbial adv, String param) {
 		switch (adv){
 		case CONDITION: return "si";
+		case CONTINUUM: return "tandis que";
 		case CONSESSION: return "bien que";
 		case MANNER: return "comme";
 		case PLACE: return "où";
 		case PURPOSE: return "afin de";
 		case REASON: return "puisque";
 		case TIME: return "quand";
+		case AFTER: return "après que";
+		case BEFORE: return "avant que";
 		default:
 			break;
 		
@@ -77,7 +80,8 @@ public class FraSnlgMap implements LangMap {
 	public String getRelative(Relative rel, String param) {
 		
 		if (rel.name().startsWith("IO_")){
-			String objPronoun = param.contains("person")? "whom": "which";
+			//String objPronoun = param.contains("person")? "whom": "which";
+			String objPronoun = "lequel";
 			Adpositional adp = Adpositional.valueOf(rel.name().split("_")[1]);
 			return getAdposition(adp, param) + " " + objPronoun;
 		}
