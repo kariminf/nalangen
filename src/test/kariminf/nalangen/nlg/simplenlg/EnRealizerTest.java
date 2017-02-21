@@ -37,7 +37,7 @@ public class EnRealizerTest {
 		
 		//Actions
 		realizer.beginSentPhrase("m_ate", "eat");
-		realizer.addVerbSpecif(VerbTense.PAST, Modality.NONE, false, false);
+		realizer.addVerbSpecif(VerbTense.PAST, Modality.NONE, false, false, false);
 		realizer.beginSubject();
 		ArrayList<String> subjRefs = new ArrayList<String>();
 		subjRefs.add("mother");
@@ -46,7 +46,7 @@ public class EnRealizerTest {
 		realizer.endSentPhrase();
 		
 		realizer.beginSentPhrase("was", "be");
-		realizer.addVerbSpecif(VerbTense.PAST, Modality.NONE, false, false);
+		realizer.addVerbSpecif(VerbTense.PAST, Modality.NONE, false, false, false);
 		realizer.beginSubject();
 		ArrayList<String> subjRefs2 = new ArrayList<String>();
 		subjRefs2.add("food");
@@ -81,7 +81,7 @@ public class EnRealizerTest {
 		//Actions
 		
 		realizer.beginSentPhrase("ate", "eat");
-		realizer.addVerbSpecif(VerbTense.PRESENT, Modality.NONE, false, false);
+		realizer.addVerbSpecif(VerbTense.PRESENT, Modality.NONE, false, false, false);
 		
 		realizer.beginSubject();
 		ArrayList<String> subjRefs2 = new ArrayList<String>();
@@ -118,7 +118,7 @@ public class EnRealizerTest {
 		//Actions
 		
 		realizer.beginSentPhrase("is", "be");
-		realizer.addVerbSpecif(VerbTense.PRESENT, Modality.NONE, false, false);
+		realizer.addVerbSpecif(VerbTense.PRESENT, Modality.NONE, false, false, false);
 		
 		realizer.beginSubject();
 		ArrayList<String> subjRefs2 = new ArrayList<String>();

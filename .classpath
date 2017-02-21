@@ -4,7 +4,7 @@
 	<classpathentry kind="src" path="src/test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/SentRep"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/SimpleNLG-EnFr"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/LangPi"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/SimpleNLG-EnFr"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

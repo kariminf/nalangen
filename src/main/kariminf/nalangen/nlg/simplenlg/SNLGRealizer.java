@@ -127,7 +127,8 @@ public abstract class SNLGRealizer implements UnivRealizer {
 	}
 
 	@Override
-	public void addVerbSpecif(VerbTense tense, Modality modality, boolean progressive, boolean negated) {
+	public void addVerbSpecif(VerbTense tense, Modality modality, 
+			boolean progressive, boolean perfect, boolean negated) {
 		
 		//Types.Tense theTense = mdMap.mapTense(tense);
 		String rTense = nlMap.getTense(tense);
@@ -150,8 +151,8 @@ public abstract class SNLGRealizer implements UnivRealizer {
 			sp.setFeature(Feature.MODAL, modal);
 		}
 		
-		
 		sp.setFeature(Feature.PROGRESSIVE, progressive);
+		sp.setFeature(Feature.PERFECT, perfect);
 		sp.setFeature(Feature.NEGATED, negated);
 
 		if (debugMsg){

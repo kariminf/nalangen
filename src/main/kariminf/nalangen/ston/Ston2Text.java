@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
 import kariminf.sentrep.UnivMap;
 import kariminf.sentrep.univ.types.*;
 import kariminf.sentrep.univ.types.Relation.*;
@@ -36,7 +34,6 @@ import kariminf.langpi.wordnet.SqliteReqExceptions.LangNotFound;
 import kariminf.langpi.wordnet.SqliteReqExceptions.NoSqliteBase;
 import kariminf.sentrep.ston.Parser;
 import kariminf.sentrep.ston.StonLex;
-import kariminf.sentrep.ston.types.SPronoun;
 
 
 public class Ston2Text extends Parser {
@@ -82,11 +79,11 @@ public class Ston2Text extends Parser {
 	}
 
 	@Override
-	protected void addVerbSpecif(String tense, String modality, boolean progressive, boolean negated) {
+	protected void addVerbSpecif(String tense, String modality, boolean progressive, boolean perfect, boolean negated) {
 		VerbTense theTense = uMap.mapTense(tense);
 		Modality theModal = uMap.mapModal(modality);
 		//System.out.println("Modal= " + theModal);
-		realizer.addVerbSpecif(theTense, theModal, progressive, negated);
+		realizer.addVerbSpecif(theTense, theModal, progressive, perfect, negated);
 		
 	}
 
@@ -209,7 +206,7 @@ public class Ston2Text extends Parser {
 
 
 	@Override
-	protected void endAction() {
+	protected void endAction(String id, int synSet) {
 		realizer.endSentPhrase();
 	}
 
@@ -234,7 +231,7 @@ public class Ston2Text extends Parser {
 
 
 	@Override
-	protected void endSentence() {
+	protected void endSentence(String type) {
 		realizer.endSentence();
 	}
 
@@ -247,7 +244,7 @@ public class Ston2Text extends Parser {
 
 
 	@Override
-	protected void endActions() {
+	protected void endActions(boolean mainClause) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -301,7 +298,7 @@ public class Ston2Text extends Parser {
 
 
 	@Override
-	protected void addPRole(String id, String pronoun) {
+	protected void addPRole(String id, int synSet, String pronoun) {
 		Pronoun p = uMap.mapPronoun(pronoun);
 		realizer.beginNounPhrase(id, p);
 		lastID = id;
@@ -319,6 +316,20 @@ public class Ston2Text extends Parser {
 	@Override
 	protected void endPRelatives() {
 		ignoreReferences = false;
+	}
+
+
+	@Override
+	protected void endRole(String id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	protected void endRelative(String SP) {
+		// TODO Auto-generated method stub
+		
 	}
 
 

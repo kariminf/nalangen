@@ -37,14 +37,14 @@ public class FrRealizerTest {
 		
 		//Actions
 		realizer.beginSentPhrase("m_ate", "manger");
-		realizer.addVerbSpecif(VerbTense.PAST, Modality.NONE, false, false);
+		realizer.addVerbSpecif(VerbTense.PAST, Modality.NONE, false, false, false);
 		realizer.beginSubject();
 		ArrayList<String> subjRefs = new ArrayList<String>();
 		subjRefs.add("mother");
 		realizer.addConjunctions(subjRefs);
 		realizer.endSubject();
 		realizer.beginSentPhrase("was", "être");
-		realizer.addVerbSpecif(VerbTense.PAST, Modality.NONE, false, false);
+		realizer.addVerbSpecif(VerbTense.PAST, Modality.NONE, false, false, false);
 		
 		realizer.beginSubject();
 		ArrayList<String> subjRefs2 = new ArrayList<String>();
@@ -81,7 +81,7 @@ public class FrRealizerTest {
 		//Actions
 		
 		realizer.beginSentPhrase("ate", "manger");
-		realizer.addVerbSpecif(VerbTense.PAST, Modality.NONE, false, false);
+		realizer.addVerbSpecif(VerbTense.PAST, Modality.NONE, false, false, false);
 		
 		realizer.beginSubject();
 		ArrayList<String> subjRefs2 = new ArrayList<String>();

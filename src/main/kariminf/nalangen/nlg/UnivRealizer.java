@@ -29,7 +29,7 @@ public interface UnivRealizer {
 	
 	public abstract void beginSentPhrase(String id, String verb);
 	
-	public abstract void addVerbSpecif(VerbTense tense, Modality modality, boolean progressive, boolean negated);
+	public abstract void addVerbSpecif(VerbTense tense, Modality modality, boolean progressive, boolean perfect, boolean negated);
 	public abstract void addConjunctions(List<String> phraseIDs);
 	
 	public abstract void beginSubject();
