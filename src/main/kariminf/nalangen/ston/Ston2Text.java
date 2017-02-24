@@ -57,6 +57,14 @@ public class Ston2Text extends Parser {
 	
 	private UnivMap uMap;
 	
+	
+	/**
+	 * 
+	 * @param realizer
+	 * @param uMap
+	 * @param lang
+	 * @param basePath
+	 */
 	public Ston2Text(UnivRealizer realizer, UnivMap uMap, String lang, String basePath) {
 		this.realizer = realizer;
 		this.uMap = uMap;
@@ -69,13 +77,33 @@ public class Ston2Text extends Parser {
 		}
 	}
 
+	
+	//=====================================================================
+	//================== Implementing methods =============================
+	//=====================================================================
+			
+			
+	//=====================================================================
+	//======================== ACTION METHODS =============================
+	//=====================================================================
 
 	@Override
-	protected void addAction(String id, int synSet) {
+	protected void beginAction(String id, int synSet) {
 		String verb = wordnet.getWord(synSet, "VERB");
 		realizer.beginSentPhrase(id, verb);
 		lastID = id;
 		isAction = true;
+	}
+	
+	@Override
+	protected void endAction(String id, int synSet) {
+		realizer.endSentPhrase();
+	}
+	
+	@Override
+	protected boolean actionFailure() {
+		return true;
+		
 	}
 
 	@Override
@@ -86,22 +114,111 @@ public class Ston2Text extends Parser {
 		realizer.addVerbSpecif(theTense, theModal, progressive, perfect, negated);
 		
 	}
-
+	
 	@Override
-	protected void actionFail() {
-		// TODO Auto-generated method stub
+	protected void addActionAdverb(int advSynSet, List<Integer> advSynSets) {
+		String adverb = wordnet.getWord(advSynSet, "ADVERB");		
+		ArrayList<String> adverbs = new ArrayList<String>();
+		
+		for(int advsyn : advSynSets){
+			String adv = wordnet.getWord(advsyn, "ADVERB");
+			adverbs.add(adv);
+		}
+		
+		realizer.addAdverb(adverb, adverbs);
 		
 	}
 
+
 	@Override
-	protected void addRole(String id, int synSet) {
+	protected boolean adverbFailure() {
+		return true;
+	}
+	
+	@Override
+	protected void beginAgents() {
+		realizer.beginSubject();
+	}
+	
+	
+	@Override
+	protected void endAgents() {
+		realizer.endSubject();
+	}
+
+	@Override
+	protected void beginThemes() {
+		realizer.beginObject();
+	}
+
+	@Override
+	protected void endThemes() {
+		realizer.endObject();
+	}
+	
+	@Override
+	protected void beginComparison(String type, List<Integer> adjSynSets) {
+		Comparison comp = uMap.mapComparison(type);
+		
+		ArrayList<String> adjectives = new ArrayList<String>();
+		
+		for (int synset: adjSynSets){
+			String adjective = wordnet.getWord(synset, "ADJECTIVE");
+			if (adjective != null && adjective.trim().length() >  0)
+				adjectives.add(adjective);
+		}
+		
+		realizer.addComparison(comp, adjectives);
+		
+	}
+	
+	
+	@Override
+	protected void endComparison(String type, List<Integer> adjSynSets) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
+	//=====================================================================
+	//========================= ROLE METHODS ==============================
+	//=====================================================================
+
+	@Override
+	protected void beginRole(String id, int synSet) {
 		String noun = wordnet.getWord(synSet, "NOUN");
 		realizer.beginNounPhrase(id, noun);
 		lastID = id;
 		isAction = false;
 		
 		rolesID.add(id);
+	}//beginRole
+	
+	@Override
+	protected void beginRole(String id, int synSet, String pronoun) {
+		Pronoun p = uMap.mapPronoun(pronoun);
+		realizer.beginNounPhrase(id, p);
+		lastID = id;
+		isAction = false;
+		
+	}//beginRole (pronoun)
+	
+	@Override
+	protected void endRole(String id, int synSet) {
+		
 	}
+	
+	@Override
+	protected boolean roleFailure() {
+		return true;
+	}//roleFailure
+	
+	@Override
+	protected void addRoleSpecif(String name, String def, String quantity) {
+		Determiner det = uMap.mapDeterminer(def);
+		realizer.addNPSpecifs(name.replace("_", " "), det, quantity);
+		
+	}//addRoleSpecif
 
 	@Override
 	protected void addAdjective(int synSet, List<Integer> advSynSets) {
@@ -115,61 +232,70 @@ public class Ston2Text extends Parser {
 		
 		realizer.addAdjective(adjective, adverbs);
 		
+	}//addAdjective
+
+
+	@Override
+	protected boolean adjectiveFailure() {
+		return true;
+	}//adjectiveFailure
+
+	@Override
+	protected void beginPRelatives() {
+		ignoreReferences = true;
 	}
 
 
 	@Override
-	protected void adjectiveFail() {
+	protected void endPRelatives() {
+		ignoreReferences = false;
+	}
+	
+	//=====================================================================
+	//======================= SENTENCE METHODS ============================
+	//=====================================================================
+	
+	@Override
+	protected void beginSentence(String type) {
+		SentMood mood = uMap.mapMood(type);
+		realizer.beginSentence(mood);
+	}
+
+
+	@Override
+	protected void endSentence(String type) {
+		realizer.endSentence();
+	}
+
+
+	@Override
+	protected void beginActions(boolean mainClause) {
 		// TODO Auto-generated method stub
 		
 	}
 
+
 	@Override
-	protected void roleFail() {
+	protected void endActions(boolean mainClause) {
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	protected void parseSuccess() {
-		
-	}
-
-	@Override
-	protected void beginAgents() {
-		realizer.beginSubject();
-	}
-
-	@Override
-	protected void beginThemes() {
-		realizer.beginObject();
-	}
-
+	
+	//=====================================================================
+	//======================== SHARED METHODS =============================
+	//=====================================================================
+	
 	@Override
 	protected void addConjunctions(List<String> IDs) {
 		if (ignoreReferences)
 			return;
 		if (IDs.size() < 1) return;
 		realizer.addConjunctions(IDs);
-	}
-
-
+	}//addConjunctions
+	
+	
 	@Override
-	protected void parseFail() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	@Override
-	protected void relativeFail() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	@Override
-	protected void addRelative(String type) {
+	protected void beginRelative(String type) {
 		
 		type = type.toUpperCase();
 		
@@ -202,132 +328,31 @@ public class Ston2Text extends Parser {
 		realizer.beginRelative(rel, params);
 		//System.out.println("Complementizer: " + rel);
 		
-	}
-
-
-	@Override
-	protected void endAction(String id, int synSet) {
-		realizer.endSentPhrase();
-	}
-
-
-	@Override
-	protected void endAgents() {
-		realizer.endSubject();
-	}
-
-
-	@Override
-	protected void endThemes() {
-		realizer.endObject();
-	}
-
-
-	@Override
-	protected void beginSentence(String type) {
-		SentMood mood = uMap.mapMood(type);
-		realizer.beginSentence(mood);
-	}
-
-
-	@Override
-	protected void endSentence(String type) {
-		realizer.endSentence();
-	}
-
-
-	@Override
-	protected void beginActions(boolean mainClause) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	@Override
-	protected void endActions(boolean mainClause) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	@Override
-	protected void addActionAdverb(int advSynSet, List<Integer> advSynSets) {
-		String adverb = wordnet.getWord(advSynSet, "ADVERB");		
-		ArrayList<String> adverbs = new ArrayList<String>();
-		
-		for(int advsyn : advSynSets){
-			String adv = wordnet.getWord(advsyn, "ADVERB");
-			adverbs.add(adv);
-		}
-		
-		realizer.addAdverb(adverb, adverbs);
-		
-	}
-
-
-	@Override
-	protected void adverbFail() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	@Override
-	protected void addRoleSpecif(String name, String def, String quantity) {
-		Determiner det = uMap.mapDeterminer(def);
-		realizer.addNPSpecifs(name.replace("_", " "), det, quantity);
-		
-	}
-
-
-	@Override
-	protected void addComparison(String type, List<Integer> adjSynSets) {
-		Comparison comp = uMap.mapComparison(type);
-		
-		ArrayList<String> adjectives = new ArrayList<String>();
-		
-		for (int synset: adjSynSets){
-			String adjective = wordnet.getWord(synset, "ADJECTIVE");
-			if (adjective != null && adjective.trim().length() >  0)
-				adjectives.add(adjective);
-		}
-		
-		realizer.addComparison(comp, adjectives);
-		
-	}
-
-
-	@Override
-	protected void addPRole(String id, int synSet, String pronoun) {
-		Pronoun p = uMap.mapPronoun(pronoun);
-		realizer.beginNounPhrase(id, p);
-		lastID = id;
-		isAction = false;
-		
-	}
-
-
-	@Override
-	protected void beginPRelatives() {
-		ignoreReferences = true;
-	}
-
-
-	@Override
-	protected void endPRelatives() {
-		ignoreReferences = false;
-	}
-
-
-	@Override
-	protected void endRole(String id) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
+	}//beginRelative
+	
 	@Override
 	protected void endRelative(String SP) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	protected boolean relativeFailure() {
+		return true;
+	}//relativeFailure
+	
+	
+	//=====================================================================
+	//========================= PARSE METHODS =============================
+	//=====================================================================
+	
+	@Override
+	protected void parseSuccess() {
+		
+	}
+
+	@Override
+	protected void parseFailure() {
 		// TODO Auto-generated method stub
 		
 	}
