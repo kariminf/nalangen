@@ -60,6 +60,7 @@ public abstract class SNLGRealizer implements UnivRealizer {
 	
 	private static enum Refs {
 		NONE,
+		SENT,
 		SUBJ,
 		OBJ,
 		PREP,
@@ -166,13 +167,16 @@ public abstract class SNLGRealizer implements UnivRealizer {
 
 	@Override
 	public void beginNounPhrase(String id, String noun) {
+		
 		np = nlgFactory.createNounPhrase("", noun);
 		pe = np;
-		//A pronoun
+		//A pronoun or a late noun phrase
 		if (nps.containsKey(id)){
-			np.addPreModifier(nps.get(id));
+			nps.get(id).addPostModifier(np);
+		} else {
+			nps.put(id, np);
 		}
-		nps.put(id, np);
+		
 		lastNP = id;
 	
 		if (debugMsg)
@@ -200,11 +204,15 @@ public abstract class SNLGRealizer implements UnivRealizer {
 	@Override
 	public void addNPSpecifs(String name, Determiner det, String quantity){
 		if (name != null && name.length() > 0){
-			//System.out.println(">>" + name);
+			System.out.println(">>" + name);
 			if (nps.containsKey(lastNP));
-				nps.remove(lastNP);
-			np = nlgFactory.createNounPhrase("", name);
-			nps.put(lastNP, np);
+				//nps.remove(lastNP);
+				System.out.println(">><<");
+			np = nps.get(lastNP);
+			np.clearModifiers();
+			np.addPostModifier(name);
+			//np = nlgFactory.createNounPhrase("", name);
+			//nps.put(lastNP, np);
 			pe = np;
 		} else if (!thereIsPronoun) {
 			String determiner = nlMap.getDeterminer(det);
@@ -268,7 +276,53 @@ public abstract class SNLGRealizer implements UnivRealizer {
 
 		conjunctions = nlgFactory.createCoordinatedPhrase();
 		conjunctions.setFeature(Feature.CONJUNCTION, nlMap.getCoordination(Coordination.AND));
+		
+		switch (lastRef) {
+		case NONE:
+			return;
+		case SENT://it is a sentence
+			for (String phraseID: phraseIDs){
+				if (sps.containsKey(phraseID)){
+					SPhraseSpec spph = sps.get(phraseID);
+					if (spph.getSubject() == null && notRelSubject)
+						spph.setFeature(Feature.PASSIVE, true);
+					conjunctions.addCoordinate(spph);
+				}
+			}
+			break;
+		case SUBJ:
+		case OBJ:
+		case PREP:
+			for (String phraseID: phraseIDs){
+				NPPhraseSpec npph = nlgFactory.createNounPhrase();
+				if (nps.containsKey(phraseID)) npph = nps.get(phraseID);
+				else nps.put(phraseID, npph);
+				conjunctions.addCoordinate(npph);
+				if(npph.isPlural())
+					conjunctions.setPlural(true);
+			}
+			break;
+		case ADV:
+		case REL:
+			for (String phraseID: phraseIDs){
+				SPhraseSpec spph = nlgFactory.createClause();
+				if (sps.containsKey(phraseID)){
+					spph = sps.get(phraseID);
+					if (spph.getSubject() == null && notRelSubject)
+						spph.setFeature(Feature.PASSIVE, true);
+				}
+				else sps.put(phraseID, spph);
+				conjunctions.addCoordinate(spph);
+				
+			}
+			break;
+		
+		default:
+			break;
 
+		}
+		
+		/*
 		for (String phraseID: phraseIDs){
 			
 			if (sps.containsKey(phraseID)){
@@ -302,7 +356,7 @@ public abstract class SNLGRealizer implements UnivRealizer {
 			}
 			sps.put(phraseID, sp);
 			conjunctions.addCoordinate(sp);
-		}
+		}*/
 		
 		disjunctions.addCoordinate(conjunctions);
 		
@@ -437,11 +491,15 @@ public abstract class SNLGRealizer implements UnivRealizer {
 		if (debugMsg)
 			System.out.println("Begin sentence type:" + type);
 		
+		lastRef = Refs.SENT;
+		
 	}
 
 	@Override
 	public void endSentence() {
 		//paragraph.addComponent(disjunctions);
+		lastRef = Refs.NONE;
+		if (disjunctions == null) return;
 		result += realiser.realiseSentence(disjunctions) + " ";
 		if (debugMsg){
 			System.out.println("Sent:" + realiser.realiseSentence(disjunctions));
