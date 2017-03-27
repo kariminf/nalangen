@@ -24,9 +24,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import kariminf.sentrep.UnivMap;
-import kariminf.sentrep.univ.types.*;
-import kariminf.sentrep.univ.types.Relation.*;
-
 import kariminf.nalangen.nlg.UnivRealizer;
 import kariminf.langpi.wordnet.SqliteRequestor;
 import kariminf.langpi.wordnet.WNRequestor;
@@ -34,6 +31,8 @@ import kariminf.langpi.wordnet.SqliteReqExceptions.LangNotFound;
 import kariminf.langpi.wordnet.SqliteReqExceptions.NoSqliteBase;
 import kariminf.sentrep.ston.Parser;
 import kariminf.sentrep.ston.StonLex;
+import kariminf.sentrep.types.*;
+import kariminf.sentrep.types.Relation.*;
 
 
 public class Ston2Text extends Parser {

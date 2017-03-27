@@ -7,11 +7,10 @@ import java.util.List;
 import kariminf.nalangen.nlg.UnivRealizer;
 
 import kariminf.sentrep.LangMap;
-import kariminf.sentrep.univ.types.*;
-import kariminf.sentrep.univ.types.Relation.Adpositional;
-import kariminf.sentrep.univ.types.Relation.Adverbial;
-import kariminf.sentrep.univ.types.Relation.Relative;
-
+import kariminf.sentrep.types.*;
+import kariminf.sentrep.types.Relation.Adpositional;
+import kariminf.sentrep.types.Relation.Adverbial;
+import kariminf.sentrep.types.Relation.Relative;
 import simplenlg.features.Feature;
 import simplenlg.features.LexicalFeature;
 import simplenlg.features.Tense;
@@ -204,13 +203,14 @@ public abstract class SNLGRealizer implements UnivRealizer {
 	@Override
 	public void addNPSpecifs(String name, Determiner det, String quantity){
 		if (name != null && name.length() > 0){
-			System.out.println(">>" + name);
-			if (nps.containsKey(lastNP));
-				//nps.remove(lastNP);
-				System.out.println(">><<");
+			//System.out.println(">>" + name);
 			np = nps.get(lastNP);
+			//nps.remove(lastNP);
+			//np = nlgFactory.createNounPhrase("", name);
+			
 			np.clearModifiers();
-			np.addPostModifier(name);
+			np.clearComplements();
+			np.addModifier(name);
 			//np = nlgFactory.createNounPhrase("", name);
 			//nps.put(lastNP, np);
 			pe = np;

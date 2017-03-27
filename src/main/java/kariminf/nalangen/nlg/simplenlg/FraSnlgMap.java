@@ -1,11 +1,11 @@
 package kariminf.nalangen.nlg.simplenlg;
 
 import kariminf.sentrep.LangMap;
-import kariminf.sentrep.univ.types.*;
-import kariminf.sentrep.univ.types.Pronoun.Proximity;
-import kariminf.sentrep.univ.types.Relation.Adpositional;
-import kariminf.sentrep.univ.types.Relation.Adverbial;
-import kariminf.sentrep.univ.types.Relation.Relative;
+import kariminf.sentrep.types.*;
+import kariminf.sentrep.types.Pronoun.Proximity;
+import kariminf.sentrep.types.Relation.Adpositional;
+import kariminf.sentrep.types.Relation.Adverbial;
+import kariminf.sentrep.types.Relation.Relative;
 
 public class FraSnlgMap implements LangMap {
 

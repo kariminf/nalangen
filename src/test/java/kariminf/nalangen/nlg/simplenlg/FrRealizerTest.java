@@ -9,8 +9,8 @@ import kariminf.nalangen.nlg.UnivRealizer;
 import kariminf.nalangen.nlg.simplenlg.FraRealizer;
 import kariminf.sentrep.UnivMap;
 import kariminf.sentrep.ston.Ston2UnivMap;
-import kariminf.sentrep.univ.types.*;
-import kariminf.sentrep.univ.types.Relation.Relative;
+import kariminf.sentrep.types.*;
+import kariminf.sentrep.types.Relation.Relative;
 
 
 public class FrRealizerTest {
