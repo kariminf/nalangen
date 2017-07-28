@@ -1,10 +1,10 @@
 # NaLanGen
 
-[![Project](https://img.shields.io/badge/Project-NaLanGen-4B0082.svg)](https://github.com/kariminf/NaLanGen)
+[![Project](https://img.shields.io/badge/Project-NaLanGen-4B0082.svg)](https://github.com/kariminf/nalangen)
 [![License](https://img.shields.io/badge/License-Apache_2-4B0082.svg)](http://www.apache.org/licenses/LICENSE-2.0)
-[![Travis](https://img.shields.io/travis/kariminf/NaLanGen.svg)](https://travis-ci.org/kariminf/NaLanGen)
-[![codecov](https://img.shields.io/codecov/c/github/kariminf/NaLanGen.svg)](https://codecov.io/gh/kariminf/NaLanGen)
-[![jitpack](https://jitpack.io/v/kariminf/NaLanGen.svg)](https://jitpack.io/#kariminf/NaLanGen)
+[![Travis](https://img.shields.io/travis/kariminf/nalangen.svg)](https://travis-ci.org/kariminf/nalangen)
+[![codecov](https://img.shields.io/codecov/c/github/kariminf/nalangen.svg)](https://codecov.io/gh/kariminf/nalangen)
+[![jitpack](https://jitpack.io/v/kariminf/nalangen.svg)](https://jitpack.io/#kariminf/nalangen)
 
 NaLanGen stands for "Natural Language Generator".
 The aim of this tool is to combine a lot of NLG programs for as many languages as we can, to use them.
