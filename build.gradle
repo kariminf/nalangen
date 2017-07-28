@@ -28,7 +28,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 // Release version
-version = '1.0.1'
+version = '0.0.2'
 
 ext.current_Date = getDate()
 
